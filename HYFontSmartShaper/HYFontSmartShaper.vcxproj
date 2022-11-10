@@ -1,0 +1,251 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{0A1651B4-EF3A-4153-9BDD-490174038E09}</ProjectGuid>
+    <RootNamespace>HYFontSmartShaper</RootNamespace>
+    <Keyword>MFCProj</Keyword>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v142</PlatformToolset>
+    <UseOfMfc>Dynamic</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+    <WholeProgramOptimization>false</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v142</PlatformToolset>
+    <UseOfMfc>Dynamic</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>15.0.26419.1</_ProjectFileVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>..\intermedia\HYFontSmartShaper\$(Configuration)\</OutDir>
+    <IntDir>..\intermedia\HYFontSmartShaper\$(Configuration)\</IntDir>
+    <LinkIncremental>true</LinkIncremental>
+    <TargetName>$(ProjectName)D</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>..\intermedia\HYFontSmartShaper\$(Configuration)\</OutDir>
+    <IntDir>..\intermedia\HYFontSmartShaper\$(Configuration)\</IntDir>
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Midl>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+      <ValidateAllParameters>true</ValidateAllParameters>
+    </Midl>
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>..\include\HYFontCodec;..\include;..\include\HYFontSmartCore;..\include\HYIKFontCodec;..\boost_1_59_0;..\include\HYImageConvertFont;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <CallingConvention>Cdecl</CallingConvention>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0804</Culture>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Link>
+      <AdditionalDependencies>HYBaseFunctionD.lib;HYFontCodecD.lib;HYIkCodecD.lib;HYImageConvertFontD.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(OutDir)$(ProjectName)D.exe</OutputFile>
+      <AdditionalLibraryDirectories>..\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+    <PostBuildEvent>
+      <Command>copy "$(TargetDir)$(TargetName).exe" ..\bin\$(TargetName).exe</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Midl>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+      <ValidateAllParameters>true</ValidateAllParameters>
+    </Midl>
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <AdditionalIncludeDirectories>..\include\HYFontCodec;..\include\;..\include\HYFontSmartCore;..\include\HYIKFontCodec;..\boost_1_59_0;..\include\HYImageConvertFont;..\CXImage\Include\CxImage;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>false</MinimalRebuild>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <CallingConvention>Cdecl</CallingConvention>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0804</Culture>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Link>
+      <AdditionalDependencies>HYBaseFunction.lib;HYFontCodec.lib;HYIkCodec.lib;png.lib;jpeg.lib;zlib.lib;tiff.lib;jbig.lib;jasper.lib;mng.lib;libdcr.lib;libpsd.lib;cximage.lib;HYImageConvertFont.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\lib;..\CXImage\lib\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+    <PostBuildEvent>
+      <Command>copy "$(TargetDir)$(TargetName).exe" ..\bin\$(TargetName).exe</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="CharsCompareDlg.cpp" />
+    <ClCompile Include="CVrMasters.cpp" />
+    <ClCompile Include="MakeTTCDlg.cpp" />
+    <ClCompile Include="MKVNTDlg.cpp" />
+    <ClCompile Include="MKVNTMasterPage.cpp" />
+    <ClCompile Include="MKVNTSheet.cpp" />
+    <ClCompile Include="CompareFontWnd.cpp" />
+    <ClCompile Include="CVrFontShowWnd.cpp" />
+    <ClCompile Include="FongSVGDlg.cpp" />
+    <ClCompile Include="FontCmprZoomWnd.cpp" />
+    <ClCompile Include="FontDumpDlg.cpp" />
+    <ClCompile Include="FontInfDlg.cpp" />
+    <ClCompile Include="FontSetupCFFProPage.cpp" />
+    <ClCompile Include="FontSetupDlg.cpp" />
+    <ClCompile Include="FontSetupEMProPage.cpp" />
+    <ClCompile Include="FontSetupOptionPage.cpp" />
+    <ClCompile Include="FontSetUpSheet.cpp" />
+    <ClCompile Include="FontShowWnd.cpp" />
+    <ClCompile Include="FontVADHDlg.cpp" />
+    <ClCompile Include="FontZoomWnd.cpp" />
+    <ClCompile Include="HYFontSmartShaper.cpp" />
+    <ClCompile Include="HYFontSmartShaperDoc.cpp" />
+    <ClCompile Include="HYFontSmartShaperView.cpp" />
+    <ClCompile Include="HYMakeJFFontDlg.cpp" />
+    <ClCompile Include="HYToTtcDlg.cpp" />
+    <ClCompile Include="IKMergeDlg.cpp" />
+    <ClCompile Include="IKSplitDlg.cpp" />
+    <ClCompile Include="MainFrm.cpp" />
+    <ClCompile Include="Markup.cpp" />
+    <ClCompile Include="MergeDlg.cpp" />
+    <ClCompile Include="MKVNTAxisPage.cpp" />
+    <ClCompile Include="MKVNTFontPage.cpp" />
+    <ClCompile Include="MKVNTInstncPage.cpp" />
+    <ClCompile Include="MXGCPYDlg.cpp" />
+    <ClCompile Include="ResetPsNameDlg.cpp" />
+    <ClCompile Include="stdafx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="ThumFontWnd.cpp" />
+    <ClCompile Include="TXTCmpDlg.cpp" />
+    <ClCompile Include="VerifyFntDlg.cpp" />
+    <ClCompile Include="VFntSetUpDlg.cpp" />
+    <ClCompile Include="VrAxisRecords.cpp" />
+    <ClCompile Include="VrMasterinf.cpp" />
+    <ClCompile Include="XSysBaseProxy.cpp" />
+    <ClCompile Include="XSysProxy.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\include\HYFontSmartCore\HY_Global.h" />
+    <ClInclude Include="CharsCompareDlg.h" />
+    <ClInclude Include="CVrMasters.h" />
+    <ClInclude Include="MakeTTCDlg.h" />
+    <ClInclude Include="MKVNTDlg.h" />
+    <ClInclude Include="MKVNTMasterPage.h" />
+    <ClInclude Include="MKVNTSheet.h" />
+    <ClInclude Include="CompareFontWnd.h" />
+    <ClInclude Include="CVrFontShowWnd.h" />
+    <ClInclude Include="FongSVGDlg.h" />
+    <ClInclude Include="FontCmprZoomWnd.h" />
+    <ClInclude Include="FontDumpDlg.h" />
+    <ClInclude Include="FontInfDlg.h" />
+    <ClInclude Include="FontSetupCFFProPage.h" />
+    <ClInclude Include="FontSetupDlg.h" />
+    <ClInclude Include="FontSetupEMProPage.h" />
+    <ClInclude Include="FontSetupOptionPage.h" />
+    <ClInclude Include="FontSetUpSheet.h" />
+    <ClInclude Include="FontShowWnd.h" />
+    <ClInclude Include="FontVADHDlg.h" />
+    <ClInclude Include="FontZoomWnd.h" />
+    <ClInclude Include="HYFontSmartShaper.h" />
+    <ClInclude Include="HYFontSmartShaperDoc.h" />
+    <ClInclude Include="HYFontSmartShaperView.h" />
+    <ClInclude Include="HYMakeJFFontDlg.h" />
+    <ClInclude Include="HYToTtcDlg.h" />
+    <ClInclude Include="IKMergeDlg.h" />
+    <ClInclude Include="IKSplitDlg.h" />
+    <ClInclude Include="MainFrm.h" />
+    <ClInclude Include="Markup.h" />
+    <ClInclude Include="MergeDlg.h" />
+    <ClInclude Include="MKVNTAxisPage.h" />
+    <ClInclude Include="MKVNTFontPage.h" />
+    <ClInclude Include="MKVNTInstncPage.h" />
+    <ClInclude Include="MXGCPYDlg.h" />
+    <ClInclude Include="ResetPsNameDlg.h" />
+    <ClInclude Include="Resource.h" />
+    <ClInclude Include="resource2.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="targetver.h" />
+    <ClInclude Include="ThumFontWnd.h" />
+    <ClInclude Include="TXTCmpDlg.h" />
+    <ClInclude Include="VerifyFntDlg.h" />
+    <ClInclude Include="VFntSetUpDlg.h" />
+    <ClInclude Include="VrAxisRecords.h" />
+    <ClInclude Include="VrMasterinf.h" />
+    <ClInclude Include="XSysBaseProxy.h" />
+    <ClInclude Include="XSysProxy.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\HYFontSmartShaper.ico" />
+    <Image Include="res\HYFontSmartShaperDoc.ico" />
+    <Image Include="res\Toolbar.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="HYFontSmartShaper.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\HYFontSmartShaper.rc2" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties RESOURCE_FILE="HYFontSmartShaper.rc" />
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>

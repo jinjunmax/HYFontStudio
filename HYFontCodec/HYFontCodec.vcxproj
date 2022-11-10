@@ -1,0 +1,238 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{23E12B94-3897-4427-B847-483B56B4629F}</ProjectGuid>
+    <RootNamespace>HYFontCodec</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+    <WholeProgramOptimization>false</WholeProgramOptimization>
+    <UseOfMfc>false</UseOfMfc>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v142</PlatformToolset>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>15.0.26419.1</_ProjectFileVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>..\intermedia\HYFontCodec\$(Configuration)\</OutDir>
+    <IntDir>..\intermedia\HYFontCodec\$(Configuration)\</IntDir>
+    <LinkIncremental>true</LinkIncremental>
+    <TargetName>$(ProjectName)D</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>..\intermedia\HYFontCodec\$(Configuration)\</OutDir>
+    <IntDir>..\intermedia\HYFontCodec\$(Configuration)\</IntDir>
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>..\include\HYFontCodec;..\include;..\include\Zlib;..\boost_1_59_0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>ZLIB_WINAPI;WIN32;_DEBUG;_WINDOWS;_USRDLL;HYFONTCODEC_EXPORTS;MARKUP_STL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <CallingConvention>Cdecl</CallingConvention>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>HYBaseFunctionD.lib;zdll.lib;zlibwapi.lib;HYZIPCodec.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(OutDir)$(ProjectName)D.dll</OutputFile>
+      <AdditionalLibraryDirectories>..\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <ImportLibrary>..\lib\HYFontCodecD.lib</ImportLibrary>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+    <PostBuildEvent>
+      <Command>copy "$(TargetDir)$(TargetName).dll" ..\bin\$(TargetName).dll</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <AdditionalIncludeDirectories>..\include\HYFontCodec;..\include;..\include\Zlib;..\boost_1_59_0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>ZLIB_WINAPI;WIN32;NDEBUG;_WINDOWS;_USRDLL;HYFONTCODEC_EXPORTS;MARKUP_STL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <CallingConvention>Cdecl</CallingConvention>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>HYBaseFunction.lib;zlibwapi.lib;HYZIPCodec.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(OutDir)$(ProjectName).dll</OutputFile>
+      <AdditionalLibraryDirectories>..\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <ImportLibrary>..\lib\$(TargetName).lib</ImportLibrary>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+    <PostBuildEvent>
+      <Command>copy "$(TargetDir)$(TargetName).dll" ..\bin\$(TargetName).dll</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\include\HYFontCodec\HYGsub.cpp" />
+    <ClCompile Include="HYFontFunc.cpp" />
+    <ClCompile Include="HYTTC.cpp" />
+    <ClCompile Include="dllmain.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </PrecompiledHeader>
+      <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</CompileAsManaged>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </PrecompiledHeader>
+      <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</CompileAsManaged>
+    </ClCompile>
+    <ClCompile Include="FontExtract.cpp" />
+    <ClCompile Include="HYavar.cpp" />
+    <ClCompile Include="HYCBLC.cpp" />
+    <ClCompile Include="HYCFFInfo.cpp" />
+    <ClCompile Include="HYCmap.cpp" />
+    <ClCompile Include="HYCodeMap.cpp" />
+    <ClCompile Include="HYCOLR.cpp" />
+    <ClCompile Include="HYCvt.cpp" />
+    <ClCompile Include="HYDSIG.cpp" />
+    <ClCompile Include="HYFeatureRecord.cpp" />
+    <ClCompile Include="HYFontApi.cpp" />
+    <ClCompile Include="HYFontApiPrivate.cpp" />
+    <ClCompile Include="HYFontCodec.cpp" />
+    <ClCompile Include="HYFpgm.cpp" />
+    <ClCompile Include="HYfvar.cpp" />
+    <ClCompile Include="HYGasp.cpp" />
+    <ClCompile Include="HYgvar.cpp" />
+    <ClCompile Include="HYHead.cpp" />
+    <ClCompile Include="HYHhea.cpp" />
+    <ClCompile Include="HYHmtx.cpp" />
+    <ClCompile Include="HYHVAR.cpp" />
+    <ClCompile Include="HYItemVariation.cpp" />
+    <ClCompile Include="HYLoca.cpp" />
+    <ClCompile Include="HYMaxp.cpp" />
+    <ClCompile Include="HYmeta.cpp" />
+    <ClCompile Include="HYName.cpp" />
+    <ClCompile Include="HYOS.cpp" />
+    <ClCompile Include="HYPGlyf.cpp" />
+    <ClCompile Include="HYPost.cpp" />
+    <ClCompile Include="HYPrep.cpp" />
+    <ClCompile Include="HYsbix.cpp" />
+    <ClCompile Include="HYScriptRecord.cpp" />
+    <ClCompile Include="HYSTAT.cpp" />
+    <ClCompile Include="HYSVG.cpp" />
+    <ClCompile Include="HYTableDirectory.cpp" />
+    <ClCompile Include="HYVhea.cpp" />
+    <ClCompile Include="HYVmtx.cpp" />
+    <ClCompile Include="HYVORG.cpp" />
+    <ClCompile Include="HYVVAR.cpp" />
+    <ClCompile Include="Markup.cpp" />
+    <ClCompile Include="stdafx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="WoffCodec.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\include\HYErrorDef.h" />
+    <ClInclude Include="..\include\HYFontCodec\HYFontFunc.h" />
+    <ClInclude Include="..\include\HYFontCodec\HYTTC.h" />
+    <ClInclude Include="..\include\HYFontCodec\FontExtract.h" />
+    <ClInclude Include="..\include\HYFontCodec\HYavar.h" />
+    <ClInclude Include="..\include\HYFontCodec\HYCBLC.h" />
+    <ClInclude Include="..\include\HYFontCodec\HYCFFInfo.h" />
+    <ClInclude Include="..\include\HYFontCodec\HYCharSetRang.h" />
+    <ClInclude Include="..\include\HYFontCodec\HYCmap.h" />
+    <ClInclude Include="..\include\HYFontCodec\HYCodeMap.h" />
+    <ClInclude Include="..\include\HYFontCodec\HYCOLR.h" />
+    <ClInclude Include="..\include\HYFontCodec\HYCvt.h" />
+    <ClInclude Include="..\include\HYFontCodec\HYDSIG.h" />
+    <ClInclude Include="..\include\HYFontCodec\HYFeatureRecord.h" />
+    <ClInclude Include="..\include\HYFontCodec\HYFontApi.h" />
+    <ClInclude Include="..\include\HYFontCodec\HYFontCodec.h" />
+    <ClInclude Include="..\include\HYFontCodec\HYFontCodecDef.h" />
+    <ClInclude Include="..\include\HYFontCodec\HYFontCodecHead.h" />
+    <ClInclude Include="..\include\HYFontCodec\HYFpgm.h" />
+    <ClInclude Include="..\include\HYFontCodec\HYfvar.h" />
+    <ClInclude Include="..\include\HYFontCodec\HYGasp.h" />
+    <ClInclude Include="..\include\HYFontCodec\HYGlyf.h" />
+    <ClInclude Include="..\include\HYFontCodec\HYGsub.h" />
+    <ClInclude Include="..\include\HYFontCodec\HYgvar.h" />
+    <ClInclude Include="..\include\HYFontCodec\HYHead.h" />
+    <ClInclude Include="..\include\HYFontCodec\HYHhea.h" />
+    <ClInclude Include="..\include\HYFontCodec\HYHmtx.h" />
+    <ClInclude Include="..\include\HYFontCodec\HYHVAR.h" />
+    <ClInclude Include="..\include\HYFontCodec\HYItemVariation.h" />
+    <ClInclude Include="..\include\HYFontCodec\HYLoca.h" />
+    <ClInclude Include="..\include\HYFontCodec\HYMaxp.h" />
+    <ClInclude Include="..\include\HYFontCodec\HYmeta.h" />
+    <ClInclude Include="..\include\HYFontCodec\HYName.h" />
+    <ClInclude Include="..\include\HYFontCodec\HYOS.h" />
+    <ClInclude Include="..\include\HYFontCodec\HYPost.h" />
+    <ClInclude Include="..\include\HYFontCodec\HYPrep.h" />
+    <ClInclude Include="..\include\HYFontCodec\HYsbix.h" />
+    <ClInclude Include="..\include\HYFontCodec\HYScriptRecord.h" />
+    <ClInclude Include="..\include\HYFontCodec\HYSTAT.h" />
+    <ClInclude Include="..\include\HYFontCodec\HYSVG.h" />
+    <ClInclude Include="..\include\HYFontCodec\HYTableDirectory.h" />
+    <ClInclude Include="..\include\HYFontCodec\HYVhea.h" />
+    <ClInclude Include="..\include\HYFontCodec\HYVmtx.h" />
+    <ClInclude Include="..\include\HYFontCodec\HYVORG.h" />
+    <ClInclude Include="..\include\HYFontCodec\HYVVAR.h" />
+    <ClInclude Include="..\include\HYFontCodec\WoffCodec.h" />
+    <ClInclude Include="HYFontApiPrivate.h" />
+    <ClInclude Include="Markup.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="targetver.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Infomation.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\HYBaseFunction\HYBaseFunction.vcxproj">
+      <Project>{ac5af06c-6112-4f78-b300-50ef230508f9}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

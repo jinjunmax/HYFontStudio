@@ -1,0 +1,6 @@
+; HYImageConvertFont.def : Declares the module parameters for the DLL.
+
+LIBRARY      "HYImageConvertFont"
+
+EXPORTS
+    ; Explicit exports can go here
