@@ -269,8 +269,6 @@ namespace HYFONTCODEC
 		int		EncodeCmapFmt14(FILE* pFontFile,CMAP_TABLE_ENTRY& entry);
 
 	public:
-
-#if 0 //emjio ∏ƒ‘Ï¡Ÿ ±∆¡±Œ
 		// EBLC CBLC Table
 		int		DecodeEBLC();
 		int		DecodeCBLC();
@@ -278,14 +276,14 @@ namespace HYFONTCODEC
 		void	DecodeSbitLineMetrics(SbitLineMetrics& sbit);
 		void	DecodeBigGlyphMetrics(BigGlyphMetrics& bigMtrcs);
 		int		DecodeIndexSubTableArray(BitmapSize& bitmapSizeTable,long  indexSubTableArrayOffset);
-		int		DecodeIndexSubTable(IndexSUBTable& IndexSubArray);
-		void	DecdoeIndexSubTable1(IndexSUBTable& IndxSubTb);
-		void	DecdoeIndexSubTable2(IndexSUBTable& IndxSubTb);
-		void	DecdoeIndexSubTable3(IndexSUBTable& IndxSubTb);
-		void	DecdoeIndexSubTable4(IndexSUBTable& IndxSubTb);
-		void	DecdoeIndexSubTable5(IndexSUBTable& IndxSubTb);
-
+		int		DecodeIndexSubTable(IndexSubTableArray& aryIndxSubTb);
+		void	DecdoeIndexSubTable1(IndexSubTableArray& aryIndxSubTb);
+		void	DecdoeIndexSubTable2(IndexSubTableArray& aryIndxSubTb);
+		void	DecdoeIndexSubTable3(IndexSubTableArray& aryIndxSubTb);
+		void	DecdoeIndexSubTable4(IndexSubTableArray& aryIndxSubTb);
+		void	DecdoeIndexSubTable5(IndexSubTableArray& aryIndxSubTb);
 		void	DecodeBmpLC(unsigned long ulBLCPos);
+
 		int		EncodeCBLC();
 		int		EncodeEBLC();
 		void	EncodeBLCInfo(CHYCBLC& HYCblc,unsigned long ulBLCPos);
@@ -325,7 +323,7 @@ namespace HYFONTCODEC
 		void	EncodeEBDTFormat17(IndexSubTableArray& SubTableArray, unsigned long uloffsetEBDT);
 		void	EncodeEBDTFormat18(IndexSubTableArray& SubTableArray, unsigned long uloffsetEBDT);
 		void	EncodeEBDTFormat19(IndexSubTableArray& SubTableArray, unsigned long uloffsetEBDT);		
-#endif 
+
 		//head table
 		int		Decodehead();
 		void	Dumphead(CMarkup& MK);

@@ -1967,18 +1967,19 @@ namespace HYFONTCODEC
 			Decodevmtx();
 		}
 
-#if 0 //emjio 改造临时屏蔽
 		// 解析CBLC表
 		if(FindTableEntry(CBLC_TAG)){
 			DecodeCBLC();
-		}
-		// 解析CBDT表
-		if(FindTableEntry(CBDT_TAG)){
-			DecodeCBDT();				
-		}
+		}		
 		if (FindTableEntry(EBLC_TAG)) {
 			DecodeEBLC();
 		}
+#if 0 //emjio 改造临时屏蔽
+		// 解析CBDT表
+		if (FindTableEntry(CBDT_TAG)) {
+			DecodeCBDT();
+		}
+
 		// 解析CBDT表
 		if (FindTableEntry(EBDT_TAG)) {
 			DecodeEBDT();
@@ -7513,7 +7514,7 @@ namespace HYFONTCODEC
 		return HY_NOERROR;
 
 	}	// end of int CHYFontCodec::EncodeCmapFmt14()
-#if 0	//emjio 改造临时屏蔽
+
 	//EBLC
 	int	CHYFontCodec::DecodeEBLC()
 	{
@@ -7661,10 +7662,7 @@ namespace HYFONTCODEC
 			long currentPs = ftell(m_pFontFile);
 
 			fseek(m_pFontFile, indexSubTableArrayOffset + arryIndxSubTable.Offset, SEEK_SET);
-			IndexSUBTable IndxSubTb;
-			DecodeIndexSubTable(IndxSubTb);
-			arryIndxSubTable.vtIndxSubTable.push_back(IndxSubTb);
-
+			DecodeIndexSubTable(arryIndxSubTable);
 			fseek(m_pFontFile, currentPs, SEEK_SET);
 
 			bitmapSizeTable.vtIndexSubTableArray.push_back(arryIndxSubTable);
@@ -7674,8 +7672,9 @@ namespace HYFONTCODEC
 
 	}	// end of int CHYFontCodec::DecodeIndexSubTableArray()
 
-	int CHYFontCodec::DecodeIndexSubTable(IndexSUBTable& IndxSubTb)
+	int CHYFontCodec::DecodeIndexSubTable(IndexSubTableArray& aryIndxSubTb)
 	{	
+		IndexSUBTable& IndxSubTb = aryIndxSubTb.IndxSubTable;
 		//IndexSubHeader
 		//indexFormat
 		fread(&IndxSubTb.Header.indexFormat,2,1,m_pFontFile);
@@ -7689,19 +7688,19 @@ namespace HYFONTCODEC
 
 		switch(IndxSubTb.Header.indexFormat)	{			
 			case 1:
-				DecdoeIndexSubTable1(IndxSubTb);
+				DecdoeIndexSubTable1(aryIndxSubTb);
 				break;			
 			case 2:				
-				DecdoeIndexSubTable2(IndxSubTb);
+				DecdoeIndexSubTable2(aryIndxSubTb);
 				break;			
 			case 3:
-				DecdoeIndexSubTable3(IndxSubTb);
+				DecdoeIndexSubTable3(aryIndxSubTb);
 				break;			
 			case 4:				
-				DecdoeIndexSubTable4(IndxSubTb);
+				DecdoeIndexSubTable4(aryIndxSubTb);
 				break;			
 			case 5:
-				DecdoeIndexSubTable5(IndxSubTb);
+				DecdoeIndexSubTable5(aryIndxSubTb);
 				break;			
 		}
 
@@ -7709,20 +7708,27 @@ namespace HYFONTCODEC
 
 	}	// end of int CHYFontCodec::DecodeIndexSubTable()
 
-	void	CHYFontCodec::DecdoeIndexSubTable1(IndexSUBTable& IndxSubTb)
-	{
-		IndexSubTable1& SubTable1 = IndxSubTb.SubTable1;
+	void	CHYFontCodec::DecdoeIndexSubTable1(IndexSubTableArray& aryIndxSubTb)
+	{		
+		IndexSubTable1& SubTable1 = aryIndxSubTb.IndxSubTable.SubTable1;
 
 		unsigned long ulOffset = 0;
-		fread(&ulOffset, 4, 1, m_pFontFile);
-		ulOffset = hy_cdr_int32_to(ulOffset);
-		SubTable1.vtsbitOffsets.push_back(ulOffset);
+		// it is necessary to store one extra element in the 
+		// sbitOffsets array pointing just past the end of the 
+		// range’s image data. 
+		int iSize = aryIndxSubTb.lastGlyphIndex - aryIndxSubTb.firstGlyphIndex +1+1;
+		for (int i = 0; i < iSize; i++)
+		{
+			fread(&ulOffset, 4, 1, m_pFontFile);
+			ulOffset = hy_cdr_int32_to(ulOffset);
+			SubTable1.vtsbitOffsets.push_back(ulOffset);
+		}
 
 	}	// end of int	CHYFontCodec::DecdoeIndexSubTable1()
 
-	void	CHYFontCodec::DecdoeIndexSubTable2(IndexSUBTable& IndxSubTb)
+	void	CHYFontCodec::DecdoeIndexSubTable2(IndexSubTableArray& aryIndxSubTb)
 	{
-		IndexSubTable2& SubTable2 = IndxSubTb.SubTable2;
+		IndexSubTable2& SubTable2 = aryIndxSubTb.IndxSubTable.SubTable2;
 
 		unsigned long ulImageSize = 0;
 		fread(&ulImageSize, 4, 1, m_pFontFile);
@@ -7731,20 +7737,27 @@ namespace HYFONTCODEC
 
 	}	// end of int	CHYFontCodec::DecdoeIndexSubTable2()
 
-	void	CHYFontCodec::DecdoeIndexSubTable3(IndexSUBTable& IndxSubTb)
+	void	CHYFontCodec::DecdoeIndexSubTable3(IndexSubTableArray& aryIndxSubTb)
 	{
-		IndexSubTable3& SubTable3 = IndxSubTb.SubTable3;
+		IndexSubTable3& SubTable3 = aryIndxSubTb.IndxSubTable.SubTable3;
 
+		// it is necessary to store one extra element in the 
+		// sbitOffsets array pointing just past the end of the 
+		// range’s image data. 
+		int iSize = aryIndxSubTb.lastGlyphIndex - aryIndxSubTb.firstGlyphIndex + 1 +1;
 		unsigned short usOffset = 0;
-		fread(&usOffset, 2, 1, m_pFontFile);
-		usOffset = hy_cdr_int16_to(usOffset);
-		SubTable3.vtOffsetArray.push_back(usOffset);
+		for (int i = 0; i < iSize; i++)
+		{
+			fread(&usOffset, 2, 1, m_pFontFile);
+			usOffset = hy_cdr_int16_to(usOffset);
+			SubTable3.vtOffsetArray.push_back(usOffset);
+		}
 
 	}	// end of void	CHYFontCodec::DecdoeIndexSubTable3()
 
-	void	CHYFontCodec::DecdoeIndexSubTable4(IndexSUBTable& IndxSubTb)
+	void	CHYFontCodec::DecdoeIndexSubTable4(IndexSubTableArray& aryIndxSubTb)
 	{
-		IndexSubTable4& SubTable4 = IndxSubTb.SubTable4;
+		IndexSubTable4& SubTable4 = aryIndxSubTb.IndxSubTable.SubTable4;
 
 		unsigned long numGlyphs = 0;
 		fread(&numGlyphs, 4, 1, m_pFontFile);
@@ -7763,25 +7776,23 @@ namespace HYFONTCODEC
 
 	}	// end of void	CHYFontCodec::DecdoeIndexSubTable4()
 
-	void	CHYFontCodec::DecdoeIndexSubTable5(IndexSUBTable& IndxSubTb)
+	void	CHYFontCodec::DecdoeIndexSubTable5(IndexSubTableArray& aryIndxSubTb)
 	{
 		unsigned long ulTmp = 0;
-		IndexSubTable5& SubTable5 = IndxSubTb.SubTable5;
+		IndexSubTable5& SubTable5 = aryIndxSubTb.IndxSubTable.SubTable5;
+
 		fread(&ulTmp, 4, 1, m_pFontFile);
 		SubTable5.imageSize = hy_cdr_int32_to(ulTmp);
-
-		DecodeBigGlyphMetrics(SubTable5.bigMetrics);
-		
+		DecodeBigGlyphMetrics(SubTable5.bigMetrics);		
 		fread(&ulTmp, 4, 1, m_pFontFile);
 		SubTable5.numGlyphs = hy_cdr_int32_to(ulTmp);
-
 		unsigned short usGID = 0;
 		for (int i = 0; i < SubTable5.numGlyphs; i++){			
 			fread(&usGID, 2, 1, m_pFontFile);
 			usGID = hy_cdr_int16_to(usGID);
 			SubTable5.vtGlyphIDArray.push_back(usGID);
 		}
-	
+
 	}	// end of void	CHYFontCodec::DecdoeIndexSubTable5()
 
 	int	CHYFontCodec::EncodeCBLC()
@@ -7840,7 +7851,7 @@ namespace HYFONTCODEC
 		
 		for (unsigned long i = 0; i < m_HYCblc.Header.numsizes; i++) {
 			BitmapSize& bitmapSizeTable = m_HYCblc.vtBitmapSizeTb[i];
-			bitmapSizeTable.numberofIndexSubTables = (unsigned long)m_HYCblc.vtIndexSubTableArray.size();
+			bitmapSizeTable.numberofIndexSubTables = (unsigned long)bitmapSizeTable.vtIndexSubTableArray.size();
 			
 			ulTmp = 0;			
 			fwrite(&ulTmp, 4, 1, m_pFontFile);
@@ -7903,7 +7914,7 @@ namespace HYFONTCODEC
 
 			unsigned long AdditionalOffset = 0;
 			for (unsigned long y = 0; y < bitmapSizeTable.numberofIndexSubTables; y++) {
-				IndexSubTableArray& subtableArray = m_HYCblc.vtIndexSubTableArray[y];
+				IndexSubTableArray& subtableArray = bitmapSizeTable.vtIndexSubTableArray[y];
 				subtableArray.Offset = AdditionalOffset;
 				EncodeIndexSubTableArray(subtableArray, AdditionalOffset);
 			}
@@ -7946,19 +7957,19 @@ namespace HYFONTCODEC
 
 		//IndexSubHeader
 		//indexFormat
-		usTmp = hy_cdr_int16_to(subtableArray.IndexSubTb.Header.indexFormat);
+		usTmp = hy_cdr_int16_to(subtableArray.IndxSubTable.Header.indexFormat);
 		fwrite(&usTmp, 2, 1, m_pFontFile);
 		additionalOffset += 2;
 		//imageFormat
-		usTmp = hy_cdr_int16_to(subtableArray.IndexSubTb.Header.imageFormat);
+		usTmp = hy_cdr_int16_to(subtableArray.IndxSubTable.Header.imageFormat);
 		fwrite(&usTmp, 2, 1, m_pFontFile);
 		additionalOffset += 2;
 		//imageDataOffset
-		ulTmp = hy_cdr_int32_to(subtableArray.IndexSubTb.Header.imageDataOffset);
+		ulTmp = hy_cdr_int32_to(subtableArray.IndxSubTable.Header.imageDataOffset);
 		fwrite(&ulTmp, 4, 1, m_pFontFile);
 		additionalOffset += 4;
 
-		switch (subtableArray.IndexSubTb.Header.indexFormat)
+		switch (subtableArray.IndxSubTable.Header.indexFormat)
 		{
 			case 1:
 				EncodeIndexSubTable1(subtableArray, additionalOffset);
@@ -7989,7 +8000,7 @@ namespace HYFONTCODEC
 		int loop = IndexArray.lastGlyphIndex - IndexArray.firstGlyphIndex + 1 + 1;
 		unsigned long ulTmp;
 		for (int i = 0; i < loop; i++){			
-			ulTmp = hy_cdr_int32_to(IndexArray.IndexSubTb.SubTable1.vtsbitOffsets[i]);
+			ulTmp = hy_cdr_int32_to(IndexArray.IndxSubTable.SubTable1.vtsbitOffsets[i]);
 			fwrite(&ulTmp, 4, 1, m_pFontFile);
 			additionalOffset += 4;
 		}
@@ -7999,7 +8010,7 @@ namespace HYFONTCODEC
 	void CHYFontCodec::EncodeIndexSubTable2(IndexSubTableArray& IndexArray, unsigned long additionalOffset)
 	{
 		unsigned long ulTmp;
-		IndexSubTable2& SubTable2 = IndexArray.IndexSubTb.SubTable2;
+		IndexSubTable2& SubTable2 = IndexArray.IndxSubTable.SubTable2;
 		ulTmp = hy_cdr_int32_to(SubTable2.ulImageSize);
 		fwrite(&ulTmp, 4, 1, m_pFontFile);
 		additionalOffset += 4;
@@ -8018,11 +8029,13 @@ namespace HYFONTCODEC
 
 	void CHYFontCodec::EncodeIndexSubTable3(IndexSubTableArray& IndexArray, unsigned long additionalOffset)
 	{
-		// +1, it is necessary to store one extra element in the sbitOffsets array pointing just past the end of the range’s image data. 
+		// +1, it is necessary to store one extra element 
+		//in the sbitOffsets array pointing 
+		//just past the end of the range’s image data. 
 		int loop = IndexArray.lastGlyphIndex - IndexArray.firstGlyphIndex + 1 + 1;
 		unsigned short usTmp;
 		for (int i = 0; i < loop; i++) {
-			usTmp = hy_cdr_int16_to(IndexArray.IndexSubTb.SubTable3.vtOffsetArray[i]);
+			usTmp = hy_cdr_int16_to(IndexArray.IndxSubTable.SubTable3.vtOffsetArray[i]);
 			fwrite(&usTmp, 2, 1, m_pFontFile);
 			additionalOffset += 2;
 		}
@@ -8034,7 +8047,7 @@ namespace HYFONTCODEC
 		unsigned long ulTmp=0;
 		unsigned short usTmp = 0;
 
-		IndexSubTable4& SubTable4 = IndexArray.IndexSubTb.SubTable4;
+		IndexSubTable4& SubTable4 = IndexArray.IndxSubTable.SubTable4;
 		ulTmp = hy_cdr_int32_to(SubTable4.numGlyphs);
 		fwrite(&ulTmp, 4, 1, m_pFontFile);
 		additionalOffset += 4;
@@ -8053,7 +8066,7 @@ namespace HYFONTCODEC
 	void CHYFontCodec::EncodeIndexSubTable5(IndexSubTableArray& IndexArray, unsigned long additionalOffset)
 	{
 		unsigned long ulTmp;
-		IndexSubTable5& SubTable5 = IndexArray.IndexSubTb.SubTable5;
+		IndexSubTable5& SubTable5 = IndexArray.IndxSubTable.SubTable5;
 		ulTmp = hy_cdr_int32_to(SubTable5.imageSize);
 		fwrite(&ulTmp, 4, 1, m_pFontFile);
 		additionalOffset += 4;
@@ -8102,7 +8115,7 @@ namespace HYFONTCODEC
 			size_t szBitmapSize = m_HYCblc.vtBitmapSizeTb.size();
 			for (size_t i = 0; i < szBitmapSize; i++) {
 				BitmapSize& bitmapSizeTable = m_HYCblc.vtBitmapSizeTb[i];
-				IndexSubTableArray& IndexTableArray = m_HYCblc.vtIndexSubTableArray[i];
+				IndexSubTableArray& IndexTableArray = bitmapSizeTable.vtIndexSubTableArray[i];
 				DecodeEBDTData(IndexTableArray, tbEntry.offset);
 			}
 		}
@@ -8132,8 +8145,11 @@ namespace HYFONTCODEC
 			size_t szBitmapSize = m_HYCblc.vtBitmapSizeTb.size();
 			for (size_t i = 0; i < szBitmapSize; i++) {
 				BitmapSize& bitmapSizeTable = m_HYCblc.vtBitmapSizeTb[i];
-				IndexSubTableArray& IndexTableArray = m_HYCblc.vtIndexSubTableArray[i];
-				DecodeEBDTData(IndexTableArray, tbEntry.offset);
+				for (int j = 0; j < bitmapSizeTable.numberofIndexSubTables; j++)
+				{
+					IndexSubTableArray& IndexTableArray = bitmapSizeTable.vtIndexSubTableArray[j];
+					DecodeEBDTData(IndexTableArray, tbEntry.offset);
+				}	
 			}
 		}	
 
@@ -8143,57 +8159,71 @@ namespace HYFONTCODEC
 
 	void CHYFontCodec::DecodeEBDTData(IndexSubTableArray& arrySubtable, unsigned long ulEBDTPos)
 	{		
-		int iLoop = arrySubtable.lastGlyphIndex - arrySubtable.firstGlyphIndex + 1;
-		for (int i = 0; i < iLoop; i++) {
-			IndexSUBTable& subTable = arrySubtable.vtIndxSubTable[i];
-			unsigned short usImgFormat = subTable.Header.imageFormat;
-			unsigned short usindexFormat = subTable.Header.indexFormat;
-			unsigned long ulDataoffset = ulEBDTPos + subTable.Header.imageDataOffset;
-			
-			ulDataoffset += subTable.SubTable1.vtsbitOffsets[i];
-			fseek(m_pFontFile, ulDataoffset, SEEK_SET);
-			unsigned long dataLen = subTable.SubTable1.vtsbitOffsets[i + 1] - subTable.SubTable1.vtsbitOffsets[i];
+		// it is necessary to store one extra element in the 
+		// sbitOffsets array pointing just past the end of 
+		//the range’s image data
+		int iLoop = arrySubtable.lastGlyphIndex - arrySubtable.firstGlyphIndex+1+1;
 
+		IndexSUBTable& subTable = arrySubtable.IndxSubTable;
+		unsigned short usImgFormat = subTable.Header.imageFormat;
+		unsigned short usindexFormat = subTable.Header.indexFormat;
+
+		unsigned long ulDataoffset = ulEBDTPos + subTable.Header.imageDataOffset;
+		
+		for (int i = 0; i < iLoop; i++) {
+			ulDataoffset += subTable.SubTable1.vtsbitOffsets[i];			
+			fseek(m_pFontFile, ulDataoffset, SEEK_SET);
+	
+			unsigned long dataLen = subTable.SubTable1.vtsbitOffsets[i + 1] - subTable.SubTable1.vtsbitOffsets[i];
 			if (usImgFormat == 1){					
-				CBDTFormat1& format1 = subTable.dataFrmt1;
+				CBDTFormat1 format1;
 				DecodeEBDTFormat1(format1,dataLen);
+				subTable.vtDataFrmt1.push_back(format1);
 			}
 			if (usImgFormat == 2) {
-				CBDTFormat2& format2 = subTable.dataFrmt2;
+				CBDTFormat2 format2;
 				DecodeEBDTFormat2(format2, dataLen);
+				subTable.vtDataFrmt2.push_back(format2);
 			}
 			if (usImgFormat == 5) {
-				CBDTFormat5& format5 = subTable.dataFrmt5;
+				CBDTFormat5 format5;
 				DecodeEBDTFormat5(format5, dataLen);
+				subTable.vtDataFrmt5.push_back(format5);
 			}
 			if (usImgFormat == 6) {
-				CBDTFormat6& format6 = subTable.dataFrmt6;
+				CBDTFormat6 format6;
 				DecodeEBDTFormat6(format6, dataLen);
+				subTable.vtDataFrmt6.push_back(format6);
 			}
 			if (usImgFormat == 7) {
-				CBDTFormat7& format7 = subTable.dataFrmt7;
-				DecodeEBDTFormat7(format7, dataLen);					
+				CBDTFormat7 format7;
+				DecodeEBDTFormat7(format7, dataLen);
+				subTable.vtDataFrmt7.push_back(format7);
 			}
 			if (usImgFormat == 8) {
-				CBDTFormat8& format8 = subTable.dataFrmt8;
+				CBDTFormat8 format8;
 				DecodeEBDTFormat8(format8);
-					
+				subTable.vtDataFrmt8.push_back(format8);
 			}
 			if (usImgFormat == 9) {
-				CBDTFormat9& format9 = subTable.dataFrmt9;
-				DecodeEBDTFormat9(format9);					
+				CBDTFormat9 format9;
+				DecodeEBDTFormat9(format9);
+				subTable.vtDataFrmt9.push_back(format9);
 			}
 			if (usImgFormat == 17) {
-				CBDTFormat17& format17 = subTable.dataFrmt17;
-				DecodeEBDTFormat17(format17);					
+				CBDTFormat17 format17;
+				DecodeEBDTFormat17(format17);
+				subTable.vtDataFrmt17.push_back(format17);
 			}
 			if (usImgFormat == 18) {
-				CBDTFormat18& format18 = subTable.dataFrmt18;
-				DecodeEBDTFormat18(format18);					
+				CBDTFormat18 format18;
+				DecodeEBDTFormat18(format18);
+				subTable.vtDataFrmt18.push_back(format18);
 			}
 			if (usImgFormat == 19) {
-				CBDTFormat19& format19 = subTable.dataFrmt19;
-				DecodeEBDTFormat19(format19);					
+				CBDTFormat19 format19;
+				DecodeEBDTFormat19(format19);
+				subTable.vtDataFrmt19.push_back(format19);
 			}						
 		}
 	
@@ -8206,7 +8236,8 @@ namespace HYFONTCODEC
 		fread(&format1.SmlGlyphMtcs.BearingX, 1, 1, m_pFontFile);
 		fread(&format1.SmlGlyphMtcs.BearingY, 1, 1, m_pFontFile);
 		fread(&format1.SmlGlyphMtcs.Advance, 1, 1, m_pFontFile);
-		for (unsigned long x = 0; x < dataLen; x++) {
+		unsigned long size = dataLen - 5;
+		for (unsigned long x = 0; x < size; x++) {
 			unsigned char cTmp;
 			fread(&cTmp, 1, 1, m_pFontFile);
 			format1.imagedata.push_back(cTmp);
@@ -8222,7 +8253,8 @@ namespace HYFONTCODEC
 		fread(&format2.SmlGlyphMtcs.BearingY, 1, 1, m_pFontFile);
 		fread(&format2.SmlGlyphMtcs.Advance, 1, 1, m_pFontFile);
 
-		for (unsigned long x = 0; x < dataLen; x++) {
+		unsigned long size = dataLen - 5;
+		for (unsigned long x = 0; x < size; x++) {
 			unsigned char cTmp;
 			fread(&cTmp, 1, 1, m_pFontFile);
 			format2.imagedata.push_back(cTmp);
@@ -8251,7 +8283,8 @@ namespace HYFONTCODEC
 		fread(&format6.bigGlyphMtcs.vertBearingY, 1, 1, m_pFontFile);
 		fread(&format6.bigGlyphMtcs.vertAdvance, 1, 1, m_pFontFile);
 
-		for (unsigned long x = 0; x < dataLen; x++) {
+		unsigned long size = dataLen - 8;
+		for (unsigned long x = 0; x < size; x++) {
 			unsigned char cTmp;
 			fread(&cTmp, 1, 1, m_pFontFile);
 			format6.imagedata.push_back(cTmp);
@@ -8269,8 +8302,8 @@ namespace HYFONTCODEC
 		fread(&format7.bigGlyphMtcs.vertBearingX, 1, 1, m_pFontFile);
 		fread(&format7.bigGlyphMtcs.vertBearingY, 1, 1, m_pFontFile);
 		fread(&format7.bigGlyphMtcs.vertAdvance, 1, 1, m_pFontFile);
-
-		for (unsigned long x = 0; x < dataLen; x++) {
+		unsigned long size = dataLen - 8;
+		for (unsigned long x = 0; x < size; x++) {
 			unsigned char cTmp;
 			fread(&cTmp, 1, 1, m_pFontFile);
 			format7.imagedata.push_back(cTmp);
@@ -8423,62 +8456,14 @@ namespace HYFONTCODEC
 		fwrite(&usTmp, 2, 1, m_pFontFile);
 		usTmp = hy_cdr_int16_to(m_HYCBDT.minorVersion);
 		fwrite(&usTmp, 2, 1, m_pFontFile);
-#if 0
-		size_t stBTSzTb = m_HYCblc.vtBitmapSizeTb.size();
-		for (size_t i = 0; i < stBTSzTb; i++){
-			BitmapSize& bitmapSizeTB = m_HYCblc.vtBitmapSizeTb[i];
-			size_t tbArraySize = m_HYCblc.vtIndexSubTableArray.size();
-			for (size_t j = 0; j < tbArraySize; j++){
-				size_t tArySize = 0;
-				IndexSubTableArray& SubTableArray = m_HYCblc.vtIndexSubTableArray[j];
-				IndexSUBTable& SUBTable = SubTableArray.IndexSubTb;
 
-				switch (SUBTable.Header.imageFormat)
-				{
-				case 1:
-					EncodeEBDTFormat1(SubTableArray, uloffsetEBDT);
-					break;
-				case 2:
-					EncodeEBDTFormat2(SubTableArray, uloffsetEBDT);
-					break;
-				case 5:
-					EncodeEBDTFormat5(SubTableArray, uloffsetEBDT);
-					break;
-				case 6:
-					EncodeEBDTFormat6(SubTableArray, uloffsetEBDT);
-					break;
-				case 7:
-					EncodeEBDTFormat7(SubTableArray, uloffsetEBDT);
-					break;
-				case 8:
-					EncodeEBDTFormat8(SubTableArray, uloffsetEBDT);
-					break;
-				case 9:
-					EncodeEBDTFormat9(SubTableArray, uloffsetEBDT);
-					break;
-				case 17:
-					EncodeEBDTFormat17(SubTableArray, uloffsetEBDT);
-					break;
-				case 18:
-					EncodeEBDTFormat18(SubTableArray, uloffsetEBDT);
-					break;
-				case 19:
-					EncodeEBDTFormat19(SubTableArray, uloffsetEBDT);
-					break;
-				default:
-					break;
-				}
-			}
-		}	
-#else 
 		size_t stBTSzTb = m_HYCblc.vtBitmapSizeTb.size();
 		for (size_t i = 0; i < stBTSzTb; i++) {
-			BitmapSize& bitmapSizeTB = m_HYCblc.vtBitmapSizeTb[i];
-			IndexSubTableArray& SubTableArray = m_HYCblc.vtIndexSubTableArray[i];
-			for (size_t j = 0; j < tbArraySize; j++) {
+			BitmapSize& bitmapSizeTB = m_HYCblc.vtBitmapSizeTb[i];			
+			for (size_t j = 0; j < bitmapSizeTB.numberofIndexSubTables; j++) {
 				size_t tArySize = 0;
-				IndexSubTableArray& SubTableArray = m_HYCblc.vtIndexSubTableArray[j];
-				IndexSUBTable& SUBTable = SubTableArray.IndexSubTb;
+				IndexSubTableArray& SubTableArray = bitmapSizeTB.vtIndexSubTableArray[j];
+				IndexSUBTable& SUBTable = SubTableArray.IndxSubTable;
 
 				switch (SUBTable.Header.imageFormat)
 				{
@@ -8518,8 +8503,6 @@ namespace HYFONTCODEC
 			}
 		}
 
-
-#endif 
 		return true;
 
 	}	// end of int CHYFontCodec::EncodeBDTData()
@@ -8528,11 +8511,11 @@ namespace HYFONTCODEC
 	{	
 		int iseek=0;
 		unsigned long ulCurrent = ftell(m_pFontFile);
-		SubTableArray.IndexSubTb.Header.imageDataOffset = ulCurrent - uloffsetEBDT;
+		SubTableArray.IndxSubTable.Header.imageDataOffset = ulCurrent - uloffsetEBDT;
 		unsigned long GlyphOffset = 0;
 
 		for (int i = SubTableArray.firstGlyphIndex; i <= SubTableArray.lastGlyphIndex; i++) {
-			CBDTFormat1& Foramt1 = SubTableArray.IndexSubTb.vtDdataForm1[iseek];
+			CBDTFormat1& Foramt1 = SubTableArray.IndxSubTable.vtDataFrmt1[iseek];
 			fwrite(&Foramt1.SmlGlyphMtcs.height, 1, 1, m_pFontFile);
 			fwrite(&Foramt1.SmlGlyphMtcs.width, 1, 1, m_pFontFile);
 			fwrite(&Foramt1.SmlGlyphMtcs.BearingX, 1, 1, m_pFontFile);
@@ -8546,17 +8529,17 @@ namespace HYFONTCODEC
 
 			// 计算offset
 			GlyphOffset = ftell(m_pFontFile) - ulCurrent;
-			if (SubTableArray.IndexSubTb.Header.indexFormat == 1){				
-				SubTableArray.IndexSubTb.SubTable1.vtsbitOffsets.push_back(GlyphOffset);
+			if (SubTableArray.IndxSubTable.Header.indexFormat == 1){				
+				SubTableArray.IndxSubTable.SubTable1.vtsbitOffsets.push_back(GlyphOffset);
 			}			
-			if (SubTableArray.IndexSubTb.Header.indexFormat == 3) {				
-				SubTableArray.IndexSubTb.SubTable3.vtOffsetArray.push_back((unsigned short)GlyphOffset);
+			if (SubTableArray.IndxSubTable.Header.indexFormat == 3) {				
+				SubTableArray.IndxSubTable.SubTable3.vtOffsetArray.push_back((unsigned short)GlyphOffset);
 			}
-			if (SubTableArray.IndexSubTb.Header.indexFormat == 4) {
+			if (SubTableArray.IndxSubTable.Header.indexFormat == 4) {
 				GlyphIdOffsetPair Pair;				
 				Pair.glyphID = i;				
 				Pair.sbitOffset = (unsigned short)GlyphOffset;
-				SubTableArray.IndexSubTb.SubTable4.vtGlyphArray.push_back(Pair);
+				SubTableArray.IndxSubTable.SubTable4.vtGlyphArray.push_back(Pair);
 			}
 			iseek++;
 		}
@@ -8564,18 +8547,18 @@ namespace HYFONTCODEC
 		// it is necessary to store one extra element in the sbitOffsets array pointing just past the end of the range’s image data. 
 		//This will allow the correct calculation of the image data size for the last glyph in the range.
 		GlyphOffset = ftell(m_pFontFile) - ulCurrent;
-		if (SubTableArray.IndexSubTb.Header.indexFormat == 1) {
-			SubTableArray.IndexSubTb.SubTable1.vtsbitOffsets.push_back(GlyphOffset);
+		if (SubTableArray.IndxSubTable.Header.indexFormat == 1) {
+			SubTableArray.IndxSubTable.SubTable1.vtsbitOffsets.push_back(GlyphOffset);
 		}
-		if (SubTableArray.IndexSubTb.Header.indexFormat == 3) {
-			SubTableArray.IndexSubTb.SubTable3.vtOffsetArray.push_back((unsigned short)GlyphOffset);
+		if (SubTableArray.IndxSubTable.Header.indexFormat == 3) {
+			SubTableArray.IndxSubTable.SubTable3.vtOffsetArray.push_back((unsigned short)GlyphOffset);
 		}
-		if (SubTableArray.IndexSubTb.Header.indexFormat == 4) {
+		if (SubTableArray.IndxSubTable.Header.indexFormat == 4) {
 			GlyphIdOffsetPair Pair;
 			Pair.glyphID = 0;
 			Pair.sbitOffset = (unsigned short)GlyphOffset;
-			SubTableArray.IndexSubTb.SubTable4.vtGlyphArray.push_back(Pair);
-			SubTableArray.IndexSubTb.SubTable4.numGlyphs = iseek;
+			SubTableArray.IndxSubTable.SubTable4.vtGlyphArray.push_back(Pair);
+			SubTableArray.IndxSubTable.SubTable4.numGlyphs = iseek;
 		}
 	
 	}	// end of void CHYFontCodec::EncodeEBDTFormat1()
@@ -8584,10 +8567,10 @@ namespace HYFONTCODEC
 	{
 		int iseek = 0;
 		unsigned long ulCurrent = ftell(m_pFontFile);
-		SubTableArray.IndexSubTb.Header.imageDataOffset = ulCurrent - uloffsetEBDT;
+		SubTableArray.IndxSubTable.Header.imageDataOffset = ulCurrent - uloffsetEBDT;
 		unsigned long GlyphOffset = 0;
 		for (int i = SubTableArray.firstGlyphIndex; i <= SubTableArray.lastGlyphIndex; i++) {
-			CBDTFormat2& Foramt2 = SubTableArray.IndexSubTb.vtDdataForm2[iseek];
+			CBDTFormat2& Foramt2 = SubTableArray.IndxSubTable.vtDataFrmt2[iseek];
 			fwrite(&Foramt2.SmlGlyphMtcs.height, 1, 1, m_pFontFile);
 			fwrite(&Foramt2.SmlGlyphMtcs.width, 1, 1, m_pFontFile);
 			fwrite(&Foramt2.SmlGlyphMtcs.BearingX, 1, 1, m_pFontFile);
@@ -8601,17 +8584,17 @@ namespace HYFONTCODEC
 
 			// 计算offset
 			GlyphOffset = ftell(m_pFontFile) - ulCurrent;
-			if (SubTableArray.IndexSubTb.Header.indexFormat == 1) {				
-				SubTableArray.IndexSubTb.SubTable1.vtsbitOffsets.push_back(GlyphOffset);
+			if (SubTableArray.IndxSubTable.Header.indexFormat == 1) {				
+				SubTableArray.IndxSubTable.SubTable1.vtsbitOffsets.push_back(GlyphOffset);
 			}
-			if (SubTableArray.IndexSubTb.Header.indexFormat == 3) {				
-				SubTableArray.IndexSubTb.SubTable3.vtOffsetArray.push_back((unsigned short)GlyphOffset);
+			if (SubTableArray.IndxSubTable.Header.indexFormat == 3) {				
+				SubTableArray.IndxSubTable.SubTable3.vtOffsetArray.push_back((unsigned short)GlyphOffset);
 			}
-			if (SubTableArray.IndexSubTb.Header.indexFormat == 4) {
+			if (SubTableArray.IndxSubTable.Header.indexFormat == 4) {
 				GlyphIdOffsetPair Pair;
 				Pair.glyphID = i;
 				Pair.sbitOffset = (unsigned short)GlyphOffset;
-				SubTableArray.IndexSubTb.SubTable4.vtGlyphArray.push_back(Pair);
+				SubTableArray.IndxSubTable.SubTable4.vtGlyphArray.push_back(Pair);
 			}
 			iseek++;
 		}		
@@ -8619,18 +8602,18 @@ namespace HYFONTCODEC
 		// it is necessary to store one extra element in the sbitOffsets array pointing just past the end of the range’s image data. 
 		//This will allow the correct calculation of the image data size for the last glyph in the range.
 		GlyphOffset = ftell(m_pFontFile) - ulCurrent;
-		if (SubTableArray.IndexSubTb.Header.indexFormat == 1) {
-			SubTableArray.IndexSubTb.SubTable1.vtsbitOffsets.push_back(GlyphOffset);
+		if (SubTableArray.IndxSubTable.Header.indexFormat == 1) {
+			SubTableArray.IndxSubTable.SubTable1.vtsbitOffsets.push_back(GlyphOffset);
 		}
-		if (SubTableArray.IndexSubTb.Header.indexFormat == 3) {
-			SubTableArray.IndexSubTb.SubTable3.vtOffsetArray.push_back((unsigned short)GlyphOffset);
+		if (SubTableArray.IndxSubTable.Header.indexFormat == 3) {
+			SubTableArray.IndxSubTable.SubTable3.vtOffsetArray.push_back((unsigned short)GlyphOffset);
 		}
-		if (SubTableArray.IndexSubTb.Header.indexFormat == 4) {
+		if (SubTableArray.IndxSubTable.Header.indexFormat == 4) {
 			GlyphIdOffsetPair Pair;
 			Pair.glyphID = 0;
 			Pair.sbitOffset = (unsigned short)GlyphOffset;
-			SubTableArray.IndexSubTb.SubTable4.vtGlyphArray.push_back(Pair);
-			SubTableArray.IndexSubTb.SubTable4.numGlyphs = iseek;
+			SubTableArray.IndxSubTable.SubTable4.vtGlyphArray.push_back(Pair);
+			SubTableArray.IndxSubTable.SubTable4.numGlyphs = iseek;
 		}
 	
 	}	// end of void CHYFontCodec::EncodeEBDTFormat2()
@@ -8639,10 +8622,10 @@ namespace HYFONTCODEC
 	{
 		int iseek = 0;
 		unsigned long ulCurrent = ftell(m_pFontFile);
-		SubTableArray.IndexSubTb.Header.imageDataOffset = ulCurrent - uloffsetEBDT;
+		SubTableArray.IndxSubTable.Header.imageDataOffset = ulCurrent - uloffsetEBDT;
 
 		for (int i = SubTableArray.firstGlyphIndex; i <= SubTableArray.lastGlyphIndex; i++) {
-			CBDTFormat5& Foramt5 = SubTableArray.IndexSubTb.vtDdataForm5[iseek];
+			CBDTFormat5& Foramt5 = SubTableArray.IndxSubTable.vtDataFrmt5[iseek];
 			size_t stSize = Foramt5.imagedata.size();
 			for (size_t y = 0; y < stSize; y++) {
 				fwrite(&Foramt5.imagedata[y], 1, 1, m_pFontFile);
@@ -8656,11 +8639,11 @@ namespace HYFONTCODEC
 	{
 		int iseek = 0;
 		unsigned long ulCurrent = ftell(m_pFontFile);
-		SubTableArray.IndexSubTb.Header.imageDataOffset = ulCurrent - uloffsetEBDT;
+		SubTableArray.IndxSubTable.Header.imageDataOffset = ulCurrent - uloffsetEBDT;
 		unsigned long GlyphOffset = 0;
 
 		for (int i = SubTableArray.firstGlyphIndex; i <= SubTableArray.lastGlyphIndex; i++) {
-			CBDTFormat6& Foramt6 = SubTableArray.IndexSubTb.vtDdataForm6[iseek];
+			CBDTFormat6& Foramt6 = SubTableArray.IndxSubTable.vtDataFrmt6[iseek];
 			fwrite(&Foramt6.bigGlyphMtcs.height, 1, 1, m_pFontFile);
 			fwrite(&Foramt6.bigGlyphMtcs.width, 1, 1, m_pFontFile);
 			fwrite(&Foramt6.bigGlyphMtcs.horiBearingX, 1, 1, m_pFontFile);
@@ -8677,17 +8660,17 @@ namespace HYFONTCODEC
 
 			// 计算offset
 			GlyphOffset = ftell(m_pFontFile) - ulCurrent;
-			if (SubTableArray.IndexSubTb.Header.indexFormat == 1) {
-				SubTableArray.IndexSubTb.SubTable1.vtsbitOffsets.push_back(GlyphOffset);
+			if (SubTableArray.IndxSubTable.Header.indexFormat == 1) {
+				SubTableArray.IndxSubTable.SubTable1.vtsbitOffsets.push_back(GlyphOffset);
 			}
-			if (SubTableArray.IndexSubTb.Header.indexFormat == 3) {
-				SubTableArray.IndexSubTb.SubTable3.vtOffsetArray.push_back((unsigned short)GlyphOffset);
+			if (SubTableArray.IndxSubTable.Header.indexFormat == 3) {
+				SubTableArray.IndxSubTable.SubTable3.vtOffsetArray.push_back((unsigned short)GlyphOffset);
 			}
-			if (SubTableArray.IndexSubTb.Header.indexFormat == 4) {
+			if (SubTableArray.IndxSubTable.Header.indexFormat == 4) {
 				GlyphIdOffsetPair Pair;
 				Pair.glyphID = i;
 				Pair.sbitOffset = (unsigned short)GlyphOffset;
-				SubTableArray.IndexSubTb.SubTable4.vtGlyphArray.push_back(Pair);
+				SubTableArray.IndxSubTable.SubTable4.vtGlyphArray.push_back(Pair);
 			}
 			iseek++;
 		}
@@ -8695,18 +8678,18 @@ namespace HYFONTCODEC
 		// it is necessary to store one extra element in the sbitOffsets array pointing just past the end of the range’s image data. 
 		//This will allow the correct calculation of the image data size for the last glyph in the range.
 		GlyphOffset = ftell(m_pFontFile) - ulCurrent;
-		if (SubTableArray.IndexSubTb.Header.indexFormat == 1) {
-			SubTableArray.IndexSubTb.SubTable1.vtsbitOffsets.push_back(GlyphOffset);
+		if (SubTableArray.IndxSubTable.Header.indexFormat == 1) {
+			SubTableArray.IndxSubTable.SubTable1.vtsbitOffsets.push_back(GlyphOffset);
 		}
-		if (SubTableArray.IndexSubTb.Header.indexFormat == 3) {
-			SubTableArray.IndexSubTb.SubTable3.vtOffsetArray.push_back((unsigned short)GlyphOffset);
+		if (SubTableArray.IndxSubTable.Header.indexFormat == 3) {
+			SubTableArray.IndxSubTable.SubTable3.vtOffsetArray.push_back((unsigned short)GlyphOffset);
 		}
-		if (SubTableArray.IndexSubTb.Header.indexFormat == 4) {
+		if (SubTableArray.IndxSubTable.Header.indexFormat == 4) {
 			GlyphIdOffsetPair Pair;
 			Pair.glyphID = 0;
 			Pair.sbitOffset = (unsigned short)GlyphOffset;
-			SubTableArray.IndexSubTb.SubTable4.vtGlyphArray.push_back(Pair);
-			SubTableArray.IndexSubTb.SubTable4.numGlyphs = iseek;
+			SubTableArray.IndxSubTable.SubTable4.vtGlyphArray.push_back(Pair);
+			SubTableArray.IndxSubTable.SubTable4.numGlyphs = iseek;
 		}
 
 	}	// end of void CHYFontCodec::EncodeEBDTFormat6()
@@ -8715,11 +8698,11 @@ namespace HYFONTCODEC
 	{
 		int iseek = 0;
 		unsigned long ulCurrent = ftell(m_pFontFile);
-		SubTableArray.IndexSubTb.Header.imageDataOffset = ulCurrent - uloffsetEBDT;
+		SubTableArray.IndxSubTable.Header.imageDataOffset = ulCurrent - uloffsetEBDT;
 		unsigned long GlyphOffset = 0;
 
 		for (int i = SubTableArray.firstGlyphIndex; i <= SubTableArray.lastGlyphIndex; i++) {
-			CBDTFormat7& Format7 = SubTableArray.IndexSubTb.vtDdataForm7[iseek];
+			CBDTFormat7& Format7 = SubTableArray.IndxSubTable.vtDataFrmt7[iseek];
 			fwrite(&Format7.bigGlyphMtcs.height, 1, 1, m_pFontFile);
 			fwrite(&Format7.bigGlyphMtcs.width, 1, 1, m_pFontFile);
 			fwrite(&Format7.bigGlyphMtcs.horiBearingX, 1, 1, m_pFontFile);
@@ -8736,17 +8719,17 @@ namespace HYFONTCODEC
 
 			// 计算offset
 			GlyphOffset = ftell(m_pFontFile) - ulCurrent;
-			if (SubTableArray.IndexSubTb.Header.indexFormat == 1) {
-				SubTableArray.IndexSubTb.SubTable1.vtsbitOffsets.push_back(GlyphOffset);
+			if (SubTableArray.IndxSubTable.Header.indexFormat == 1) {
+				SubTableArray.IndxSubTable.SubTable1.vtsbitOffsets.push_back(GlyphOffset);
 			}
-			if (SubTableArray.IndexSubTb.Header.indexFormat == 3) {
-				SubTableArray.IndexSubTb.SubTable3.vtOffsetArray.push_back((unsigned short)GlyphOffset);
+			if (SubTableArray.IndxSubTable.Header.indexFormat == 3) {
+				SubTableArray.IndxSubTable.SubTable3.vtOffsetArray.push_back((unsigned short)GlyphOffset);
 			}
-			if (SubTableArray.IndexSubTb.Header.indexFormat == 4) {
+			if (SubTableArray.IndxSubTable.Header.indexFormat == 4) {
 				GlyphIdOffsetPair Pair;
 				Pair.glyphID = i;
 				Pair.sbitOffset = (unsigned short)GlyphOffset;
-				SubTableArray.IndexSubTb.SubTable4.vtGlyphArray.push_back(Pair);
+				SubTableArray.IndxSubTable.SubTable4.vtGlyphArray.push_back(Pair);
 			}
 			iseek++;
 		}
@@ -8754,18 +8737,18 @@ namespace HYFONTCODEC
 		// it is necessary to store one extra element in the sbitOffsets array pointing just past the end of the range’s image data. 
 		//This will allow the correct calculation of the image data size for the last glyph in the range.
 		GlyphOffset = ftell(m_pFontFile) - ulCurrent;
-		if (SubTableArray.IndexSubTb.Header.indexFormat == 1) {
-			SubTableArray.IndexSubTb.SubTable1.vtsbitOffsets.push_back(GlyphOffset);
+		if (SubTableArray.IndxSubTable.Header.indexFormat == 1) {
+			SubTableArray.IndxSubTable.SubTable1.vtsbitOffsets.push_back(GlyphOffset);
 		}
-		if (SubTableArray.IndexSubTb.Header.indexFormat == 3) {
-			SubTableArray.IndexSubTb.SubTable3.vtOffsetArray.push_back((unsigned short)GlyphOffset);
+		if (SubTableArray.IndxSubTable.Header.indexFormat == 3) {
+			SubTableArray.IndxSubTable.SubTable3.vtOffsetArray.push_back((unsigned short)GlyphOffset);
 		}
-		if (SubTableArray.IndexSubTb.Header.indexFormat == 4) {
+		if (SubTableArray.IndxSubTable.Header.indexFormat == 4) {
 			GlyphIdOffsetPair Pair;
 			Pair.glyphID = 0;
 			Pair.sbitOffset = (unsigned short)GlyphOffset;
-			SubTableArray.IndexSubTb.SubTable4.vtGlyphArray.push_back(Pair);
-			SubTableArray.IndexSubTb.SubTable4.numGlyphs = iseek;
+			SubTableArray.IndxSubTable.SubTable4.vtGlyphArray.push_back(Pair);
+			SubTableArray.IndxSubTable.SubTable4.numGlyphs = iseek;
 		}
 	
 	}	// end of void CHYFontCodec::EncodeEBDTFormat7()
@@ -8774,12 +8757,12 @@ namespace HYFONTCODEC
 	{
 		int iseek = 0;
 		unsigned long ulCurrent = ftell(m_pFontFile);
-		SubTableArray.IndexSubTb.Header.imageDataOffset = ulCurrent - uloffsetEBDT;
+		SubTableArray.IndxSubTable.Header.imageDataOffset = ulCurrent - uloffsetEBDT;
 
 		char cPad = 0;
 		unsigned short usTmp = 0;
 		for (int i = SubTableArray.firstGlyphIndex; i <= SubTableArray.lastGlyphIndex; i++) {
-			CBDTFormat8& Foramt8 = SubTableArray.IndexSubTb.vtDdataForm8[iseek];
+			CBDTFormat8& Foramt8 = SubTableArray.IndxSubTable.vtDataFrmt8[iseek];
 			fwrite(&Foramt8.smallGlyphMtcs.height, 1, 1, m_pFontFile);
 			fwrite(&Foramt8.smallGlyphMtcs.width, 1, 1, m_pFontFile);
 			fwrite(&Foramt8.smallGlyphMtcs.BearingX, 1, 1, m_pFontFile);
@@ -8807,12 +8790,12 @@ namespace HYFONTCODEC
 	{
 		int iseek = 0;
 		unsigned long ulCurrent = ftell(m_pFontFile);
-		SubTableArray.IndexSubTb.Header.imageDataOffset = ulCurrent - uloffsetEBDT;
+		SubTableArray.IndxSubTable.Header.imageDataOffset = ulCurrent - uloffsetEBDT;
 
 		char cPad = 0;
 		unsigned short usTmp = 0;
 		for (int i = SubTableArray.firstGlyphIndex; i <= SubTableArray.lastGlyphIndex; i++) {
-			CBDTFormat9& Foramt9 = SubTableArray.IndexSubTb.vtDdataForm9[iseek];
+			CBDTFormat9& Foramt9 = SubTableArray.IndxSubTable.vtDataFrmt9[iseek];
 			fwrite(&Foramt9.bigGlyphMtcs.height, 1, 1, m_pFontFile);
 			fwrite(&Foramt9.bigGlyphMtcs.width, 1, 1, m_pFontFile);
 			fwrite(&Foramt9.bigGlyphMtcs.horiBearingX, 1, 1, m_pFontFile);
@@ -8843,13 +8826,13 @@ namespace HYFONTCODEC
 	{
 		int iseek = 0;
 		unsigned long ulCurrent = ftell(m_pFontFile);
-		SubTableArray.IndexSubTb.Header.imageDataOffset = ulCurrent - uloffsetEBDT;
+		SubTableArray.IndxSubTable.Header.imageDataOffset = ulCurrent - uloffsetEBDT;
 
 		char cPad = 0;
 		unsigned long ulTmp = 0, GlyphOffset=0;
 
 		for (int i = SubTableArray.firstGlyphIndex; i <= SubTableArray.lastGlyphIndex; i++) {
-			CBDTFormat17& Foramt17 = SubTableArray.IndexSubTb.vtDdataForm17[iseek];
+			CBDTFormat17& Foramt17 = SubTableArray.IndxSubTable.vtDataFrmt17[iseek];
 			fwrite(&Foramt17.smallGlyphMtcs.height, 1, 1, m_pFontFile);
 			fwrite(&Foramt17.smallGlyphMtcs.width, 1, 1, m_pFontFile);
 			fwrite(&Foramt17.smallGlyphMtcs.BearingX, 1, 1, m_pFontFile);
@@ -8864,17 +8847,17 @@ namespace HYFONTCODEC
 
 			// 计算offset
 			GlyphOffset = ftell(m_pFontFile) - ulCurrent;
-			if (SubTableArray.IndexSubTb.Header.indexFormat == 1) {
-				SubTableArray.IndexSubTb.SubTable1.vtsbitOffsets.push_back(GlyphOffset);
+			if (SubTableArray.IndxSubTable.Header.indexFormat == 1) {
+				SubTableArray.IndxSubTable.SubTable1.vtsbitOffsets.push_back(GlyphOffset);
 			}
-			if (SubTableArray.IndexSubTb.Header.indexFormat == 3) {
-				SubTableArray.IndexSubTb.SubTable3.vtOffsetArray.push_back((unsigned short)GlyphOffset);
+			if (SubTableArray.IndxSubTable.Header.indexFormat == 3) {
+				SubTableArray.IndxSubTable.SubTable3.vtOffsetArray.push_back((unsigned short)GlyphOffset);
 			}
-			if (SubTableArray.IndexSubTb.Header.indexFormat == 4) {
+			if (SubTableArray.IndxSubTable.Header.indexFormat == 4) {
 				GlyphIdOffsetPair Pair;
 				Pair.glyphID = i;
 				Pair.sbitOffset = (unsigned short)GlyphOffset;
-				SubTableArray.IndexSubTb.SubTable4.vtGlyphArray.push_back(Pair);
+				SubTableArray.IndxSubTable.SubTable4.vtGlyphArray.push_back(Pair);
 			}
 			iseek++;
 		}
@@ -8882,18 +8865,18 @@ namespace HYFONTCODEC
 		// it is necessary to store one extra element in the sbitOffsets array pointing just past the end of the range’s image data. 
 		//This will allow the correct calculation of the image data size for the last glyph in the range.
 		GlyphOffset = ftell(m_pFontFile) - ulCurrent;
-		if (SubTableArray.IndexSubTb.Header.indexFormat == 1) {
-			SubTableArray.IndexSubTb.SubTable1.vtsbitOffsets.push_back(GlyphOffset);
+		if (SubTableArray.IndxSubTable.Header.indexFormat == 1) {
+			SubTableArray.IndxSubTable.SubTable1.vtsbitOffsets.push_back(GlyphOffset);
 		}
-		if (SubTableArray.IndexSubTb.Header.indexFormat == 3) {
-			SubTableArray.IndexSubTb.SubTable3.vtOffsetArray.push_back((unsigned short)GlyphOffset);
+		if (SubTableArray.IndxSubTable.Header.indexFormat == 3) {
+			SubTableArray.IndxSubTable.SubTable3.vtOffsetArray.push_back((unsigned short)GlyphOffset);
 		}
-		if (SubTableArray.IndexSubTb.Header.indexFormat == 4) {
+		if (SubTableArray.IndxSubTable.Header.indexFormat == 4) {
 			GlyphIdOffsetPair Pair;
 			Pair.glyphID = 0;
 			Pair.sbitOffset = (unsigned short)GlyphOffset;
-			SubTableArray.IndexSubTb.SubTable4.vtGlyphArray.push_back(Pair);
-			SubTableArray.IndexSubTb.SubTable4.numGlyphs = iseek;
+			SubTableArray.IndxSubTable.SubTable4.vtGlyphArray.push_back(Pair);
+			SubTableArray.IndxSubTable.SubTable4.numGlyphs = iseek;
 		}
 	
 	}	// end of void CHYFontCodec::EncodeEBDTFormat17()
@@ -8902,11 +8885,11 @@ namespace HYFONTCODEC
 	{
 		int iseek = 0;
 		unsigned long ulCurrent = ftell(m_pFontFile);
-		SubTableArray.IndexSubTb.Header.imageDataOffset = ulCurrent - uloffsetEBDT;
+		SubTableArray.IndxSubTable.Header.imageDataOffset = ulCurrent - uloffsetEBDT;
 		
 		unsigned long ulTmp = 0, GlyphOffset = 0;
 		for (int i = SubTableArray.firstGlyphIndex; i <= SubTableArray.lastGlyphIndex; i++) {
-			CBDTFormat18& Foramt18 = SubTableArray.IndexSubTb.vtDdataForm18[iseek];
+			CBDTFormat18& Foramt18 = SubTableArray.IndxSubTable.vtDataFrmt18[iseek];
 			fwrite(&Foramt18.bigGlyphMtcs.height, 1, 1, m_pFontFile);
 			fwrite(&Foramt18.bigGlyphMtcs.width, 1, 1, m_pFontFile);
 			fwrite(&Foramt18.bigGlyphMtcs.horiBearingX, 1, 1, m_pFontFile);
@@ -8924,17 +8907,17 @@ namespace HYFONTCODEC
 
 			// 计算offset
 			GlyphOffset = ftell(m_pFontFile) - ulCurrent;
-			if (SubTableArray.IndexSubTb.Header.indexFormat == 1) {
-				SubTableArray.IndexSubTb.SubTable1.vtsbitOffsets.push_back(GlyphOffset);
+			if (SubTableArray.IndxSubTable.Header.indexFormat == 1) {
+				SubTableArray.IndxSubTable.SubTable1.vtsbitOffsets.push_back(GlyphOffset);
 			}
-			if (SubTableArray.IndexSubTb.Header.indexFormat == 3) {
-				SubTableArray.IndexSubTb.SubTable3.vtOffsetArray.push_back((unsigned short)GlyphOffset);
+			if (SubTableArray.IndxSubTable.Header.indexFormat == 3) {
+				SubTableArray.IndxSubTable.SubTable3.vtOffsetArray.push_back((unsigned short)GlyphOffset);
 			}
-			if (SubTableArray.IndexSubTb.Header.indexFormat == 4) {
+			if (SubTableArray.IndxSubTable.Header.indexFormat == 4) {
 				GlyphIdOffsetPair Pair;
 				Pair.glyphID = i;
 				Pair.sbitOffset = (unsigned short)GlyphOffset;
-				SubTableArray.IndexSubTb.SubTable4.vtGlyphArray.push_back(Pair);
+				SubTableArray.IndxSubTable.SubTable4.vtGlyphArray.push_back(Pair);
 			}
 			iseek++;
 		}
@@ -8942,18 +8925,18 @@ namespace HYFONTCODEC
 		// it is necessary to store one extra element in the sbitOffsets array pointing just past the end of the range’s image data. 
 		//This will allow the correct calculation of the image data size for the last glyph in the range.
 		GlyphOffset = ftell(m_pFontFile) - ulCurrent;
-		if (SubTableArray.IndexSubTb.Header.indexFormat == 1) {
-			SubTableArray.IndexSubTb.SubTable1.vtsbitOffsets.push_back(GlyphOffset);
+		if (SubTableArray.IndxSubTable.Header.indexFormat == 1) {
+			SubTableArray.IndxSubTable.SubTable1.vtsbitOffsets.push_back(GlyphOffset);
 		}
-		if (SubTableArray.IndexSubTb.Header.indexFormat == 3) {
-			SubTableArray.IndexSubTb.SubTable3.vtOffsetArray.push_back((unsigned short)GlyphOffset);
+		if (SubTableArray.IndxSubTable.Header.indexFormat == 3) {
+			SubTableArray.IndxSubTable.SubTable3.vtOffsetArray.push_back((unsigned short)GlyphOffset);
 		}
-		if (SubTableArray.IndexSubTb.Header.indexFormat == 4) {
+		if (SubTableArray.IndxSubTable.Header.indexFormat == 4) {
 			GlyphIdOffsetPair Pair;
 			Pair.glyphID = 0;
 			Pair.sbitOffset = (unsigned short)GlyphOffset;
-			SubTableArray.IndexSubTb.SubTable4.vtGlyphArray.push_back(Pair);
-			SubTableArray.IndexSubTb.SubTable4.numGlyphs = iseek;
+			SubTableArray.IndxSubTable.SubTable4.vtGlyphArray.push_back(Pair);
+			SubTableArray.IndxSubTable.SubTable4.numGlyphs = iseek;
 		}
 	
 	}	// end of void CHYFontCodec::EncodeEBDTFormat18()
@@ -8962,11 +8945,11 @@ namespace HYFONTCODEC
 	{
 		int iseek = 0;
 		unsigned long ulCurrent = ftell(m_pFontFile);
-		SubTableArray.IndexSubTb.Header.imageDataOffset = ulCurrent - uloffsetEBDT;
+		SubTableArray.IndxSubTable.Header.imageDataOffset = ulCurrent - uloffsetEBDT;
 		
 		unsigned long ulTmp = 0, GlyphOffset = 0;
 		for (int i = SubTableArray.firstGlyphIndex; i <= SubTableArray.lastGlyphIndex; i++) {
-			CBDTFormat19& Foramt19 = SubTableArray.IndexSubTb.vtDdataForm19[iseek];
+			CBDTFormat19& Foramt19 = SubTableArray.IndxSubTable.vtDataFrmt19[iseek];
 			ulTmp = hy_cdr_int32_to(Foramt19.dataLen);
 			fwrite(&ulTmp, 4, 1, m_pFontFile);
 			for (int y = 0; y < Foramt19.dataLen; y++) {
@@ -8975,7 +8958,7 @@ namespace HYFONTCODEC
 		}
 
 	}	// end of void CHYFontCodec::EncodeEBDTFormat19()
-#endif 
+
 
 	int	CHYFontCodec::Decodehead()
 	{

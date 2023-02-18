@@ -312,17 +312,17 @@ namespace HYFONTCODEC
 			IndexSubTable4	SubTable4;
 			IndexSubTable5	SubTable5;
 
-			// 这里存放BitmapData
-			CBDTFormat1		dataFrmt1;
-			CBDTFormat2		dataFrmt2;
-			CBDTFormat5		dataFrmt5;
-			CBDTFormat6		dataFrmt6;
-			CBDTFormat7		dataFrmt7;
-			CBDTFormat8		dataFrmt8;
-			CBDTFormat9		dataFrmt9;
-			CBDTFormat17	dataFrmt17;
-			CBDTFormat18	dataFrmt18;
-			CBDTFormat19	dataFrmt19;
+			// 这里存放BitmapData 一个图像对应一个dataFrmt
+			std::vector<CBDTFormat1>		vtDataFrmt1;
+			std::vector<CBDTFormat2>		vtDataFrmt2;
+			std::vector<CBDTFormat5>		vtDataFrmt5;
+			std::vector<CBDTFormat6>		vtDataFrmt6;
+			std::vector<CBDTFormat7>		vtDataFrmt7;
+			std::vector<CBDTFormat8>		vtDataFrmt8;
+			std::vector<CBDTFormat9>		vtDataFrmt9;
+			std::vector<CBDTFormat17>		vtDataFrmt17;
+			std::vector<CBDTFormat18>		vtDataFrmt18;
+			std::vector<CBDTFormat19>		vtDataFrmt19;
 
 	};	//end of class HY_DLL_CLASS IndexSUBTable	
 
@@ -338,7 +338,7 @@ namespace HYFONTCODEC
 		unsigned short 	lastGlyphIndex;			//last glyph code of this range (inclusive)
 		unsigned long	Offset;					//add to indexSubTableArrayOffset to get offset from beginning of 'EBLC'
 	public:
-		std::vector<IndexSUBTable>	vtIndxSubTable;
+		IndexSUBTable	IndxSubTable;
 
 	};	// end of class HY_DLL_CLASS IndexSubTableArray
 
