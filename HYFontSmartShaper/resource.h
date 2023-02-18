@@ -297,7 +297,6 @@
 #define IDC_PTN_SETADH_CHK              2609
 #define IDC_PTN_LYT_CHK                 2610
 #define IDC_PTN_HYSND_CHK               2611
-#define IDC_PTN_HYSND_CHK2              2612
 #define IDC_PTN_KANGXI_CHK              2612
 #define IDC_MRG_SRC1_EDT                3101
 #define IDC_MRG_SRC2_EDT                3102
@@ -362,13 +361,22 @@
 #define ID_FLNM2NUMNM                   32899
 #define ID_32900                        32900
 #define ID_MN_CMPTXT                    32901
+#define ID_FILE_NEW1                    32902
+#define ID_32903                        32903
+#define ID_32904                        32904
+#define ID_32905                        32905
+#define ID_MN_CHKERTTF                  32906
+#define ID_MN_CHKEROTF                  32907
+#define ID_EMOJI_32908                  32908
+#define ID_EMOJI_BUD                    32909
+#define ID_EMOJI_MK                     32910
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        379
-#define _APS_NEXT_COMMAND_VALUE         32902
+#define _APS_NEXT_COMMAND_VALUE         32911
 #define _APS_NEXT_CONTROL_VALUE         1207
 #define _APS_NEXT_SYMED_VALUE           310
 #endif

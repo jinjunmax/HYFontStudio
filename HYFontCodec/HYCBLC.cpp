@@ -289,8 +289,6 @@ namespace HYFONTCODEC
 		bitDepth					= 0;
 		Flags						= 0;
 
-		vtIndexSubTableArray.clear();		
-
 	}	// end of void BitmapSize::SetDefault()
 
 	CBLCHEADER::CBLCHEADER()

@@ -207,9 +207,10 @@ namespace HYFONTCODEC
 
 		int		EncodeSVG(char* pSVGFile);
 		int		EncodeEOT(const char* pEotFile, const char* pFontFile);
+#if 0	//emjio 改造临时屏蔽
 		int		EncodeEmojiOpentypeFont(char* pFontFile, char* EmojiProfile);
 		int		EncodeEmojiOAppleFont(char* pFontFile, char* EmojiProfile);
-
+#endif 
 		int		MakeTableDirectory(std::vector<unsigned long> vtFlag);
 		int		MakeHYCodeMap(std::vector<CHYGlyph>& vtHYGlyphs);
 
@@ -268,6 +269,8 @@ namespace HYFONTCODEC
 		int		EncodeCmapFmt14(FILE* pFontFile,CMAP_TABLE_ENTRY& entry);
 
 	public:
+
+#if 0 //emjio 改造临时屏蔽
 		// EBLC CBLC Table
 		int		DecodeEBLC();
 		int		DecodeCBLC();
@@ -275,12 +278,12 @@ namespace HYFONTCODEC
 		void	DecodeSbitLineMetrics(SbitLineMetrics& sbit);
 		void	DecodeBigGlyphMetrics(BigGlyphMetrics& bigMtrcs);
 		int		DecodeIndexSubTableArray(BitmapSize& bitmapSizeTable,long  indexSubTableArrayOffset);
-		int		DecodeIndexSubTable(IndexSubTableArray& IndexSubArray);
-		void	DecdoeIndexSubTable1(IndexSubTableArray& IndexSubArray);
-		void	DecdoeIndexSubTable2(IndexSubTableArray& IndexSubArray);
-		void	DecdoeIndexSubTable3(IndexSubTableArray& IndexSubArray);
-		void	DecdoeIndexSubTable4(IndexSubTableArray& IndexSubArray);
-		void	DecdoeIndexSubTable5(IndexSubTableArray& IndexSubArray);
+		int		DecodeIndexSubTable(IndexSUBTable& IndexSubArray);
+		void	DecdoeIndexSubTable1(IndexSUBTable& IndxSubTb);
+		void	DecdoeIndexSubTable2(IndexSUBTable& IndxSubTb);
+		void	DecdoeIndexSubTable3(IndexSUBTable& IndxSubTb);
+		void	DecdoeIndexSubTable4(IndexSUBTable& IndxSubTb);
+		void	DecdoeIndexSubTable5(IndexSUBTable& IndxSubTb);
 
 		void	DecodeBmpLC(unsigned long ulBLCPos);
 		int		EncodeCBLC();
@@ -308,7 +311,6 @@ namespace HYFONTCODEC
 		void	DecodeEBDTFormat18(CBDTFormat18& format18);
 		void	DecodeEBDTFormat19(CBDTFormat19& format19);
 
-		void	DumpCBDT();
 		int		EncodeEBDT();
 		int		EncodeCBDT();
 		int		EncodeEBDTData(unsigned long uloffsetEBDT);
@@ -323,47 +325,39 @@ namespace HYFONTCODEC
 		void	EncodeEBDTFormat17(IndexSubTableArray& SubTableArray, unsigned long uloffsetEBDT);
 		void	EncodeEBDTFormat18(IndexSubTableArray& SubTableArray, unsigned long uloffsetEBDT);
 		void	EncodeEBDTFormat19(IndexSubTableArray& SubTableArray, unsigned long uloffsetEBDT);		
+#endif 
 		//head table
 		int		Decodehead();
 		void	Dumphead(CMarkup& MK);
 		int		Encodehead();
 		
 		//hhea table
-		int		Decodehhea();
-		void	Dumphhea();
+		int		Decodehhea();		
 		int		Encodehhea();
 		//hmtx table
 		int		Decodehmtx();
-		void	Dumphmtx();
 		int		Encodehmtx();
 		//maxp table
 		int		Decodemaxp();	
 		void	Dumpmaxp(CMarkup &Mk);
 		int		Encodemaxp();
 		//name table
-		int		Decodename();
-		void	Dumpname();
+		int		Decodename();		
 		int		Encodename();
 		// os2 table
-		int		DecodeOS2();
-		void	DumpOS2();
+		int		DecodeOS2();		
 		int		EncodeOS2();
 		// post table
-		int		Decodepost();
-		void	Dumppost();
+		int		Decodepost();		
 		int		Encodepost(HYFIXED& fxVersion);	
 		//prep table
-		int		Decodeprep();
-		void	Dumpprep();
+		int		Decodeprep();		
 		int		Encodeprep();
 		// Tables Related to TrueType Outlines
-		int		Decodecvt();
-		void	Dumpcvt();
-		int		Decodefgpm();
-		void	Dumpfgpm();
+		int		Decodecvt();		
+		int		Decodefgpm();		
 		// glyf table
 		int		Decodeglyf();
-		void	Dumpglyf();
 		int		EncodeGlyph();
 
 	protected:
@@ -371,8 +365,7 @@ namespace HYFONTCODEC
 		void	DecodeGLYF_COMPOS(CHYGlyph& Glyph);	
 	public:	
 		// loca table
-		int		Decodeloca();
-		void	Dumploca();
+		int		Decodeloca();		
 		int		Encodeloca();	
 
 		// Tables Related to PostScript Outlines
@@ -422,14 +415,10 @@ namespace HYFONTCODEC
 
 	public:
 		//Advanced Typographic Tables
-		int			DecodeBASE();
-		void		DumpBASE();
-		int			DecodeGDEF();
-		void		DumpGDEF();
-		int			DecodeGPOS();
-		void		DumpGPOS();
-		int			DecodeGSUB();
-		void		DumpGSUB();
+		int			DecodeBASE();		
+		int			DecodeGDEF();		
+		int			DecodeGPOS();		
+		int			DecodeGSUB();		
 		bool		DecodeScriptList(unsigned long ulOffset);
 		bool		DecodeFeaturetList(unsigned long ulOffset);
 		bool		DecodeLookupList(unsigned long ulOffset);

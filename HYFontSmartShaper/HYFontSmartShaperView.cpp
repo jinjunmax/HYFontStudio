@@ -96,6 +96,9 @@ BEGIN_MESSAGE_MAP(CHYFontSmartShaperView, CFormView)
 	ON_EN_CHANGE(IDC_MN_ADW_EDT, &CHYFontSmartShaperView::OnEnChangeMnAdwEdt)
 	ON_EN_CHANGE(IDC_MN_ADH_EDT, &CHYFontSmartShaperView::OnEnChangeMnAdhEdt)
 	ON_COMMAND(ID_MN_CMPTXT, &CHYFontSmartShaperView::OnMnCmptxt)
+	ON_COMMAND(ID_MN_CHKERTTF, &CHYFontSmartShaperView::OnMnChkerttf)
+	ON_COMMAND(ID_MN_CHKEROTF, &CHYFontSmartShaperView::OnMnChkerotf)
+	ON_COMMAND(ID_EMOJI_MK, &CHYFontSmartShaperView::OnEmojiMk)
 END_MESSAGE_MAP()
 
 // CHYFontSmartShaperView 构造/析构
@@ -220,8 +223,8 @@ static void LoadFontThread(void* pParam)
 void CHYFontSmartShaperView::OnFileOpen()
 {	
 	TCHAR szFilters[]= _T("字库 文件(*.otf;*.ttf)|*.otf;*ttf|OpenType 文件(*.otf)|*.otf|Truetype 文件(*.ttf)|*.ttf||");
-	CFileDialog  OpenFileDlg(TRUE, _T(""), _T(""), OFN_READONLY|OFN_LONGNAMES|OFN_FILEMUSTEXIST,szFilters);	
-	
+
+	CFileDialog  OpenFileDlg(TRUE, _T(""), _T(""), OFN_READONLY|OFN_LONGNAMES|OFN_FILEMUSTEXIST,szFilters);		
 	if (OpenFileDlg.DoModal() != IDOK) return;	
 	m_strFontFileName = OpenFileDlg.GetPathName();
 
@@ -258,6 +261,7 @@ void CHYFontSmartShaperView::OnFileSave()
 	ulTableFlag.push_back(VHEA_TAG);
 	ulTableFlag.push_back(VMTX_TAG);
 	ulTableFlag.push_back(GASP_TAG);
+	ulTableFlag.push_back(GSUB_TAG);
 
 	if (iCheckNo == IDC_MN_CVT_TTF_RD) {		
 		TCHAR szFilters[] = _T("Truetype 文件(*.ttf)|*.ttf||");
@@ -284,6 +288,13 @@ void CHYFontSmartShaperView::OnFileSave()
 
 	::XSysproxy().InitEncodeOption(m_FontEnCodec);
 	::XSysproxy().SetEncodeOption(m_FontEnCodec, m_FontDeCodec);
+	m_FontEnCodec.m_mulpTableData.setDefault();	
+	m_FontEnCodec.m_mulpTableData = m_FontDeCodec.m_mulpTableData;
+
+	if (::XSysproxy().m_tagOpeionPrm.bCmplLayout)
+	{
+		::XSysproxy().LoadAdvancedTypographicTables(&m_FontEnCodec);
+	}
 
 	if (m_FontEnCodec.Encode((LPTSTR)(LPCTSTR)strFileName, ulTableFlag, ::XSysproxy().m_tagOpeionPrm) == HY_NOERROR)
 		AfxMessageBox(_T("字库生成完成"));
@@ -562,7 +573,9 @@ void CHYFontSmartShaperView::OnBnClickedMnCvtmBtn()
 	unsigned long uluni2 = 0x2BD2D;
 	unsigned long uluni3 = 0x2C1CD;
 
-	size_t stGlyhNum = m_FontEnCodec.m_vtHYGlyphs.size();	
+	size_t stGlyhNum = m_FontDeCodec.m_vtHYGlyphs.size();
+	int iNum = 0;
+	string strlog;
 	for(size_t i=0; i<stGlyhNum; i++){		
 		CHYGlyph		SrcGryph	= m_FontDeCodec.m_vtHYGlyphs[i];
 		CHYGlyph&		DstGryph	= m_FontEnCodec.m_vtHYGlyphs[i];
@@ -574,6 +587,8 @@ void CHYFontSmartShaperView::OnBnClickedMnCvtmBtn()
 		if (::XSysproxy().m_tagOpeionPrm.bsetADH) {
 			if (m_adsAdh != 0) SetAdHeight(m_adsAdh, DstGryph);
 		}
+
+
 		m_prssProgress.SetPos(((i+1)*100)/stGlyhNum);
 	}
 
@@ -863,8 +878,8 @@ void CHYFontSmartShaperView::InitCtrl()
 	m_cmbSeek.SetCurSel(0);
 
 	SetDrawParam();	
-	CheckRadioButton(IDC_MN_CVT_TTF_RD,IDC_MN_CVT_OTF_RD,IDC_MN_CVT_OTF_RD);
-	m_FontEnCodec.m_iFontType = FONTTYPE_OTF;	
+	CheckRadioButton(IDC_MN_CVT_TTF_RD,IDC_MN_CVT_OTF_RD, IDC_MN_CVT_TTF_RD);
+	m_FontEnCodec.m_iFontType = FONTTYPE_TTF;
 
 }	// end of void CHYFontSmartShaperView::InitCtrl()
 
@@ -1203,6 +1218,7 @@ void CHYFontSmartShaperView::SetLayout()
 		if (pWnd->m_hWnd){			
 			pWnd->MoveWindow(rcCntrl);		
 		}
+		//pWnd->ShowWindow(SW_HIDE);
 	}
 
 	CRect rcCVTStc;
@@ -1215,6 +1231,7 @@ void CHYFontSmartShaperView::SetLayout()
 		if (pWnd->m_hWnd){			
 			pWnd->MoveWindow(rcCVTStc);			
 		}
+		//pWnd->ShowWindow(SW_HIDE);
 	}
 
 	CRect rcCVTTFRD;
@@ -1227,6 +1244,7 @@ void CHYFontSmartShaperView::SetLayout()
 		if (pWnd->m_hWnd){	
 			pWnd->MoveWindow(rcCVTTFRD);		
 		}
+		//pWnd->ShowWindow(SW_HIDE);
 	}
 
 	CRect rcCVOTFRD;
@@ -1239,6 +1257,7 @@ void CHYFontSmartShaperView::SetLayout()
 		if (pWnd->m_hWnd){
 			pWnd->MoveWindow(rcCVOTFRD);
 		}
+		//pWnd->ShowWindow(SW_HIDE);
 	}
 
 	CRect rcDWStc;
@@ -1250,7 +1269,7 @@ void CHYFontSmartShaperView::SetLayout()
 	if (pWnd){
 		if (pWnd->m_hWnd){
 			pWnd->MoveWindow(rcDWStc);
-		}
+		}		
 	}
 
 	CRect rcPTRD;
@@ -1372,6 +1391,7 @@ void CHYFontSmartShaperView::SetLayout()
 		if (pWnd->m_hWnd) {
 			pWnd->MoveWindow(rcADWStc);
 		}
+		//pWnd->ShowWindow(SW_HIDE);
 	}
 
 	CRect rcADWEdt;
@@ -1386,6 +1406,8 @@ void CHYFontSmartShaperView::SetLayout()
 			AdwEdtCtrl->SetEventMask(AdwEdtCtrl->GetEventMask() |
 				ENM_CHANGE);
 		}
+
+		//AdwEdtCtrl->ShowWindow(SW_HIDE);
 	}
 
 	CRect rcADWNTSEdt;
@@ -1398,6 +1420,8 @@ void CHYFontSmartShaperView::SetLayout()
 		if (pWnd->m_hWnd) {
 			pWnd->MoveWindow(rcADWNTSEdt);
 		}
+
+		//pWnd->ShowWindow(SW_HIDE);
 	}	
 
 	// 设置高度
@@ -1411,6 +1435,8 @@ void CHYFontSmartShaperView::SetLayout()
 		if (pWnd->m_hWnd) {
 			pWnd->MoveWindow(rcADHStc);
 		}
+
+		//pWnd->ShowWindow(SW_HIDE);
 	}
 
 	CRect rcADHEdt;
@@ -1423,6 +1449,8 @@ void CHYFontSmartShaperView::SetLayout()
 		if (pWnd->m_hWnd) {
 			pWnd->MoveWindow(rcADHEdt);
 		}
+
+		//pWnd->ShowWindow(SW_HIDE);
 	}
 
 	CRect rcADHNTSEdt;
@@ -1435,6 +1463,8 @@ void CHYFontSmartShaperView::SetLayout()
 		if (pWnd->m_hWnd) {
 			pWnd->MoveWindow(rcADHNTSEdt);
 		}
+
+		//pWnd->ShowWindow(SW_HIDE);
 	}
 
 
@@ -1449,6 +1479,8 @@ void CHYFontSmartShaperView::SetLayout()
 		if (pWnd->m_hWnd){
 			pWnd->MoveWindow(rcVMTSTC);		
 		}
+
+		//pWnd->ShowWindow(SW_HIDE);
 	}
 
 	CRect rcVMTCMB;
@@ -1461,6 +1493,8 @@ void CHYFontSmartShaperView::SetLayout()
 		if (pWnd->m_hWnd){
 			pWnd->MoveWindow(rcVMTCMB);		
 		}
+
+		//pWnd->ShowWindow(SW_HIDE);
 	}
 
 	CRect rcCVTSBtn;
@@ -1472,7 +1506,7 @@ void CHYFontSmartShaperView::SetLayout()
 	if (pWnd){
 		if (pWnd->m_hWnd){
 			pWnd->MoveWindow(rcCVTSBtn);
-		}
+		}		
 	}
 
 	CRect rcCVTMBtn;
@@ -2599,7 +2633,9 @@ void CHYFontSmartShaperView::OnEmojiExport()
 		std::string strDir = HY_GetDirFromPath(std::string(strFileName));
 		std::string strSubDir = HY_GetFileNameFromPath(std::string(strFileName));
 		sprintf_s(pDir,"%s%s\\",strDir.data(),strSubDir.data());
+#if 0
 		::EmojiToImage((LPTSTR)(LPCTSTR)strFileName,pDir);
+#endif
 	}
 
 }	// end of void CHYFontSmartShaperView::OnEmojiExport()
@@ -3210,24 +3246,24 @@ void CHYFontSmartShaperView::OnMnExptname()
 
 	CString strFileName = openFileDlg.GetPathName();
 	CHYFontCodec	fntCdc;
-	if (HY_NOERROR != fntCdc.Decode((LPSTR)(LPCSTR)strFileName)) {
-		AfxMessageBox("字库解析失败");
-		return;
-	}
+if (HY_NOERROR != fntCdc.Decode((LPSTR)(LPCSTR)strFileName)) {
+	AfxMessageBox("字库解析失败");
+	return;
+}
 
-	string strPsnameFile = ::HY_GetDirFromPath((LPSTR)(LPCSTR)strFileName)+::HY_GetFileNameFromPath((LPSTR)(LPCSTR)strFileName)+".txt";
-	CStdioFile	stdFile(strPsnameFile.c_str(), CFile::modeWrite| CFile::typeText| CFile::modeCreate);
-	for (int i = 0; i < fntCdc.m_HYMaxp.numGlyphs; i++) {
-		stdFile.WriteString(fntCdc.m_vtHYGlyphs[i].strPostName.c_str());
-		stdFile.WriteString("\n");
-	}
-	stdFile.Flush();
-	stdFile.Close();
-	
+string strPsnameFile = ::HY_GetDirFromPath((LPSTR)(LPCSTR)strFileName) + ::HY_GetFileNameFromPath((LPSTR)(LPCSTR)strFileName) + ".txt";
+CStdioFile	stdFile(strPsnameFile.c_str(), CFile::modeWrite | CFile::typeText | CFile::modeCreate);
+for (int i = 0; i < fntCdc.m_HYMaxp.numGlyphs; i++) {
+	stdFile.WriteString(fntCdc.m_vtHYGlyphs[i].strPostName.c_str());
+	stdFile.WriteString("\n");
+}
+stdFile.Flush();
+stdFile.Close();
+
 }	// end of void CHYFontSmartShaperView::OnMnExptname()
 
 void CHYFontSmartShaperView::OnEnChangeMnAdwEdt()
-{	
+{
 	if (!::XSysproxy().m_tagOpeionPrm.bsetADW) {
 		AfxMessageBox("如果要调整中文字宽，需要在设置中勾选自定义宽度");
 	}
@@ -3243,8 +3279,201 @@ void CHYFontSmartShaperView::OnEnChangeMnAdhEdt()
 }	// end of void CHYFontSmartShaperView::OnEnChangeMnAdhEdt()
 
 void CHYFontSmartShaperView::OnMnCmptxt()
-{	
+{
 	CTXTCmpDlg dlg;
 	dlg.DoModal();
-	
+
 }	// end of void CHYFontSmartShaperView::OnMnCmptxt()
+
+void CHYFontSmartShaperView::OnMnChkerttf()
+{
+	CTime tm;
+	string strlog = to_string(tm.GetYear()) + "-" + to_string(tm.GetMonth())
+		+ "-" + to_string(tm.GetDay()) + "  "
+		+ to_string(tm.GetHour()) + ":"
+		+ to_string(tm.GetMinute()) + ":"
+		+ to_string(tm.GetSecond());
+
+	string strlogFile = ::XSysproxy().m_strLogFile;
+	HY_WriteLog(strlogFile, strlog, true);
+	size_t stGlyhNum = m_FontDeCodec.m_vtHYGlyphs.size();
+	int iNum = 0;
+	for (size_t i = 0; i < stGlyhNum; i++) {
+		CHYGlyph& SrcGryph = m_FontDeCodec.m_vtHYGlyphs[i];
+		std::vector<int> cntrIndx;
+		std::vector<CHYContour> vtResult;
+		if (::XSysproxy().GetBugChar(SrcGryph, cntrIndx, vtResult))
+		{
+			strlog = SrcGryph.strPostName + "\n";
+			for (int a = 0; a < cntrIndx.size(); a++)
+			{
+				strlog += "contourIndex=" + std::to_string(cntrIndx[a]) + "\n";
+
+				CHYContour& cntur = vtResult[a];
+				for (int b = 0; b < cntur.vtHYPoints.size(); b++)
+				{
+					strlog += std::to_string(cntur.vtHYPoints[b].x) + "," + std::to_string(cntur.vtHYPoints[b].y) + " ";
+				}
+				strlog += "\n";
+				HY_WriteLog(strlogFile, strlog);
+			}
+			iNum++;
+		}
+	}
+
+	strlog = "Check number=" + std::to_string(iNum);
+	HY_WriteLog(strlogFile, strlog);
+
+
+}	// end of void CHYFontSmartShaperView::OnMnChkerttf()
+
+void CHYFontSmartShaperView::OnMnChkerotf()
+{
+	// TODO: 在此添加命令处理程序代码
+
+}	// end of void CHYFontSmartShaperView::OnMnChkerotf()
+
+void CHYFontSmartShaperView::OnEmojiMk()
+{
+	TCHAR	szFilters[] = _T("XML 文件(*.xml)|*.xml||");
+	CFileDialog  openFileDlg(TRUE, _T(""), _T(""), OFN_LONGNAMES | OFN_FILEMUSTEXIST, szFilters);
+	if (openFileDlg.DoModal() != IDOK)	return;
+
+	CString strXmlFile = openFileDlg.GetPathName();	
+
+	CHYFontCodec	fntEmoji;
+
+	CHYCBLC& CBLC = fntEmoji.m_HYCblc;
+	CHYCBDT& CBDT = fntEmoji.m_HYCBDT;
+
+	CBLC.Header.version.value = 3;
+	CBLC.Header.version.fract = 0;
+
+
+	CMarkup mkEmoji;
+	if (!mkEmoji.Load(strXmlFile)) return;
+	mkEmoji.ResetMainPos();
+	if (mkEmoji.FindElem("Emoji")) 
+	{
+		mkEmoji.IntoElem();
+		if (mkEmoji.FindElem("OpenType"))
+		{
+			mkEmoji.IntoElem();
+			while (mkEmoji.FindElem("bitmapSizeTable"))
+			{
+				mkEmoji.IntoElem();
+				BitmapSize bmpSz;
+				
+				if (mkEmoji.FindElem("sbitLineMetrics_hori"))
+				{					
+					mkEmoji.IntoElem();
+
+					mkEmoji.FindElem("ascender");
+					bmpSz.Hori.ascender = (char)atoi(mkEmoji.GetData());
+					mkEmoji.FindElem("descender");
+					bmpSz.Hori.descender = (char)atoi(mkEmoji.GetData());
+					mkEmoji.FindElem("widthMax");
+					bmpSz.Hori.widthMax = (unsigned char)atoi(mkEmoji.GetData());
+					mkEmoji.FindElem("caretSlopeNumerator");
+					bmpSz.Hori.caretSlopeNumerator = (char)atoi(mkEmoji.GetData());
+					mkEmoji.FindElem("caretSlopeDenominator");
+					bmpSz.Hori.caretSlopeDenominator = (char)atoi(mkEmoji.GetData());
+					mkEmoji.FindElem("caretOffset");
+					bmpSz.Hori.caretOffset = (char)atoi(mkEmoji.GetData());
+					mkEmoji.FindElem("minOriginSB");
+					bmpSz.Hori.minOriginSB = (char)atoi(mkEmoji.GetData());
+					mkEmoji.FindElem("minAdvanceSB");
+					bmpSz.Hori.minAdvanceSB = (char)atoi(mkEmoji.GetData());
+					mkEmoji.FindElem("maxBeforeBL");
+					bmpSz.Hori.maxBeforeBL = (char)atoi(mkEmoji.GetData());
+					mkEmoji.FindElem("minAfterBL");
+					bmpSz.Hori.minAfterBL = (char)atoi(mkEmoji.GetData());
+					mkEmoji.FindElem("pad1");
+					bmpSz.Hori.pad1 = (char)atoi(mkEmoji.GetData());
+					mkEmoji.FindElem("pad2");
+					bmpSz.Hori.pad2 = (char)atoi(mkEmoji.GetData());
+
+					mkEmoji.OutOfElem();
+				}
+
+				if (mkEmoji.FindElem("sbitLineMetrics_vert"))
+				{
+					mkEmoji.IntoElem();
+
+					mkEmoji.FindElem("ascender");
+					bmpSz.Vert.ascender = (char)atoi(mkEmoji.GetData());
+					mkEmoji.FindElem("descender");
+					bmpSz.Vert.descender = (char)atoi(mkEmoji.GetData());
+					mkEmoji.FindElem("widthMax");
+					bmpSz.Vert.widthMax = (unsigned char)atoi(mkEmoji.GetData());
+					mkEmoji.FindElem("caretSlopeNumerator");
+					bmpSz.Vert.caretSlopeNumerator = (char)atoi(mkEmoji.GetData());
+					mkEmoji.FindElem("caretSlopeDenominator");
+					bmpSz.Vert.caretSlopeDenominator = (char)atoi(mkEmoji.GetData());
+					mkEmoji.FindElem("caretOffset");
+					bmpSz.Vert.caretOffset = (char)atoi(mkEmoji.GetData());
+					mkEmoji.FindElem("minOriginSB");
+					bmpSz.Vert.minOriginSB = (char)atoi(mkEmoji.GetData());
+					mkEmoji.FindElem("minAdvanceSB");
+					bmpSz.Vert.minAdvanceSB = (char)atoi(mkEmoji.GetData());
+					mkEmoji.FindElem("maxBeforeBL");
+					bmpSz.Vert.maxBeforeBL = (char)atoi(mkEmoji.GetData());
+					mkEmoji.FindElem("minAfterBL");
+					bmpSz.Vert.minAfterBL = (char)atoi(mkEmoji.GetData());
+					mkEmoji.FindElem("pad1");
+					bmpSz.Vert.pad1 = (char)atoi(mkEmoji.GetData());
+					mkEmoji.FindElem("pad2");
+					bmpSz.Vert.pad2 = (char)atoi(mkEmoji.GetData());
+
+					mkEmoji.OutOfElem();
+				}
+
+				if (mkEmoji.FindElem("startGlyphIndex"))
+				{
+					bmpSz.startGlyphIndex = (unsigned short)atoi(mkEmoji.GetData());
+				}
+
+				if (mkEmoji.FindElem("endGlyphIndex"))
+				{
+					bmpSz.endGlyphIndex = (unsigned short)atoi(mkEmoji.GetData());
+				}
+
+				if (mkEmoji.FindElem("ppemX"))
+				{
+					bmpSz.ppemX = (unsigned char)atoi(mkEmoji.GetData());
+				}
+
+				if (mkEmoji.FindElem("ppemY"))
+				{
+					bmpSz.ppemY = (unsigned char)atoi(mkEmoji.GetData());
+				}
+
+				if (mkEmoji.FindElem("bitDepth"))
+				{
+					bmpSz.bitDepth = (unsigned char)atoi(mkEmoji.GetData());
+				}
+
+				if (mkEmoji.FindElem("Flags"))
+				{
+					bmpSz.Flags = (unsigned char)atoi(mkEmoji.GetData());
+				}
+
+				mkEmoji.OutOfElem();
+
+				CBLC.vtBitmapSizeTb.push_back(bmpSz);
+			}
+
+			mkEmoji.OutOfElem();
+		}
+		mkEmoji.OutOfElem();
+	}
+	
+
+	
+
+	
+
+
+
+
+}	// end of void CHYFontSmartShaperView::OnEmojiMk()

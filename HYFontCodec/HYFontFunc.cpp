@@ -17,9 +17,33 @@ void CHYFontFunc::MergeGlyphs(std::vector<CHYGlyph>& src1Glyphs, std::vector<CHY
 	size_t st = src2Glyphs.size();	
 	for (size_t i = 0; i < st; i++) {
 		CHYGlyph src2Gly = src2Glyphs[i];
-		if (src2Gly.vtUnicode[0] == 0xffff)
+
+		if (src2Gly.strPostName == ".notdef")		
 			continue;
-		if (src2Gly.vtUnicode.size() == 0) { // 如果没有unicode
+
+		if (src2Gly.vtUnicode.size() > 0)
+		{ 
+			if (src2Gly.vtUnicode[0] == 0xffff)
+				continue;
+			if (src2Gly.vtUnicode[0] == 0x0020)
+				continue;
+			if (src2Gly.vtUnicode[0] == 0x000a)
+				continue;
+			if (src2Gly.vtUnicode[0] == 0x000d)
+				continue;
+
+			//如果unicode重复后边覆盖前边
+			unsigned long ulUni1 = src2Gly.vtUnicode[0];
+			int iIndex = FindGryphIndexByUnciode(src1Glyphs, ulUni1);
+			if (iIndex != -1) {
+				src1Glyphs[iIndex] = src2Gly;
+			}
+			else {
+				src1Glyphs.push_back(src2Gly);
+			}
+
+		}
+		else if (src2Gly.vtUnicode.size() == 0) { // 如果没有unicode
 			if (src2Gly.strPostName == "") {	// 既没有unicode编码也没有name
 				src1Glyphs.push_back(src2Gly);
 			}
@@ -32,17 +56,7 @@ void CHYFontFunc::MergeGlyphs(std::vector<CHYGlyph>& src1Glyphs, std::vector<CHY
 					src1Glyphs.push_back(src2Gly);
 				}
 			}
-		}
-		else {	//如果unicode重复后边覆盖前边
-			unsigned long ulUni1 = src2Gly.vtUnicode[0];
-			int iIndex = FindGryphIndexByUnciode(src1Glyphs, ulUni1);
-			if (iIndex != -1) {
-				src1Glyphs[iIndex] = src2Gly;
-			}
-			else {
-				src1Glyphs.push_back(src2Gly);
-			}
-		}
+		}		
 	}
 
 }	// end of void CHYFontFunc::MergeGlyphs()

@@ -208,4 +208,7 @@ public:
 	afx_msg void OnEnChangeMnAdwEdt();
 	afx_msg void OnEnChangeMnAdhEdt();
 	afx_msg void OnMnCmptxt();
+	afx_msg void OnMnChkerttf();
+	afx_msg void OnMnChkerotf();
+	afx_msg void OnEmojiMk();
 };

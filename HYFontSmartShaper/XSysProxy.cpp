@@ -638,7 +638,7 @@ void CXSysProxy::InitEncodeOption(CHYFontCodec& Encode)
 	Encode.m_HYhead.fontRevision.value = 1;
 	Encode.m_HYhead.fontRevision.fract = 0;
 	Encode.m_HYhead.magicNumber = 0x5F0F3CF5;
-	Encode.m_HYhead.unitsPerEm = ::XSysproxy().m_tagOpeionPrm.usUnitsPerEM;
+	//Encode.m_HYhead.unitsPerEm = ::XSysproxy().m_tagOpeionPrm.usUnitsPerEM;
 	// Bit 0: Baseline for font at y=0. 
 	//Bit 1: Left sidebearing point at x=0 (relevant only for TrueType rasterizers) ¡ª see the note below regarding variable fonts.
 	Encode.m_HYhead.flags = 3;
@@ -655,7 +655,7 @@ void CXSysProxy::InitEncodeOption(CHYFontCodec& Encode)
 	// Hhea
 	Encode.m_HYHhea.version.value = 1;
 	Encode.m_HYHhea.version.fract = 0;
-	Encode.m_HYHhea.Ascender = Encode.m_HYhead.xMax;
+	Encode.m_HYHhea.Ascender = Encode.m_HYhead.yMax;
 	Encode.m_HYHhea.Descender = Encode.m_HYhead.yMin;
 	Encode.m_HYHhea.LineGap = 0;
 	Encode.m_HYHhea.advanceWidthMax = Encode.GetAdvancMaxWidth();
@@ -680,7 +680,7 @@ void CXSysProxy::InitEncodeOption(CHYFontCodec& Encode)
 	Encode.m_HYOS2.sTypoAscender = ::XSysproxy().m_tagOpeionPrm.sTypo_Ascender;
 	Encode.m_HYOS2.sTypoDescender = ::XSysproxy().m_tagOpeionPrm.sTypo_Descender;
 	Encode.m_HYOS2.usWinAscent = Encode.m_HYhead.yMax;
-	Encode.m_HYOS2.usWinDescent = Encode.m_HYhead.yMin;
+	Encode.m_HYOS2.usWinDescent = abs(Encode.m_HYhead.yMin);
 	Encode.m_HYOS2.ulCodePageRange1 = ::XSysproxy().m_tagOpeionPrm.ulCodePageRang1;
 	Encode.m_HYOS2.ulCodePageRange2 = ::XSysproxy().m_tagOpeionPrm.ulCodePageRang2;
 	Encode.m_HYOS2.vtachVendID.clear();
@@ -806,7 +806,6 @@ void CXSysProxy::SetEncodeOption(CHYFontCodec& Encode, CHYFontCodec& Original)
 		for each (char var in Original.m_HYOS2.vtachVendID) {
 			Encode.m_HYOS2.vtachVendID.push_back(var);
 		}
-
 		Encode.m_HYOS2.ulCodePageRange1 = Original.m_HYOS2.ulCodePageRange1;
 		Encode.m_HYOS2.ulCodePageRange2 = Original.m_HYOS2.ulCodePageRange2;
 	}
@@ -832,6 +831,7 @@ void CXSysProxy::SetEncodeOption(CHYFontCodec& Encode, CHYFontCodec& Original)
 	Encode.m_HYOS2.usDefaultChar = Original.m_HYOS2.usDefaultChar;
 	Encode.m_HYOS2.usBreakChar = Original.m_HYOS2.usBreakChar;
 	Encode.m_HYOS2.usMaxContext = Original.m_HYOS2.usMaxContext;
+	Encode.m_HYOS2.fsSelection = Original.m_HYOS2.fsSelection;
 
 	Encode.m_HYPost.italicAngle.value = Original.m_HYPost.italicAngle.value;
 	Encode.m_HYPost.italicAngle.fract = Original.m_HYPost.italicAngle.fract;
@@ -849,4 +849,135 @@ void CXSysProxy::SetEncodeOption(CHYFontCodec& Encode, CHYFontCodec& Original)
 	}
 
 }	// end of void CXSysProxy::SetEncodeOption()
+
+BOOL CXSysProxy::GetBugChar(CHYGlyph& InGlyph, std::vector<int>& cntrIndx,std::vector<CHYContour>& vtResult)
+{
+	size_t		szCntunNum = InGlyph.vtContour.size();
+	// Â·¾¶	
+
+	BOOL b = FALSE;
+	for (size_t a = 0; a < szCntunNum; a++)
+	{
+		CHYContour& hyCntur = InGlyph.vtContour[a];
+		std::vector<CHYPoint> outHYPoints;
+		MakeConturPath(hyCntur, outHYPoints);
+
+		size_t stPoins = outHYPoints.size();
+		double dbAgnle = 0.0f;
+		CHYPoint pt1, pt2, pt3;
+		for (int j = 1; j < stPoins;)
+		{
+			if (outHYPoints[j].flag == POINT_FLG_CONTROL)
+			{		
+				pt1 = outHYPoints[j - 1];				
+				pt2 = outHYPoints[j];
+
+				if (j < stPoins)
+				{
+					dbAgnle = CHYFontFunc::AnglePoint(outHYPoints[j - 1], outHYPoints[j], outHYPoints[j + 1]);
+					pt3 = outHYPoints[j + 1];					
+				}
+				else
+				{
+					dbAgnle = CHYFontFunc::AnglePoint(outHYPoints[j - 1], outHYPoints[j], outHYPoints[0]);
+					pt3 = outHYPoints[0];					
+				}
+				if (dbAgnle < 2.0f)
+				{	
+					if ((pt1.x != pt2.x) && (pt1.y != pt2.y))
+					{
+						if ((pt3.x != pt2.x) && (pt3.y != pt2.y))
+						{
+							CHYContour cunt;
+
+							cunt.vtHYPoints.push_back(pt1);
+							cunt.vtHYPoints.push_back(pt2);
+							cunt.vtHYPoints.push_back(pt3);
+							cntrIndx.push_back(a);
+							vtResult.push_back(cunt);
+							b=TRUE;
+						}
+					}
+				}
+			}
+			j++;
+		}		
+	}
+	return b;
+
+}	// end of BOOL CXSysProxy::GetBugChar()
+
+void CXSysProxy::MakeConturPath(CHYContour& hyCntur, std::vector<CHYPoint>& outHYPoints)
+{
+	size_t  sPtNum = hyCntur.vtHYPoints.size();
+	CHYPoint f1, f2;
+	size_t i = 0;
+#if 0	
+	while (i < sPtNum)
+	{
+		if (i == 0)
+		{
+			outHYPoints.push_back(hyCntur.vtHYPoints[i++]);
+		}
+		else
+		{
+			if (hyCntur.vtHYPoints[i].flag == POINT_FLG_ANCHOR)
+			{	
+				outHYPoints.push_back(hyCntur.vtHYPoints[i++]);
+				
+			}
+			else if (hyCntur.vtHYPoints[i].flag == POINT_FLG_CONTROL)
+			{
+				outHYPoints.push_back(hyCntur.vtHYPoints[i++]);
+				if (i < sPtNum)
+				{
+					if (hyCntur.vtHYPoints[i].flag == POINT_FLG_ANCHOR)
+					{	
+						outHYPoints.push_back(hyCntur.vtHYPoints[i++]);
+						
+					}					
+					else if (hyCntur.vtHYPoints[i].flag == POINT_FLG_CONTROL)
+					{						
+						f2.x = hyCntur.vtHYPoints[i-1].x + (hyCntur.vtHYPoints[i].x - hyCntur.vtHYPoints[i-1].x) / 2.0f;
+						f2.y = hyCntur.vtHYPoints[i-1].y + (hyCntur.vtHYPoints[i].y - hyCntur.vtHYPoints[i-1].y) / 2.0f;
+						f2.flag = POINT_FLG_ANCHOR;
+						outHYPoints.push_back(f2);
+					}					
+				}
+			}
+		}
+	}
+#else 
+	while (i < sPtNum)
+	{		
+		if (hyCntur.vtHYPoints[i++].flag == POINT_FLG_ANCHOR)
+		{
+			if ((i+1)<sPtNum)
+			{ 
+				if(hyCntur.vtHYPoints[i].flag == POINT_FLG_CONTROL &&
+					hyCntur.vtHYPoints[i+1].flag == POINT_FLG_ANCHOR)
+				{
+					outHYPoints.push_back(hyCntur.vtHYPoints[i-1]);
+					outHYPoints.push_back(hyCntur.vtHYPoints[i]);
+					outHYPoints.push_back(hyCntur.vtHYPoints[i+1]);
+				}					
+			}
+			else {
+				if (i < sPtNum)
+				{
+					if (hyCntur.vtHYPoints[i].flag == POINT_FLG_CONTROL &&
+						hyCntur.vtHYPoints[0].flag == POINT_FLG_ANCHOR)
+					{
+						outHYPoints.push_back(hyCntur.vtHYPoints[i - 1]);
+						outHYPoints.push_back(hyCntur.vtHYPoints[i]);
+						outHYPoints.push_back(hyCntur.vtHYPoints[0]);
+					}
+				}
+			}
+		}
+	}
+
+#endif 
+
+}	// end of void CFontShowWnd::MakeConturPath();
 

@@ -742,10 +742,25 @@ int  HY_ReadTextLine(char* filename, std::vector<std::string>& szlineText)
 
 }	// end of bool HY_DLL_API  HY_ReadLineText()
 
-void  HY_WriteLog(std::vector<std::string>& szText)
+void  HY_WriteLog(std::string SavePath,std::string& Text,bool bNew)
 {
-	//char* filename = 
-	
+	int err = 0;
+	FILE* pCreatFile = 0;	
+	if (bNew) {
+		pCreatFile = fopen(SavePath.c_str(), "wt");
+	}
+	else {
+		pCreatFile = fopen(SavePath.c_str(), "at");
+	}
+
+	if (pCreatFile == 0) {
+		_get_errno(&err);
+		_set_errno(0);
+		return;
+	}
+	fwrite(Text.c_str(),1, Text.length()+1, pCreatFile);
+	fflush(pCreatFile);
+	fclose(pCreatFile);
 
 }	// end of void HY_WriteLog()
 

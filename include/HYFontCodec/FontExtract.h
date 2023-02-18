@@ -108,8 +108,8 @@ namespace HYFONTCODEC
 		int				IsCompositeGlyph(FILE* f,std::vector<int>& vtGID);
 		int				FilterSVG(CHYFontCodec& Decode, std::vector<CHYCodeMapItem>& vtCodeMapItem);
 		int				FilterColors(CHYFontCodec& Decode, std::vector<CHYCodeMapItem>& vtCodeMapItem);
-		int				FilterEmbeddedBitmap(CHYFontCodec& Decode, std::vector<CHYCodeMapItem>& vtCodeMapItem);
-		void			RemoveEmbeddedBitmap(CHYCBLC& BLC, int GID);
+		//int				FilterEmbeddedBitmap(CHYFontCodec& Decode, std::vector<CHYCodeMapItem>& vtCodeMapItem);
+		//void			RemoveEmbeddedBitmap(CHYCBLC& BLC, int GID);
 
 		/************************************************************************/
 		//ExtractFont

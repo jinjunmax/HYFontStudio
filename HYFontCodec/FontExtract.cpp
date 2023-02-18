@@ -100,6 +100,7 @@ namespace HYFONTCODEC
 				FontDecode.DecodeCOLR();
 			if (FontDecode.m_HYTbDirectory.FindTableEntry(SVG_TAG) != -1)
 				FontDecode.DecodeSVG();
+#if 0 //emjio ∏ƒ‘Ï¡Ÿ ±∆¡±Œ
 			if (FontDecode.m_HYTbDirectory.FindTableEntry(EBLC_TAG) != -1)
 				FontDecode.DecodeEBLC();
 			if (FontDecode.m_HYTbDirectory.FindTableEntry(CBLC_TAG) != -1)
@@ -108,7 +109,7 @@ namespace HYFONTCODEC
 				FontDecode.DecodeEBDT();
 			if (FontDecode.m_HYTbDirectory.FindTableEntry(CBDT_TAG) != -1)
 				FontDecode.DecodeCBDT();
-
+#endif
 			int iTableEntryIndx = FontDecode.m_HYTbDirectory.FindTableEntry(GLYF_TAG);
 			if (iTableEntryIndx == -1)											return FONT_ERR_GLYF_DECODE;
 
@@ -183,7 +184,9 @@ namespace HYFONTCODEC
 
 		if (FontDecode.m_HYTbDirectory.FindTableEntry(EBDT_TAG) != -1 ||
 			FontDecode.m_HYTbDirectory.FindTableEntry(CBDT_TAG) != -1){
+#if 0
 			FilterEmbeddedBitmap(FontDecode, HYCodeMap.vtHYCodeMap);
+#endif 
 		}		
 		iRn = BulidFont(FontDecode, pOutGlyphs, ulGlyphsLen, strNewTTFFile,HYCodeMap);
 		if (pOutGlyphs) delete[] pOutGlyphs;
@@ -388,7 +391,7 @@ namespace HYFONTCODEC
 		return true;
 
 	}	// end of int CFontExtract::FilterColors()
-
+#if 0
 	int	CFontExtract::FilterEmbeddedBitmap(CHYFontCodec& Decode, std::vector<CHYCodeMapItem>& vtCodeMapItem)
 	{
 		size_t stLoop = vtCodeMapItem.size();
@@ -405,9 +408,9 @@ namespace HYFONTCODEC
 	{
 		for (int i = 0; i < BLC.Header.numsizes; i++){
 			BitmapSize& bmpSz = BLC.vtBitmapSizeTb[i];
-			size_t szSubTable = bmpSz.vtIndexSubTableArray.size();
+			size_t szSubTable = BLC.vtIndexSubTableArray.size();
 			for (size_t j = 0; j < szSubTable; j++) {
-				IndexSubTableArray& SubTableArray =  bmpSz.vtIndexSubTableArray[j];				
+				IndexSubTableArray& SubTableArray = BLC.vtIndexSubTableArray[j];
 				for (int x = SubTableArray.firstGlyphIndex; 
 					x <= SubTableArray.lastGlyphIndex; x++)	{
 					if (x != GID) {
@@ -435,6 +438,7 @@ namespace HYFONTCODEC
 		}
 
 	}	// end of void CFontExtract::RemoveEmbeddedBitmap()		
+#endif 
 
 	int CFontExtract::ExtractFont(const char* strTTFFile, const char* strNewTTFFile,int CMAP)
 	{

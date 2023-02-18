@@ -30,6 +30,9 @@ public:
 	void InitEncodeOption(CHYFontCodec& Encode);
 	void SetEncodeOption(CHYFontCodec& Encode, CHYFontCodec& Original);
 
+	BOOL GetBugChar(CHYGlyph& InGlyph, std::vector<int>& cntrIndx,std::vector<CHYContour>& vtResult);
+	void MakeConturPath(CHYContour& hyCntur, std::vector<CHYPoint>& vtHYPoints);
+
 public:
 	CVrAxisRecords		AxisRecords;
 	CVrMasters			Masters;

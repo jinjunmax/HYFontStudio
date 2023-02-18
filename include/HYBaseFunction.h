@@ -96,7 +96,7 @@ bool				HY_DLL_API	HY_WCharTOMultiCharEx(std::string  strOut, char* pSrc, int iS
 
 std::string			HY_DLL_API	HY_trim(std::string const& str);
 int					HY_DLL_API  HY_ReadTextLine(char* filename, std::vector<std::string>& szlineText);
-void				HY_DLL_API  HY_WriteLog(std::vector<std::string>& szText);
+void				HY_DLL_API  HY_WriteLog(std::string SavePath, std::string& Text, bool bNew=false);
 void				HY_DLL_API	HY_4ByteAlign(FILE* pF, unsigned long length);
 void				HY_DLL_API  HY_BrodMessage(UINT Msg, WPARAM wParam, LPARAM lParam);
 

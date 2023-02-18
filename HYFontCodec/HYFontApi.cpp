@@ -11,7 +11,7 @@
 using namespace  boost::algorithm;
 using namespace HYFONTCODEC;
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+#if 0 //emjio 改造临时屏蔽
 int	__cdecl	EmojiToImage(char* pFontName, char* pDirectory)
 {
 
@@ -41,12 +41,14 @@ int	__cdecl	EmojiToImage(char* pFontName, char* pDirectory)
 	Emoji.OutOfElem();
 
 	CHYCBLC& CBLC = FontCodec.m_HYCblc;	
-	size_t stBitMapTB = CBLC.vtBitmapSizeTb.size();
+	size_t stBitMapTB = CBLC.Header.numsizes;
 	if (stBitMapTB>0)	// opentype体系Emoji字库表项
 	{
 		Emoji.AddElem("OpenType");
 		Emoji.IntoElem();
 
+		//Emoji.AddElem("bitmapSize", stBitMapTB);
+		std::vector<string> szbmpSaveDir;
 		for (size_t i=0; i<stBitMapTB; i++)			
 		{
 			BitmapSize& btMapSzTable = CBLC.vtBitmapSizeTb[i];
@@ -93,84 +95,89 @@ int	__cdecl	EmojiToImage(char* pFontName, char* pDirectory)
 			Emoji.AddElem("flags",btMapSzTable.Flags);
 
 			char strike[MAX_PATH]={0};
-			sprintf_s(strike,MAX_PATH,"%sstrikeindex%02d\\",pDirectory,i);
+			sprintf_s(strike,MAX_PATH,"%sBimap_strikeindex%02d\\",pDirectory,i);
 			::ZeroMemory(md,MAX_PATH);
 			sprintf_s(md,MAX_PATH,"md %s",strike);
 			::system(md);
+			szbmpSaveDir.push_back(strike);
 
-			unsigned long ulIndexsubArryNum = CBLC.vtBitmapSizeTb[i].numberofIndexSubTables;
-			for (unsigned long j=0; j<ulIndexsubArryNum; j++)
+			Emoji.OutOfElem();
+		}
+
+		for (int x = 0; x < CBLC.Header.numsizes; x++)
+		{
+			unsigned long ulIndexsubArryNum = CBLC.vtBitmapSizeTb[x].numberofIndexSubTables;
+			for (unsigned long y = 0; y < ulIndexsubArryNum; y++)
 			{
-				IndexSubTableArray& subTableArray = CBLC.vtBitmapSizeTb[i].vtIndexSubTableArray[j];
+				IndexSubTableArray& subTableArray = CBLC.vtIndexSubTableArray[y];
 
-				char subArry[MAX_PATH]={0};
-				sprintf_s(subArry,MAX_PATH,"%sGid%dToGid%d\\",strike,subTableArray.firstGlyphIndex,subTableArray.lastGlyphIndex);
-				::ZeroMemory(md,MAX_PATH);
-				sprintf_s(md,MAX_PATH,"md %s",subArry);
-				::system(md);					
+				char subArry[MAX_PATH] = { 0 };
+				sprintf_s(subArry, MAX_PATH, "%sGid%dToGid%d\\", szbmpSaveDir[y], subTableArray.firstGlyphIndex, subTableArray.lastGlyphIndex);
+				::ZeroMemory(md, MAX_PATH);
+				sprintf_s(md, MAX_PATH, "md %s", subArry);
+				::system(md);
 
 				Emoji.AddElem("indexSubTableArray");
-				Emoji.AddAttrib("firstGlyphIndex",subTableArray.firstGlyphIndex);
-				Emoji.AddAttrib("lastGlyphIndex",subTableArray.lastGlyphIndex);
+				Emoji.AddAttrib("firstGlyphIndex", subTableArray.firstGlyphIndex);
+				Emoji.AddAttrib("lastGlyphIndex", subTableArray.lastGlyphIndex);
 				Emoji.IntoElem();
 
 				unsigned short usoffst = 0;
-				for (unsigned short x=subTableArray.firstGlyphIndex; x<subTableArray.lastGlyphIndex+1; x++)
+				for (unsigned short x1 = subTableArray.firstGlyphIndex; x1 < subTableArray.lastGlyphIndex + 1; x1++)
 				{
 					std::vector<unsigned long> szUnicode;
-					FontCodec.FindGryphUncidoByIndex(x,szUnicode);
+					FontCodec.FindGryphUncidoByIndex(x1, szUnicode);
 
-					char FileName[MAX_PATH] = {0};
-					if (szUnicode.size()>0)
-					{	
-						sprintf_s(FileName,MAX_PATH,"%s0x%x.png",subArry,szUnicode[0]);
-
-						::memset(strTmp,0,MAX_PATH);
-						sprintf_s(strTmp,MAX_PATH,"%x",szUnicode[0]);
-					}
-					else 
+					char FileName[MAX_PATH] = { 0 };
+					if (szUnicode.size() > 0)
 					{
-						sprintf_s(FileName,MAX_PATH,"%sGID%03d.png",subArry,x);
-						::memset(strTmp,0,MAX_PATH);
+						sprintf_s(FileName, MAX_PATH, "%s0x%x.png", subArry, szUnicode[0]);
+
+						::memset(strTmp, 0, MAX_PATH);
+						sprintf_s(strTmp, MAX_PATH, "%x", szUnicode[0]);
+					}
+					else
+					{
+						sprintf_s(FileName, MAX_PATH, "%sGID%03d.png", subArry, x);
+						::memset(strTmp, 0, MAX_PATH);
 					}
 
 					Emoji.AddElem("glyphLoc");
-					Emoji.AddAttrib("id",x);					
-					Emoji.AddAttrib("unicode",strTmp);					
+					Emoji.AddAttrib("id", x1);
+					Emoji.AddAttrib("unicode", strTmp);
 
 					Emoji.IntoElem();
 
-					if (usoffst<subTableArray.IndexSubTb.vtDdataForm17.size())
+					if (usoffst < subTableArray.IndexSubTb.vtDdataForm17.size())
 					{
-						CBDTFormat17&	format17 = subTableArray.IndexSubTb.vtDdataForm17[usoffst++];
+						CBDTFormat17& format17 = subTableArray.IndexSubTb.vtDdataForm17[usoffst++];
 						Emoji.AddElem("smallGlyphMetrics");
 						Emoji.IntoElem();
-						Emoji.AddElem("height",format17.smallGlyphMtcs.height);
-						Emoji.AddElem("width",format17.smallGlyphMtcs.width);
-						Emoji.AddElem("BearingX",format17.smallGlyphMtcs.BearingX);
-						Emoji.AddElem("BearingY",format17.smallGlyphMtcs.BearingY);
-						Emoji.AddElem("Advance",format17.smallGlyphMtcs.Advance);
+						Emoji.AddElem("height", format17.smallGlyphMtcs.height);
+						Emoji.AddElem("width", format17.smallGlyphMtcs.width);
+						Emoji.AddElem("BearingX", format17.smallGlyphMtcs.BearingX);
+						Emoji.AddElem("BearingY", format17.smallGlyphMtcs.BearingY);
+						Emoji.AddElem("Advance", format17.smallGlyphMtcs.Advance);
 						Emoji.OutOfElem();
-						
-						FILE* PngFile = fopen(FileName,"w+b");
-						if (PngFile != NULL) 
+
+						FILE* PngFile = fopen(FileName, "w+b");
+						if (PngFile != NULL)
 						{
 							size_t stdataLen = format17.data.size();
-							for (size_t z=0; z<stdataLen; z++)
+							for (size_t z = 0; z < stdataLen; z++)
 							{
-								fwrite(&format17.data[z],1,1,PngFile);
+								fwrite(&format17.data[z], 1, 1, PngFile);
 							}
 							fflush(PngFile);
 							fclose(PngFile);
 						}
-						Emoji.AddElem("Path",FileName);
+						Emoji.AddElem("Path", FileName);
 					}
 					Emoji.OutOfElem();
 				}
 				Emoji.OutOfElem();
 			}
-			Emoji.OutOfElem();
-		}
+		}	
 		Emoji.OutOfElem();
 	}
 	else //sbix 苹果字库特有表项
@@ -237,6 +244,7 @@ int	__cdecl	EmojiToImage(char* pFontName, char* pDirectory)
 	return HY_NOERROR;
 
 }	// end of int __cdecl	EmojiToImage()
+#endif
 
 
 int __cdecl WoffToFONT(char* pWoffFile, char* pFontName)

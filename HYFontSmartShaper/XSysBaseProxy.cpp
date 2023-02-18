@@ -24,6 +24,8 @@ BOOL CXSysBaseProxy::Init(CString strHelpFile)
 	GetCurrentDirectory(MAX_PATH,pPath);
 	m_strAppDir.Format(_T("%s\\"),pPath);
 
+	m_strLogFile = string(m_strAppDir)+"log.txt";
+
 	TCHAR   szBuffer[MAX_PATH]; 
 	ZeroMemory(szBuffer, MAX_PATH);
 	GetSystemDirectory(szBuffer, MAX_PATH); 
@@ -45,6 +47,7 @@ void CXSysBaseProxy::InitParam()
 {
 	m_strAppDir				= _T("");
 	m_strSysDir				= _T("");
+	m_strLogFile			= _T("");
 	m_pMainFrame			= NULL;	
 	ZeroMemory(&m_tagDrawParam, sizeof(DRAWFONTPARAM));
 	m_tagDrawParam.iLine	= 1;
@@ -268,6 +271,229 @@ void CXSysBaseProxy::StoreLocalProfile()
 	strTmp.Format(_T("%s"), m_tagOpeionPrm.CHSCpyright);
 
 }	// end of void CXSysBaseProxy::StoreLocalProfile()
+
+void CXSysBaseProxy::LoadAdvancedTypographicTables( CHYFontCodec* pFntCdc)
+{
+	CString strProfileName = m_strAppDir + _T("data\\GSUB.xml");
+
+	HYFONTCODEC::CHYFontCodec* pHYFontCode = pFntCdc;
+
+	std::string		strNum = "", strSutItem = "";
+	char			szTmp[4];
+	int				iNum = 0;
+	CMarkup		markUp;
+	if (markUp.Load(strProfileName))
+	{
+		markUp.ResetMainPos();
+		if (markUp.FindElem("FontProfile"))
+		{
+			markUp.IntoElem();
+
+			if (markUp.FindElem("GSUB"))
+			{
+				CHYGsub& GSUB = pHYFontCode->m_HYGsub;
+				GSUB.Setdefault();
+
+				// load Scriptlist
+				if (markUp.FindChildElem("scriptlist"))
+				{
+					markUp.IntoElem();
+					while (markUp.FindChildElem("scripttable"))
+					{
+						CHYScriptRecord	ScriptRecord;
+						markUp.IntoElem();
+						strNum = markUp.GetAttrib("tag");
+						memset(szTmp, 0, 4);
+						memcpy(szTmp, strNum.data(), 4);
+						memcpy(ScriptRecord.Tag, szTmp, 4);
+
+						if (markUp.FindChildElem("DefaultLangSys"))
+						{
+							markUp.IntoElem();
+							strNum = markUp.GetAttrib("ReqFeatureIndex");
+							ScriptRecord.Script.DefaultLangSys.ReqFeatureIndex = strtol(strNum.data(), NULL, 10);
+
+							while (markUp.FindChildElem("FeatureIndex"))
+							{
+								markUp.IntoElem();
+								strNum = markUp.GetData();
+								long FIndex = strtol(strNum.data(), NULL, 10);
+								ScriptRecord.Script.DefaultLangSys.vtFeatureIndex.push_back(static_cast<unsigned int>(FIndex));
+								markUp.OutOfElem();
+							}
+							markUp.OutOfElem();
+						}
+
+						while (markUp.FindChildElem("LangSysTable"))
+						{
+							markUp.IntoElem();
+
+							CHYLangSysRecord	langSysRecord;
+							strNum = markUp.GetAttrib("tag");
+							memset(szTmp, 0, 4);
+							memcpy(szTmp, strNum.data(), 4);
+							memcpy(langSysRecord.SysTag, szTmp, 4);
+
+							strNum = markUp.GetAttrib("ReqFeatureIndex");
+							langSysRecord.LangSys.ReqFeatureIndex = strtol(strNum.data(), NULL, 10);
+
+							while (markUp.FindChildElem("FeatureIndex"))
+							{
+								markUp.IntoElem();
+								strNum = markUp.GetData();
+								long FIndex = strtol(strNum.data(), NULL, 10);
+								langSysRecord.LangSys.vtFeatureIndex.push_back(static_cast<unsigned int>(FIndex));
+								markUp.OutOfElem();
+							}
+							markUp.OutOfElem();
+							ScriptRecord.Script.vtLangSysRecord.push_back(langSysRecord);
+						}
+
+						markUp.OutOfElem();
+						GSUB.vtScriptsList.push_back(ScriptRecord);
+					}
+					markUp.OutOfElem();
+				}
+
+				// load Fearturelist;			
+				if (markUp.FindChildElem("featurelist"))
+				{
+					markUp.IntoElem();
+					while (markUp.FindChildElem("featuretable"))
+					{
+						CHYFeatureRecord	FeatureRecord;
+						markUp.IntoElem();
+
+						strNum = markUp.GetAttrib("tag");
+						memset(szTmp, 0, 4);
+						memcpy(szTmp, strNum.data(), 4);
+						memcpy(FeatureRecord.Tag, szTmp, 4);
+
+						while (markUp.FindChildElem("LookupIndex"))
+						{
+							markUp.IntoElem();
+							strNum = markUp.GetData();
+							long lLkIndex = strtol(strNum.data(), NULL, 10);
+							FeatureRecord.FeatureTable.vtLookupListIndex.push_back(static_cast<unsigned short>(lLkIndex));
+							markUp.OutOfElem();
+						}
+
+						markUp.OutOfElem();
+						GSUB.vtFeaturesList.push_back(FeatureRecord);
+					}
+					markUp.OutOfElem();
+				}
+
+				// load Lookuplist Info
+				if (markUp.FindChildElem("lookuplist"))
+				{
+					markUp.IntoElem();
+					while (markUp.FindChildElem("lookup"))
+					{
+						CLookUp	LookUpTable;
+
+						markUp.IntoElem();
+						strNum = markUp.GetAttrib("type");
+						long Tmp = strtol(strNum.data(), NULL, 10);
+						LookUpTable.LookUpType = static_cast<unsigned  short>(Tmp);
+						strNum = markUp.GetAttrib("flag");
+						Tmp = strtol(strNum.data(), NULL, 10);
+						LookUpTable.LookUpFlag = static_cast<unsigned  short>(Tmp);
+						
+						if (LookUpTable.LookUpType == 1)
+						{
+							while (markUp.FindChildElem("SubTable"))
+							{
+								CLookUpType1	LookUpType1;
+								markUp.IntoElem();
+								strNum = markUp.GetAttrib("SubstFormat");
+								LookUpType1.SubFormat = (unsigned short)strtol(strNum.data(), NULL, 10);
+
+								if (LookUpType1.SubFormat == 2)
+								{
+									CLookUpSingleSubstitution2& SSubstitution2 = LookUpType1.Substitution2;
+									CCoverage& Coverage = SSubstitution2.Coverage;
+									// Ŀǰ��֧��1
+									Coverage.CoverageFormat = 1;
+									while (markUp.FindChildElem("charnum"))
+									{
+										markUp.IntoElem();
+										strSutItem = markUp.GetData();
+
+										std::string strTmp;
+										std::string::size_type iTmp = strSutItem.find(",");
+										if (iTmp > 0)
+										{
+											std::string strConverageID = strSutItem.substr(0, iTmp);
+											std::string strTmp = strConverageID.substr(0, 1);
+											if (!strTmp.empty())
+											{
+												transform(strTmp.begin(), strTmp.end(), strTmp.begin(), ::toupper);
+												if (strTmp == "G")
+												{
+													strTmp = strConverageID.substr(1);
+													iNum = strtol(strTmp.data(), NULL, 10);
+													Coverage.vtGlyphID.push_back(static_cast<unsigned short>(iNum));
+												}
+												if (strTmp == "U")
+												{
+													strTmp = strConverageID.substr(1);
+													DWORD dwUni = strtol(strTmp.data(), NULL, 16);
+													iNum = pHYFontCode->FindGryphIndexByUnciodeEx(dwUni);
+													//if (iNum!=-1)
+													{
+														Coverage.vtGlyphID.push_back(static_cast<unsigned short>(iNum));
+													}
+												}
+
+												std::string strSubstituteID = strSutItem.substr(iTmp + 1);
+												if (!strSubstituteID.empty())
+												{
+													strTmp = strSubstituteID.substr(0, 1);
+													if (!strTmp.empty())
+													{
+														transform(strTmp.begin(), strTmp.end(), strTmp.begin(), ::toupper);
+														if (strTmp == "G")
+														{
+															strTmp = strSubstituteID.substr(1);
+															iNum = strtol(strTmp.data(), NULL, 10);
+															SSubstitution2.vtGlyphID.push_back(static_cast<unsigned short>(iNum));
+														}
+														if (strTmp == "U")
+														{
+															strTmp = strSubstituteID.substr(1);
+															DWORD dwUni = strtol(strTmp.data(), NULL, 16);
+															iNum = pHYFontCode->FindGryphIndexByUnciodeEx(dwUni);
+															//if (iNum!=-1)
+															{
+																SSubstitution2.vtGlyphID.push_back(static_cast<unsigned short>(iNum));
+															}
+														}
+													}
+												}
+											}
+										}
+										markUp.OutOfElem();
+									}
+									Coverage.GlyphCount = (unsigned short)Coverage.vtGlyphID.size();
+								}
+								markUp.OutOfElem();
+								LookUpType1.Substitution2.GlyphCount = (unsigned short)LookUpType1.Substitution2.vtGlyphID.size();
+								LookUpTable.vtLookupType1.push_back(LookUpType1);
+							}
+						}
+						LookUpTable.SubTableCount++;
+						markUp.OutOfElem();
+						GSUB.vtLookupList.push_back(LookUpTable);
+					}
+					markUp.OutOfElem();
+				}
+			}
+			markUp.OutOfElem();
+		}
+	}
+
+}	// end of void CXSysBaseProxy::LoadAdvancedTypographicTables()
 
 BOOL CXSysBaseProxy::MulToUniHL(char* pDest, int& iDestlen, char* pSrc, int iSrclen)
 {

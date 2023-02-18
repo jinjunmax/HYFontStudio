@@ -305,22 +305,24 @@ namespace HYFONTCODEC
 			void Setdefault();
 		public:
 			IndexSubHeader	Header;
+
 			IndexSubTable1	SubTable1;
 			IndexSubTable2	SubTable2;
 			IndexSubTable3	SubTable3;
 			IndexSubTable4	SubTable4;
 			IndexSubTable5	SubTable5;
 
-			std::vector<CBDTFormat1>	vtDdataForm1;
-			std::vector<CBDTFormat2>	vtDdataForm2;
-			std::vector<CBDTFormat5>	vtDdataForm5;
-			std::vector<CBDTFormat6>	vtDdataForm6;
-			std::vector<CBDTFormat7>	vtDdataForm7;
-			std::vector<CBDTFormat8>	vtDdataForm8;
-			std::vector<CBDTFormat9>	vtDdataForm9;
-			std::vector<CBDTFormat17>	vtDdataForm17;
-			std::vector<CBDTFormat18>	vtDdataForm18;
-			std::vector<CBDTFormat19>	vtDdataForm19;
+			// ’‚¿Ô¥Ê∑≈BitmapData
+			CBDTFormat1		dataFrmt1;
+			CBDTFormat2		dataFrmt2;
+			CBDTFormat5		dataFrmt5;
+			CBDTFormat6		dataFrmt6;
+			CBDTFormat7		dataFrmt7;
+			CBDTFormat8		dataFrmt8;
+			CBDTFormat9		dataFrmt9;
+			CBDTFormat17	dataFrmt17;
+			CBDTFormat18	dataFrmt18;
+			CBDTFormat19	dataFrmt19;
 
 	};	//end of class HY_DLL_CLASS IndexSUBTable	
 
@@ -336,7 +338,7 @@ namespace HYFONTCODEC
 		unsigned short 	lastGlyphIndex;			//last glyph code of this range (inclusive)
 		unsigned long	Offset;					//add to indexSubTableArrayOffset to get offset from beginning of 'EBLC'
 	public:
-		IndexSUBTable	IndexSubTb;		
+		std::vector<IndexSUBTable>	vtIndxSubTable;
 
 	};	// end of class HY_DLL_CLASS IndexSubTableArray
 
@@ -352,16 +354,17 @@ namespace HYFONTCODEC
 			unsigned long		indexTablesSize;			//number of bytes in corresponding index subtables and array
 			unsigned long 		numberofIndexSubTables;		//an index subtable for each range or format change
 			unsigned long 		colorRef;					//not used; set to 0.
-			SbitLineMetrics 		Hori;						//line metrics for text rendered horizontally
-			SbitLineMetrics 		Vert;						//line metrics for text rendered vertically
+			SbitLineMetrics 	Hori;						//line metrics for text rendered horizontally
+			SbitLineMetrics 	Vert;						//line metrics for text rendered vertically
 			unsigned short		startGlyphIndex;			//lowest glyph index for this size
 			unsigned short 		endGlyphIndex;				//highest glyph index for this size
 			unsigned char 		ppemX;						//horizontal pixels per Em
 			unsigned char		ppemY;						//vertical pixels per Em
 			unsigned char		bitDepth;					//In addtition to already defined bitDepth values 1, 2, 4, and 8 supported by existing implementations, the value of 32 is used to identify color bitmaps with 8 bit per pixel RGBA channels
 			char				Flags;						//vertical or horizontal (see bitmapFlags)
-			std::vector<IndexSubTableArray>  vtIndexSubTableArray;
 			
+			std::vector<IndexSubTableArray>  vtIndexSubTableArray;
+
 	};	//end of class HY_DLL_CLASS BitmapSize
 
 	class HY_DLL_CLASS CBLCHEADER
@@ -386,7 +389,7 @@ namespace HYFONTCODEC
 			void SetDefault();
 		public:
 			CBLCHEADER						Header;
-			std::vector<BitmapSize>	vtBitmapSizeTb;
+			std::vector<BitmapSize>			vtBitmapSizeTb;			
 
 	};	// end of class HY_DLL_CLASS CHYCBLC
 	

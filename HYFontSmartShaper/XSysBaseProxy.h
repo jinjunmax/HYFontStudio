@@ -20,6 +20,7 @@ public:
 
 	void					LoadLocalProfile();
 	void					StoreLocalProfile();
+	void					LoadAdvancedTypographicTables(CHYFontCodec* pFntCdc);
 
 	BOOL					MulToUniHL(char* pDest, int& iDestlen, char* pSrc, int iSrclen);
 	int						FindString(std::vector<CString>& vt, CString str);
@@ -32,5 +33,6 @@ public:
 	DRAWFONTPARAM				m_tagDrawParam;
 	HY_OPTION_PRM				m_tagOpeionPrm;
 	double						m_fBaseLine;
-	std::vector<float>			m_vtNormalizedVariation;	
+	std::vector<float>			m_vtNormalizedVariation;
+	std::string					m_strLogFile;
 };

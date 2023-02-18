@@ -197,438 +197,438 @@ namespace HYFONTCODEC
 	void CHYFontCodec::InitKangxi()
 	{
 		m_mpKangxiChar.clear();
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F00, 0x4E00));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x4E00, 0x2F00));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F01, 0x4E28));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x4E28, 0x2F01));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F02, 0x4E36));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x4E36, 0x2F02));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F03, 0x4E3F));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x4E3F, 0x2F03));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F04, 0x4E59));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x4E59, 0x2F04));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F05, 0x4E85));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x4E85, 0x2F05));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F06, 0x4E8C));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x4E8C, 0x2F06));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F07, 0x4EA0));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x4EA0, 0x2F07));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F08, 0x4EBA));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x4EBA, 0x2F08));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F09, 0x513F));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x513F, 0x2F09));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F0A, 0x5165));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x5165, 0x2F0A));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F0B, 0x516B));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x516B, 0x2F0B));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F0C, 0x5182));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x5182, 0x2F0C));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F0D, 0x5196));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x5196, 0x2F0D));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F0E, 0x51AB));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x51AB, 0x2F0E));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F0F, 0x51E0));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x51E0, 0x2F0F));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F10, 0x51F5));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x51F5, 0x2F10));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F11, 0x5200));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x5200, 0x2F11));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F12, 0x529B));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x529B, 0x2F12));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F13, 0x52F9));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x52F9, 0x2F13));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F14, 0x5315));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x5315, 0x2F14));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F15, 0x531A));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x531A, 0x2F15));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F16, 0x5338));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x5338, 0x2F16));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F17, 0x5341));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x5341, 0x2F17));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F18, 0x535C));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x535C, 0x2F18));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F19, 0x5369));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x5369, 0x2F19));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F1A, 0x5382));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x5382, 0x2F1A));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F1B, 0x53B6));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x53B6, 0x2F1B));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F1C, 0x53C8));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x53C8, 0x2F1C));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F1D, 0x53E3));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x53E3, 0x2F1D));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F1E, 0x56D7));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x56D7, 0x2F1E));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F1F, 0x571F));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x571F, 0x2F1F));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F20, 0x58EB));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x58EB, 0x2F20));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F21, 0x5902));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x5902, 0x2F21));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F22, 0x590A));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x590A, 0x2F22));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F23, 0x5915));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x5915, 0x2F23));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F24, 0x5927));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x5927, 0x2F24));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F25, 0x5973));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x5973, 0x2F25));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F26, 0x5B50));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x5B50, 0x2F26));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F27, 0x5B80));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x5B80, 0x2F27));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F28, 0x5BF8));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x5BF8, 0x2F28));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F29, 0x5C0F));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x5C0F, 0x2F29));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F2A, 0x5C22));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x5C22, 0x2F2A));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F2B, 0x5C38));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x5C38, 0x2F2B));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F2C, 0x5C6E));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x5C6E, 0x2F2C));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F2D, 0x5C71));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x5C71, 0x2F2D));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F2E, 0x5DDB));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x5DDB, 0x2F2E));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F2F, 0x5DE5));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x5DE5, 0x2F2F));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F30, 0x5DF1));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x5DF1, 0x2F30));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F31, 0x5DFE));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x5DFE, 0x2F31));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F32, 0x5E72));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x5E72, 0x2F32));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F33, 0x5E7A));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x5E7A, 0x2F33));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F33, 0x2E93));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2E93, 0x2F33));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F34, 0x5E7F));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x5E7F, 0x2F34));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F35, 0x5EF4));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x5EF4, 0x2F35));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F36, 0x5EFE));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x5EFE, 0x2F36));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F37, 0x5F0B));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x5F0B, 0x2F37));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F38, 0x5F13));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x5F13, 0x2F38));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F38, 0x5F13));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x5F13, 0x2F38));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F39, 0x5F50));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x5F50, 0x2F39));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F3A, 0x5F61));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x5F61, 0x2F3A));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F3B, 0x5F73));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x5F73, 0x2F3B));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F3C, 0x5FC3));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x5FC3, 0x2F3C));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F3D, 0x6208));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x6208, 0x2F3D));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F3E, 0x6236));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x6236, 0x2F3E));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F3F, 0x624B));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x624B, 0x2F3F));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F40, 0x652F));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x652F, 0x2F40));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F41, 0x6534));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x6534, 0x2F41));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F42, 0x6587));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x6587, 0x2F42));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F43, 0x6597));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x6597, 0x2F43));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F44, 0x65A4));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x65A4, 0x2F44));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F45, 0x65B9));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x65B9, 0x2F45));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F46, 0x65E0));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x65E0, 0x2F46));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F47, 0x65E5));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x65E5, 0x2F47));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F48, 0x66F0));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x66F0, 0x2F48));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F49, 0x6708));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x6708, 0x2F49));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F4A, 0x6728));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x6728, 0x2F4A));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F4B, 0x6B20));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x6B20, 0x2F4B));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F4C, 0x6B62));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x6B62, 0x2F4C));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F4D, 0x6B79));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x6B79, 0x2F4D));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F4E, 0x6BB3));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x6BB3, 0x2F4E));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F4F, 0x6BCB));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x6BCB, 0x2F4F));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F50, 0x6BD4));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x6BD4, 0x2F50));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F51, 0x6BDB));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x6BDB, 0x2F51));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F52, 0x6C0F));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x6C0F, 0x2F52));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F53, 0x6C14));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x6C14, 0x2F53));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F54, 0x6C34));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x6C34, 0x2F54));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F55, 0x706B));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x706B, 0x2F55));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F56, 0x722A));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x722A, 0x2F56));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F57, 0x7236));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x7236, 0x2F57));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F58, 0x723B));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x723B, 0x2F58));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F59, 0x723F));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x723F, 0x2F59));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F5A, 0x7247));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x7247, 0x2F5A));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F5B, 0x7259));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x7259, 0x2F5B));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F5C, 0x725B));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x725B, 0x2F5C));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F5D, 0x72AC));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x72AC, 0x2F5D));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F5E, 0x7384));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x7384, 0x2F5E));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F5F, 0x7389));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x7389, 0x2F5F));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F60, 0x74DC));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x74DC, 0x2F60));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F61, 0x74E6));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x74E6, 0x2F61));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F62, 0x7518));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x7518, 0x2F62));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F63, 0x751F));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x751F, 0x2F63));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F64, 0x7528));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x7528, 0x2F64));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F65, 0x7530));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x7530, 0x2F65));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F66, 0x758B));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x758B, 0x2F66));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F67, 0x7592));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x7592, 0x2F67));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F68, 0x7676));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x7676, 0x2F68));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F69, 0x767D));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x767D, 0x2F69));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F6A, 0x76AE));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x76AE, 0x2F6A));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F6B, 0x76BF));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x76BF, 0x2F6B));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F6C, 0x76EE));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x76EE, 0x2F6C));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F6D, 0x77DB));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x77DB, 0x2F6D));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F6E, 0x77E2));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x77E2, 0x2F6E));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F6F, 0x77F3));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x77F3, 0x2F6F));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F70, 0x793A));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x793A, 0x2F70));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F71, 0x79B8));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x79B8, 0x2F71));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F72, 0x79BE));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x79BE, 0x2F72));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F73, 0x7A74));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x7A74, 0x2F73));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F74, 0x7ACB));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x7ACB, 0x2F74));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F75, 0x7AF9));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x7AF9, 0x2F75));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F76, 0x7C73));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x7C73, 0x2F76));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F77, 0x7CF8));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x7CF8, 0x2F77));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F78, 0x7F36));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x7F36, 0x2F78));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F79, 0x7F51));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x7F51, 0x2F79));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F7A, 0x7F8A));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x7F8A, 0x2F7A));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F7B, 0x7FBD));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x7FBD, 0x2F7B));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F7C, 0x8001));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x8001, 0x2F7C));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F7D, 0x800C));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x800C, 0x2F7D));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F7E, 0x8012));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x8012, 0x2F7E));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F7F, 0x8033));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x8033, 0x2F7F));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F80, 0x807F));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x807F, 0x2F80));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F81, 0x8089));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x8089, 0x2F81));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F82, 0x81E3));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x81E3, 0x2F82));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F83, 0x81EA));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x81EA, 0x2F83));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F84, 0x81F3));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x81F3, 0x2F84));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F85, 0x81FC));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x81FC, 0x2F85));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F86, 0x820C));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x820C, 0x2F86));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F87, 0x821B));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x821B, 0x2F87));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F88, 0x821F));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x821F, 0x2F88));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F89, 0x826E));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x826E, 0x2F89));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F8A, 0x8272));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x8272, 0x2F8A));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F8B, 0x8278));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x8278, 0x2F8B));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F8C, 0x864D));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x864D, 0x2F8C));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F8D, 0x866B));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x866B, 0x2F8D));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F8E, 0x8840));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x8840, 0x2F8E));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F8F, 0x884C));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x884C, 0x2F8F));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F90, 0x8863));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x8863, 0x2F90));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F91, 0x897E));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x897E, 0x2F91));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F92, 0x898B));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x898B, 0x2F92));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F93, 0x89D2));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x89D2, 0x2F93));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F94, 0x8A00));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x8A00, 0x2F94));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F95, 0x8C37));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x8C37, 0x2F95));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F96, 0x8C46));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x8C46, 0x2F96));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F97, 0x8C55));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x8C55, 0x2F97));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F98, 0x8C78));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x8C78, 0x2F98));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F99, 0x8C9D));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x8C9D, 0x2F99));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F9A, 0x8D64));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x8D64, 0x2F9A));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F9B, 0x8D70));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x8D70, 0x2F9B));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F9C, 0x8DB3));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x8DB3, 0x2F9C));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F9D, 0x8EAB));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x8EAB, 0x2F9D));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F9E, 0x8ECA));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x8ECA, 0x2F9E));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2F9F, 0x8F9B));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x8F9B, 0x2F9F));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2FA0, 0x8FB0));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x8FB0, 0x2FA0));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2FA1, 0x8FB5));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x8FB5, 0x2FA1));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2FA2, 0x9091));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x9091, 0x2FA2));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2FA3, 0x9149));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x9149, 0x2FA3));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2FA4, 0x91C6));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x91C6, 0x2FA4));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2FA5, 0x91CC));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x91CC, 0x2FA5));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2FA6, 0x91D1));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x91D1, 0x2FA6));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2FA7, 0x9577));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x9577, 0x2FA7));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2FA8, 0x9580));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x9580, 0x2FA8));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2FA9, 0x961C));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x961C, 0x2FA9));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2FAA, 0x96B6));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x96B6, 0x2FAA));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2FAB, 0x96B9));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x96B9, 0x2FAB));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2FAC, 0x96E8));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x96E8, 0x2FAC));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2FAD, 0x9751));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x9751, 0x2FAD));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2FAE, 0x975E));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x975E, 0x2FAE));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2FAF, 0x9762));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x9762, 0x2FAF));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2FB0, 0x9769));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x9769, 0x2FB0));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2FB1, 0x97CB));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x97CB, 0x2FB1));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2FB2, 0x97ED));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x97ED, 0x2FB2));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2FB3, 0x97F3));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x97F3, 0x2FB3));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2FB4, 0x9801));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x9801, 0x2FB4));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2FB5, 0x98A8));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x98A8, 0x2FB5));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2FB6, 0x98DB));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x98DB, 0x2FB6));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2FB7, 0x98DF));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x98DF, 0x2FB7));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2FB8, 0x9996));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x9996, 0x2FB8));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2FB9, 0x9996));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x9996, 0x2FB9));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2FBA, 0x99AC));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x99AC, 0x2FBA));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2FBB, 0x9AA8));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x9AA8, 0x2FBB));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2FBC, 0x9AD8));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x9AD8, 0x2FBC));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2FBD, 0x9ADF));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x9ADF, 0x2FBD));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2FBE, 0x9B25));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x9B25, 0x2FBE));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2FBF, 0x9B2F));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x9B2F, 0x2FBF));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2FC0, 0x9B32));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x9B32, 0x2FC0));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2FC1, 0x9B3C));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x9B3C, 0x2FC1));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2FC2, 0x9B5A));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x9B5A, 0x2FC2));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2FC3, 0x9CE5));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x9CE5, 0x2FC3));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2FC4, 0x9E75));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x9E75, 0x2FC4));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2FC5, 0x9E7F));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x9E7F, 0x2FC5));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2FC6, 0x9EA5));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x9EA5, 0x2FC6));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2FC7, 0x9EBB));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x9EBB, 0x2FC7));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2FC8, 0x9EC3));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x9EC3, 0x2FC8));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2FC9, 0x9ECD));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x9ECD, 0x2FC9));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2FCA, 0x9ED1));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x9ED1, 0x2FCA));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2FCB, 0x9EF9));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x9EF9, 0x2FCB));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2FCC, 0x9EFD));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x9EFD, 0x2FCC));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2FCD, 0x9F0E));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x9F0E, 0x2FCD));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2FCE, 0x9F13));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x9F13, 0x2FCE));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2FCF, 0x9F20));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x9F20, 0x2FCF));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2FD0, 0x9F3B));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x9F3B, 0x2FD0));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2FD1, 0x9F4A));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x9F4A, 0x2FD1));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2FD2, 0x9F52));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x9F52, 0x2FD2));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2FD3, 0x9F8D));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x9F8D, 0x2FD3));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2FD4, 0x9F9C));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x9F9C, 0x2FD4));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x2FD5, 0x9FA0));
-		m_mpVariantChar.insert(pair<unsigned long, unsigned long>(0x9FA0, 0x2FD5));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F00, 0x4E00));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x4E00, 0x2F00));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F01, 0x4E28));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x4E28, 0x2F01));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F02, 0x4E36));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x4E36, 0x2F02));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F03, 0x4E3F));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x4E3F, 0x2F03));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F04, 0x4E59));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x4E59, 0x2F04));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F05, 0x4E85));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x4E85, 0x2F05));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F06, 0x4E8C));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x4E8C, 0x2F06));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F07, 0x4EA0));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x4EA0, 0x2F07));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F08, 0x4EBA));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x4EBA, 0x2F08));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F09, 0x513F));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x513F, 0x2F09));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F0A, 0x5165));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x5165, 0x2F0A));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F0B, 0x516B));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x516B, 0x2F0B));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F0C, 0x5182));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x5182, 0x2F0C));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F0D, 0x5196));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x5196, 0x2F0D));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F0E, 0x51AB));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x51AB, 0x2F0E));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F0F, 0x51E0));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x51E0, 0x2F0F));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F10, 0x51F5));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x51F5, 0x2F10));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F11, 0x5200));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x5200, 0x2F11));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F12, 0x529B));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x529B, 0x2F12));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F13, 0x52F9));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x52F9, 0x2F13));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F14, 0x5315));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x5315, 0x2F14));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F15, 0x531A));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x531A, 0x2F15));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F16, 0x5338));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x5338, 0x2F16));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F17, 0x5341));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x5341, 0x2F17));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F18, 0x535C));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x535C, 0x2F18));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F19, 0x5369));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x5369, 0x2F19));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F1A, 0x5382));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x5382, 0x2F1A));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F1B, 0x53B6));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x53B6, 0x2F1B));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F1C, 0x53C8));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x53C8, 0x2F1C));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F1D, 0x53E3));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x53E3, 0x2F1D));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F1E, 0x56D7));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x56D7, 0x2F1E));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F1F, 0x571F));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x571F, 0x2F1F));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F20, 0x58EB));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x58EB, 0x2F20));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F21, 0x5902));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x5902, 0x2F21));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F22, 0x590A));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x590A, 0x2F22));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F23, 0x5915));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x5915, 0x2F23));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F24, 0x5927));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x5927, 0x2F24));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F25, 0x5973));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x5973, 0x2F25));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F26, 0x5B50));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x5B50, 0x2F26));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F27, 0x5B80));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x5B80, 0x2F27));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F28, 0x5BF8));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x5BF8, 0x2F28));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F29, 0x5C0F));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x5C0F, 0x2F29));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F2A, 0x5C22));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x5C22, 0x2F2A));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F2B, 0x5C38));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x5C38, 0x2F2B));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F2C, 0x5C6E));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x5C6E, 0x2F2C));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F2D, 0x5C71));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x5C71, 0x2F2D));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F2E, 0x5DDB));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x5DDB, 0x2F2E));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F2F, 0x5DE5));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x5DE5, 0x2F2F));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F30, 0x5DF1));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x5DF1, 0x2F30));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F31, 0x5DFE));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x5DFE, 0x2F31));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F32, 0x5E72));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x5E72, 0x2F32));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F33, 0x5E7A));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x5E7A, 0x2F33));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F33, 0x2E93));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2E93, 0x2F33));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F34, 0x5E7F));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x5E7F, 0x2F34));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F35, 0x5EF4));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x5EF4, 0x2F35));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F36, 0x5EFE));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x5EFE, 0x2F36));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F37, 0x5F0B));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x5F0B, 0x2F37));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F38, 0x5F13));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x5F13, 0x2F38));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F38, 0x5F13));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x5F13, 0x2F38));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F39, 0x5F50));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x5F50, 0x2F39));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F3A, 0x5F61));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x5F61, 0x2F3A));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F3B, 0x5F73));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x5F73, 0x2F3B));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F3C, 0x5FC3));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x5FC3, 0x2F3C));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F3D, 0x6208));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x6208, 0x2F3D));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F3E, 0x6236));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x6236, 0x2F3E));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F3F, 0x624B));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x624B, 0x2F3F));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F40, 0x652F));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x652F, 0x2F40));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F41, 0x6534));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x6534, 0x2F41));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F42, 0x6587));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x6587, 0x2F42));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F43, 0x6597));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x6597, 0x2F43));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F44, 0x65A4));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x65A4, 0x2F44));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F45, 0x65B9));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x65B9, 0x2F45));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F46, 0x65E0));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x65E0, 0x2F46));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F47, 0x65E5));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x65E5, 0x2F47));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F48, 0x66F0));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x66F0, 0x2F48));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F49, 0x6708));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x6708, 0x2F49));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F4A, 0x6728));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x6728, 0x2F4A));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F4B, 0x6B20));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x6B20, 0x2F4B));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F4C, 0x6B62));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x6B62, 0x2F4C));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F4D, 0x6B79));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x6B79, 0x2F4D));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F4E, 0x6BB3));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x6BB3, 0x2F4E));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F4F, 0x6BCB));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x6BCB, 0x2F4F));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F50, 0x6BD4));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x6BD4, 0x2F50));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F51, 0x6BDB));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x6BDB, 0x2F51));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F52, 0x6C0F));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x6C0F, 0x2F52));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F53, 0x6C14));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x6C14, 0x2F53));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F54, 0x6C34));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x6C34, 0x2F54));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F55, 0x706B));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x706B, 0x2F55));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F56, 0x722A));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x722A, 0x2F56));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F57, 0x7236));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x7236, 0x2F57));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F58, 0x723B));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x723B, 0x2F58));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F59, 0x723F));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x723F, 0x2F59));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F5A, 0x7247));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x7247, 0x2F5A));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F5B, 0x7259));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x7259, 0x2F5B));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F5C, 0x725B));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x725B, 0x2F5C));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F5D, 0x72AC));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x72AC, 0x2F5D));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F5E, 0x7384));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x7384, 0x2F5E));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F5F, 0x7389));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x7389, 0x2F5F));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F60, 0x74DC));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x74DC, 0x2F60));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F61, 0x74E6));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x74E6, 0x2F61));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F62, 0x7518));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x7518, 0x2F62));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F63, 0x751F));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x751F, 0x2F63));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F64, 0x7528));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x7528, 0x2F64));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F65, 0x7530));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x7530, 0x2F65));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F66, 0x758B));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x758B, 0x2F66));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F67, 0x7592));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x7592, 0x2F67));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F68, 0x7676));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x7676, 0x2F68));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F69, 0x767D));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x767D, 0x2F69));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F6A, 0x76AE));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x76AE, 0x2F6A));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F6B, 0x76BF));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x76BF, 0x2F6B));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F6C, 0x76EE));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x76EE, 0x2F6C));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F6D, 0x77DB));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x77DB, 0x2F6D));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F6E, 0x77E2));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x77E2, 0x2F6E));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F6F, 0x77F3));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x77F3, 0x2F6F));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F70, 0x793A));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x793A, 0x2F70));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F71, 0x79B8));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x79B8, 0x2F71));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F72, 0x79BE));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x79BE, 0x2F72));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F73, 0x7A74));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x7A74, 0x2F73));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F74, 0x7ACB));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x7ACB, 0x2F74));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F75, 0x7AF9));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x7AF9, 0x2F75));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F76, 0x7C73));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x7C73, 0x2F76));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F77, 0x7CF8));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x7CF8, 0x2F77));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F78, 0x7F36));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x7F36, 0x2F78));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F79, 0x7F51));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x7F51, 0x2F79));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F7A, 0x7F8A));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x7F8A, 0x2F7A));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F7B, 0x7FBD));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x7FBD, 0x2F7B));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F7C, 0x8001));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x8001, 0x2F7C));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F7D, 0x800C));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x800C, 0x2F7D));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F7E, 0x8012));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x8012, 0x2F7E));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F7F, 0x8033));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x8033, 0x2F7F));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F80, 0x807F));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x807F, 0x2F80));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F81, 0x8089));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x8089, 0x2F81));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F82, 0x81E3));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x81E3, 0x2F82));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F83, 0x81EA));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x81EA, 0x2F83));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F84, 0x81F3));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x81F3, 0x2F84));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F85, 0x81FC));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x81FC, 0x2F85));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F86, 0x820C));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x820C, 0x2F86));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F87, 0x821B));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x821B, 0x2F87));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F88, 0x821F));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x821F, 0x2F88));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F89, 0x826E));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x826E, 0x2F89));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F8A, 0x8272));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x8272, 0x2F8A));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F8B, 0x8278));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x8278, 0x2F8B));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F8C, 0x864D));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x864D, 0x2F8C));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F8D, 0x866B));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x866B, 0x2F8D));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F8E, 0x8840));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x8840, 0x2F8E));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F8F, 0x884C));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x884C, 0x2F8F));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F90, 0x8863));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x8863, 0x2F90));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F91, 0x897E));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x897E, 0x2F91));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F92, 0x898B));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x898B, 0x2F92));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F93, 0x89D2));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x89D2, 0x2F93));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F94, 0x8A00));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x8A00, 0x2F94));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F95, 0x8C37));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x8C37, 0x2F95));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F96, 0x8C46));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x8C46, 0x2F96));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F97, 0x8C55));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x8C55, 0x2F97));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F98, 0x8C78));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x8C78, 0x2F98));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F99, 0x8C9D));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x8C9D, 0x2F99));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F9A, 0x8D64));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x8D64, 0x2F9A));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F9B, 0x8D70));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x8D70, 0x2F9B));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F9C, 0x8DB3));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x8DB3, 0x2F9C));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F9D, 0x8EAB));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x8EAB, 0x2F9D));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F9E, 0x8ECA));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x8ECA, 0x2F9E));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2F9F, 0x8F9B));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x8F9B, 0x2F9F));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2FA0, 0x8FB0));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x8FB0, 0x2FA0));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2FA1, 0x8FB5));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x8FB5, 0x2FA1));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2FA2, 0x9091));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x9091, 0x2FA2));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2FA3, 0x9149));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x9149, 0x2FA3));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2FA4, 0x91C6));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x91C6, 0x2FA4));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2FA5, 0x91CC));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x91CC, 0x2FA5));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2FA6, 0x91D1));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x91D1, 0x2FA6));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2FA7, 0x9577));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x9577, 0x2FA7));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2FA8, 0x9580));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x9580, 0x2FA8));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2FA9, 0x961C));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x961C, 0x2FA9));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2FAA, 0x96B6));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x96B6, 0x2FAA));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2FAB, 0x96B9));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x96B9, 0x2FAB));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2FAC, 0x96E8));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x96E8, 0x2FAC));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2FAD, 0x9751));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x9751, 0x2FAD));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2FAE, 0x975E));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x975E, 0x2FAE));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2FAF, 0x9762));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x9762, 0x2FAF));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2FB0, 0x9769));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x9769, 0x2FB0));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2FB1, 0x97CB));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x97CB, 0x2FB1));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2FB2, 0x97ED));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x97ED, 0x2FB2));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2FB3, 0x97F3));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x97F3, 0x2FB3));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2FB4, 0x9801));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x9801, 0x2FB4));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2FB5, 0x98A8));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x98A8, 0x2FB5));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2FB6, 0x98DB));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x98DB, 0x2FB6));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2FB7, 0x98DF));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x98DF, 0x2FB7));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2FB8, 0x9996));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x9996, 0x2FB8));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2FB9, 0x9999));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x9999, 0x2FB9));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2FBA, 0x99AC));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x99AC, 0x2FBA));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2FBB, 0x9AA8));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x9AA8, 0x2FBB));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2FBC, 0x9AD8));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x9AD8, 0x2FBC));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2FBD, 0x9ADF));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x9ADF, 0x2FBD));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2FBE, 0x9B25));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x9B25, 0x2FBE));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2FBF, 0x9B2F));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x9B2F, 0x2FBF));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2FC0, 0x9B32));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x9B32, 0x2FC0));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2FC1, 0x9B3C));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x9B3C, 0x2FC1));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2FC2, 0x9B5A));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x9B5A, 0x2FC2));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2FC3, 0x9CE5));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x9CE5, 0x2FC3));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2FC4, 0x9E75));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x9E75, 0x2FC4));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2FC5, 0x9E7F));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x9E7F, 0x2FC5));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2FC6, 0x9EA5));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x9EA5, 0x2FC6));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2FC7, 0x9EBB));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x9EBB, 0x2FC7));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2FC8, 0x9EC3));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x9EC3, 0x2FC8));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2FC9, 0x9ECD));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x9ECD, 0x2FC9));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2FCA, 0x9ED1));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x9ED1, 0x2FCA));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2FCB, 0x9EF9));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x9EF9, 0x2FCB));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2FCC, 0x9EFD));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x9EFD, 0x2FCC));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2FCD, 0x9F0E));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x9F0E, 0x2FCD));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2FCE, 0x9F13));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x9F13, 0x2FCE));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2FCF, 0x9F20));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x9F20, 0x2FCF));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2FD0, 0x9F3B));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x9F3B, 0x2FD0));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2FD1, 0x9F4A));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x9F4A, 0x2FD1));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2FD2, 0x9F52));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x9F52, 0x2FD2));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2FD3, 0x9F8D));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x9F8D, 0x2FD3));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2FD4, 0x9F9C));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x9F9C, 0x2FD4));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x2FD5, 0x9FA0));
+		m_mpKangxiChar.insert(pair<unsigned long, unsigned long>(0x9FA0, 0x2FD5));
 	
 	}	//end of void CHYFontCodec::InitKangxi()
 		
@@ -1966,6 +1966,8 @@ namespace HYFONTCODEC
 		if(FindTableEntry(VMTX_TAG)){
 			Decodevmtx();
 		}
+
+#if 0 //emjio 改造临时屏蔽
 		// 解析CBLC表
 		if(FindTableEntry(CBLC_TAG)){
 			DecodeCBLC();
@@ -1981,6 +1983,7 @@ namespace HYFONTCODEC
 		if (FindTableEntry(EBDT_TAG)) {
 			DecodeEBDT();
 		}
+#endif
 		//解析sbix表
 		if(FindTableEntry(SBIX_TAG)){
 			Decodesbix();				
@@ -2393,6 +2396,7 @@ namespace HYFONTCODEC
 
 		MakeTableDirectory(vtFlag);		
 		EncodeTableDirectory();
+#if 0	//emjio 改造临时屏蔽
 		if (FindFlag(vtFlag, CBDT_TAG)) {
 			EncodeCBDT();
 		}
@@ -2405,6 +2409,7 @@ namespace HYFONTCODEC
 		if (FindFlag(vtFlag, EBLC_TAG)) {
 			EncodeEBLC();
 		}
+#endif
 		if (FindFlag(vtFlag, COLR_TAG)){
 			EncodeCOLR();
 		}		
@@ -2438,7 +2443,7 @@ namespace HYFONTCODEC
 				CountVerticalMetrics();
 				MakeVerticalMetrics();
 			}
-			Encodevhea();			
+			Encodevhea();
 		}		
 		if (FindFlag(vtFlag, VMTX_TAG)){
 			Encodevmtx();
@@ -2471,10 +2476,13 @@ namespace HYFONTCODEC
 			EncodeGlyph();
 			Encodeloca();
 		}
+
+		if (FindFlag(vtFlag, GPOS_TAG)) {
+			EncodeGPOS();
+		}
 		if (FindFlag(vtFlag, GSUB_TAG)){
 			EncodeGSUB();
 		}
-
 		if (FindFlag(vtFlag, DSIG_TAG)){
 			EncodeDSIG();
 		}
@@ -2965,7 +2973,7 @@ namespace HYFONTCODEC
 		return HY_NOERROR;
 
 	}	// end of int	CHYFontCodec::EncodeEOT()
-
+#if 0//emjio 改造临时屏蔽
 	int	CHYFontCodec::EncodeEmojiOpentypeFont(char* pFontFile, char* EmojiProfile)
 	{
 		int iRtn = CreateFile(pFontFile);	
@@ -3882,7 +3890,7 @@ namespace HYFONTCODEC
 		return HY_NOERROR;
 
 	}	// end of int CHYFontCodec::EncodeEmojiOAppleFont()
-
+#endif 
 	int	CHYFontCodec::fourbytesAlign(unsigned long Entrylength)
 	{
 		int iTail = 4-Entrylength%4;
@@ -7505,7 +7513,7 @@ namespace HYFONTCODEC
 		return HY_NOERROR;
 
 	}	// end of int CHYFontCodec::EncodeCmapFmt14()
-
+#if 0	//emjio 改造临时屏蔽
 	//EBLC
 	int	CHYFontCodec::DecodeEBLC()
 	{
@@ -7584,14 +7592,20 @@ namespace HYFONTCODEC
 			//Flags
 			fread(&bitmapSizeTable.Flags, 1, 1, m_pFontFile);
 
+			m_HYCblc.vtBitmapSizeTb.push_back(bitmapSizeTable);
+		}
+
+		for (unsigned long i = 0; i < m_HYCblc.Header.numsizes; i++){
+			BitmapSize& bmpszTb = m_HYCblc.vtBitmapSizeTb[i];
 			//解码 indexSubTableArray
 			long lCurrentPos = ftell(m_pFontFile);
-			fseek(m_pFontFile, ulBLCPos + bitmapSizeTable.indexSubTableArrayOffset, SEEK_SET);
-			DecodeIndexSubTableArray(bitmapSizeTable, ulBLCPos + bitmapSizeTable.indexSubTableArrayOffset);
-			m_HYCblc.vtBitmapSizeTb.push_back(bitmapSizeTable);
-			//continue;
+			fseek(m_pFontFile, ulBLCPos + bmpszTb.indexSubTableArrayOffset, SEEK_SET);
+
+			DecodeIndexSubTableArray(bmpszTb, ulBLCPos + bmpszTb.indexSubTableArrayOffset);			
+
 			fseek(m_pFontFile, lCurrentPos, SEEK_SET);
-		}	
+		}
+
 	}	// end of void	CHYFontCodec::DecodeBmpLC()
 
 	void	CHYFontCodec::DumpCBLC()
@@ -7630,59 +7644,64 @@ namespace HYFONTCODEC
 
 	int CHYFontCodec::DecodeIndexSubTableArray(BitmapSize& bitmapSizeTable,long  indexSubTableArrayOffset)
 	{
-		IndexSubTableArray IndexSubArray;
-		for (unsigned long i=0; i<bitmapSizeTable.numberofIndexSubTables; i++){
+		for (int i = 0; i < bitmapSizeTable.numberofIndexSubTables; i++)
+		{
+			IndexSubTableArray arryIndxSubTable;
+
 			//startGlyphIndex
-			fread(&IndexSubArray.firstGlyphIndex,2,1,m_pFontFile);
-			IndexSubArray.firstGlyphIndex = hy_cdr_int16_to(IndexSubArray.firstGlyphIndex);
+			fread(&arryIndxSubTable.firstGlyphIndex, 2, 1, m_pFontFile);
+			arryIndxSubTable.firstGlyphIndex = hy_cdr_int16_to(arryIndxSubTable.firstGlyphIndex);
 			//endGlyphIndex
-			fread(&IndexSubArray.lastGlyphIndex,2,1,m_pFontFile);
-			IndexSubArray.lastGlyphIndex = hy_cdr_int16_to(IndexSubArray.lastGlyphIndex);
+			fread(&arryIndxSubTable.lastGlyphIndex, 2, 1, m_pFontFile);
+			arryIndxSubTable.lastGlyphIndex = hy_cdr_int16_to(arryIndxSubTable.lastGlyphIndex);
 			//additionalOffsetToIndexSubtable
-			fread(&IndexSubArray.Offset,4,1,m_pFontFile);
-			IndexSubArray.Offset = hy_cdr_int32_to(IndexSubArray.Offset);
+			fread(&arryIndxSubTable.Offset, 4, 1, m_pFontFile);
+			arryIndxSubTable.Offset = hy_cdr_int32_to(arryIndxSubTable.Offset);
 
 			long currentPs = ftell(m_pFontFile);
-			fseek(m_pFontFile,indexSubTableArrayOffset+IndexSubArray.Offset,SEEK_SET);
-			DecodeIndexSubTable(IndexSubArray);
-			bitmapSizeTable.vtIndexSubTableArray.push_back(IndexSubArray);
-			fseek(m_pFontFile,currentPs,SEEK_SET);
+
+			fseek(m_pFontFile, indexSubTableArrayOffset + arryIndxSubTable.Offset, SEEK_SET);
+			IndexSUBTable IndxSubTb;
+			DecodeIndexSubTable(IndxSubTb);
+			arryIndxSubTable.vtIndxSubTable.push_back(IndxSubTb);
+
+			fseek(m_pFontFile, currentPs, SEEK_SET);
+
+			bitmapSizeTable.vtIndexSubTableArray.push_back(arryIndxSubTable);
 		}
 
 		return HY_NOERROR;
 
 	}	// end of int CHYFontCodec::DecodeIndexSubTableArray()
 
-	int CHYFontCodec::DecodeIndexSubTable(IndexSubTableArray& IndexSubArray)
+	int CHYFontCodec::DecodeIndexSubTable(IndexSUBTable& IndxSubTb)
 	{	
-		IndexSUBTable&  subTable = IndexSubArray.IndexSubTb;
-
 		//IndexSubHeader
 		//indexFormat
-		fread(&subTable.Header.indexFormat,2,1,m_pFontFile);
-		subTable.Header.indexFormat = hy_cdr_int16_to(subTable.Header.indexFormat);
+		fread(&IndxSubTb.Header.indexFormat,2,1,m_pFontFile);
+		IndxSubTb.Header.indexFormat = hy_cdr_int16_to(IndxSubTb.Header.indexFormat);
 		//imageFormat
-		fread(&subTable.Header.imageFormat,2,1,m_pFontFile);
-		subTable.Header.imageFormat = hy_cdr_int16_to(subTable.Header.imageFormat);
+		fread(&IndxSubTb.Header.imageFormat,2,1,m_pFontFile);
+		IndxSubTb.Header.imageFormat = hy_cdr_int16_to(IndxSubTb.Header.imageFormat);
 		//imageDataOffset
-		fread(&subTable.Header.imageDataOffset,4,1,m_pFontFile);
-		subTable.Header.imageDataOffset = hy_cdr_int32_to(subTable.Header.imageDataOffset);
+		fread(&IndxSubTb.Header.imageDataOffset,4,1,m_pFontFile);
+		IndxSubTb.Header.imageDataOffset = hy_cdr_int32_to(IndxSubTb.Header.imageDataOffset);
 
-		switch(subTable.Header.indexFormat)	{			
+		switch(IndxSubTb.Header.indexFormat)	{			
 			case 1:
-				DecdoeIndexSubTable1(IndexSubArray);
+				DecdoeIndexSubTable1(IndxSubTb);
 				break;			
 			case 2:				
-				DecdoeIndexSubTable2(IndexSubArray);
+				DecdoeIndexSubTable2(IndxSubTb);
 				break;			
 			case 3:
-				DecdoeIndexSubTable3(IndexSubArray);
+				DecdoeIndexSubTable3(IndxSubTb);
 				break;			
 			case 4:				
-				DecdoeIndexSubTable4(IndexSubArray);
+				DecdoeIndexSubTable4(IndxSubTb);
 				break;			
 			case 5:
-				DecdoeIndexSubTable5(IndexSubArray);				
+				DecdoeIndexSubTable5(IndxSubTb);
 				break;			
 		}
 
@@ -7690,21 +7709,20 @@ namespace HYFONTCODEC
 
 	}	// end of int CHYFontCodec::DecodeIndexSubTable()
 
-	void	CHYFontCodec::DecdoeIndexSubTable1(IndexSubTableArray& IndexSubArray)
+	void	CHYFontCodec::DecdoeIndexSubTable1(IndexSUBTable& IndxSubTb)
 	{
-		IndexSubTable1& SubTable1 = IndexSubArray.IndexSubTb.SubTable1;
-		for (int i = IndexSubArray.firstGlyphIndex; i <= IndexSubArray.lastGlyphIndex; i++){
-			unsigned long ulOffset = 0;
-			fread(&ulOffset, 4, 1, m_pFontFile);
-			ulOffset = hy_cdr_int32_to(ulOffset);
-			SubTable1.vtsbitOffsets.push_back(ulOffset);
-		}
+		IndexSubTable1& SubTable1 = IndxSubTb.SubTable1;
+
+		unsigned long ulOffset = 0;
+		fread(&ulOffset, 4, 1, m_pFontFile);
+		ulOffset = hy_cdr_int32_to(ulOffset);
+		SubTable1.vtsbitOffsets.push_back(ulOffset);
 
 	}	// end of int	CHYFontCodec::DecdoeIndexSubTable1()
 
-	void	CHYFontCodec::DecdoeIndexSubTable2(IndexSubTableArray& IndexSubArray)
+	void	CHYFontCodec::DecdoeIndexSubTable2(IndexSUBTable& IndxSubTb)
 	{
-		IndexSubTable2& SubTable2 = IndexSubArray.IndexSubTb.SubTable2;
+		IndexSubTable2& SubTable2 = IndxSubTb.SubTable2;
 
 		unsigned long ulImageSize = 0;
 		fread(&ulImageSize, 4, 1, m_pFontFile);
@@ -7713,21 +7731,21 @@ namespace HYFONTCODEC
 
 	}	// end of int	CHYFontCodec::DecdoeIndexSubTable2()
 
-	void	CHYFontCodec::DecdoeIndexSubTable3(IndexSubTableArray& IndexSubArray)
+	void	CHYFontCodec::DecdoeIndexSubTable3(IndexSUBTable& IndxSubTb)
 	{
-		IndexSubTable3& SubTable3 = IndexSubArray.IndexSubTb.SubTable3;
-		for (int i = IndexSubArray.firstGlyphIndex; i <= IndexSubArray.lastGlyphIndex; i++) {
-			unsigned short usOffset = 0;
-			fread(&usOffset, 2, 1, m_pFontFile);
-			usOffset = hy_cdr_int16_to(usOffset);
-			SubTable3.vtOffsetArray.push_back(usOffset);
-		}
+		IndexSubTable3& SubTable3 = IndxSubTb.SubTable3;
+
+		unsigned short usOffset = 0;
+		fread(&usOffset, 2, 1, m_pFontFile);
+		usOffset = hy_cdr_int16_to(usOffset);
+		SubTable3.vtOffsetArray.push_back(usOffset);
 
 	}	// end of void	CHYFontCodec::DecdoeIndexSubTable3()
 
-	void	CHYFontCodec::DecdoeIndexSubTable4(IndexSubTableArray& IndexSubArray)
+	void	CHYFontCodec::DecdoeIndexSubTable4(IndexSUBTable& IndxSubTb)
 	{
-		IndexSubTable4& SubTable4 = IndexSubArray.IndexSubTb.SubTable4;
+		IndexSubTable4& SubTable4 = IndxSubTb.SubTable4;
+
 		unsigned long numGlyphs = 0;
 		fread(&numGlyphs, 4, 1, m_pFontFile);
 		SubTable4.numGlyphs = hy_cdr_int32_to(numGlyphs);
@@ -7745,10 +7763,10 @@ namespace HYFONTCODEC
 
 	}	// end of void	CHYFontCodec::DecdoeIndexSubTable4()
 
-	void	CHYFontCodec::DecdoeIndexSubTable5(IndexSubTableArray& IndexSubArray)
+	void	CHYFontCodec::DecdoeIndexSubTable5(IndexSUBTable& IndxSubTb)
 	{
 		unsigned long ulTmp = 0;
-		IndexSubTable5& SubTable5 = IndexSubArray.IndexSubTb.SubTable5;
+		IndexSubTable5& SubTable5 = IndxSubTb.SubTable5;
 		fread(&ulTmp, 4, 1, m_pFontFile);
 		SubTable5.imageSize = hy_cdr_int32_to(ulTmp);
 
@@ -7822,10 +7840,9 @@ namespace HYFONTCODEC
 		
 		for (unsigned long i = 0; i < m_HYCblc.Header.numsizes; i++) {
 			BitmapSize& bitmapSizeTable = m_HYCblc.vtBitmapSizeTb[i];
-			bitmapSizeTable.numberofIndexSubTables = (unsigned long)bitmapSizeTable.vtIndexSubTableArray.size();
+			bitmapSizeTable.numberofIndexSubTables = (unsigned long)m_HYCblc.vtIndexSubTableArray.size();
 			
-			ulTmp = 0;
-			unsigned long  posIndexSubTableArrayOffset = ftell(m_pFontFile);
+			ulTmp = 0;			
 			fwrite(&ulTmp, 4, 1, m_pFontFile);
 			// size部分也先预留空位置。
 			fwrite(&ulTmp, 4, 1, m_pFontFile);
@@ -7875,21 +7892,26 @@ namespace HYFONTCODEC
 			fwrite(&bitmapSizeTable.bitDepth, 1, 1, m_pFontFile);
 			//flags
 			fwrite(&bitmapSizeTable.Flags, 1, 1, m_pFontFile);				
-			
+		}
+
+		for (unsigned long x = 0; x < m_HYCblc.Header.numsizes; x++) {
+			BitmapSize& bitmapSizeTable = m_HYCblc.vtBitmapSizeTb[x];
+
+			unsigned long  posIndexSubTableArrayOffset = ftell(m_pFontFile);
 			unsigned long indexSubTableArrayOffset = ftell(m_pFontFile) - ulBLCPos;
 			unsigned long indexSubTableArraySize = 0;
 
 			unsigned long AdditionalOffset = 0;
-			for (unsigned long j = 0; j < bitmapSizeTable.numberofIndexSubTables; j++){
-				IndexSubTableArray& subtableArray = bitmapSizeTable.vtIndexSubTableArray[j];
+			for (unsigned long y = 0; y < bitmapSizeTable.numberofIndexSubTables; y++) {
+				IndexSubTableArray& subtableArray = m_HYCblc.vtIndexSubTableArray[y];
 				subtableArray.Offset = AdditionalOffset;
 				EncodeIndexSubTableArray(subtableArray, AdditionalOffset);
-			}			
+			}
 
 			unsigned long ultmpPos = ftell(m_pFontFile);
-			fseek(m_pFontFile,posIndexSubTableArrayOffset,SEEK_SET);
+			fseek(m_pFontFile, posIndexSubTableArrayOffset, SEEK_SET);
 
-			// 确定真是的offset 和size的值
+			// 确定真实的offset 和size的值
 			//Offset32 	indexSubTableArrayOffset
 			ulTmp = indexSubTableArrayOffset;
 			fwrite(&ulTmp, 4, 1, m_pFontFile);
@@ -7898,6 +7920,7 @@ namespace HYFONTCODEC
 
 			ultmpPos = ftell(m_pFontFile);
 			fseek(m_pFontFile, ultmpPos, SEEK_SET);
+
 		}
 
 	}	// end of int CHYFontCodec::EncodeBLCInfo()
@@ -8079,10 +8102,8 @@ namespace HYFONTCODEC
 			size_t szBitmapSize = m_HYCblc.vtBitmapSizeTb.size();
 			for (size_t i = 0; i < szBitmapSize; i++) {
 				BitmapSize& bitmapSizeTable = m_HYCblc.vtBitmapSizeTb[i];
-				for (size_t z = 0; z < bitmapSizeTable.numberofIndexSubTables; z++) {
-					IndexSubTableArray& IndexTableArray = bitmapSizeTable.vtIndexSubTableArray[z];
-					DecodeEBDTData(IndexTableArray, tbEntry.offset);
-				}
+				IndexSubTableArray& IndexTableArray = m_HYCblc.vtIndexSubTableArray[i];
+				DecodeEBDTData(IndexTableArray, tbEntry.offset);
 			}
 		}
 
@@ -8108,13 +8129,11 @@ namespace HYFONTCODEC
 			fread(&m_HYCBDT.minorVersion,2,1,m_pFontFile);
 			m_HYCBDT.minorVersion = hy_cdr_int16_to(m_HYCBDT.minorVersion);
 
-			size_t szBitmapSize =  m_HYCblc.vtBitmapSizeTb.size();
-			for (size_t i=0; i<szBitmapSize; i++){
+			size_t szBitmapSize = m_HYCblc.vtBitmapSizeTb.size();
+			for (size_t i = 0; i < szBitmapSize; i++) {
 				BitmapSize& bitmapSizeTable = m_HYCblc.vtBitmapSizeTb[i];
-				for (size_t z = 0; z < bitmapSizeTable.numberofIndexSubTables; z++) {
-					IndexSubTableArray& IndexTableArray = bitmapSizeTable.vtIndexSubTableArray[z];
-					DecodeEBDTData(IndexTableArray, tbEntry.offset);
-				}				
+				IndexSubTableArray& IndexTableArray = m_HYCblc.vtIndexSubTableArray[i];
+				DecodeEBDTData(IndexTableArray, tbEntry.offset);
 			}
 		}	
 
@@ -8123,70 +8142,59 @@ namespace HYFONTCODEC
 	}	// end of int CHYFontCodec::DecodeCBDT()	
 
 	void CHYFontCodec::DecodeEBDTData(IndexSubTableArray& arrySubtable, unsigned long ulEBDTPos)
-	{
-		IndexSUBTable& subTable = arrySubtable.IndexSubTb;
-		unsigned short usImgFormat = subTable.Header.imageFormat;
-		unsigned short usindexFormat = subTable.Header.indexFormat;
-		
+	{		
 		int iLoop = arrySubtable.lastGlyphIndex - arrySubtable.firstGlyphIndex + 1;
 		for (int i = 0; i < iLoop; i++) {
-			unsigned long ulDataoffset = ulEBDTPos + arrySubtable.IndexSubTb.Header.imageDataOffset;
-			if (usindexFormat == 1)	{
-				ulDataoffset += subTable.SubTable1.vtsbitOffsets[i];
-				fseek(m_pFontFile, ulDataoffset, SEEK_SET);
-				unsigned long dataLen = subTable.SubTable1.vtsbitOffsets[i + 1] - subTable.SubTable1.vtsbitOffsets[i];
+			IndexSUBTable& subTable = arrySubtable.vtIndxSubTable[i];
+			unsigned short usImgFormat = subTable.Header.imageFormat;
+			unsigned short usindexFormat = subTable.Header.indexFormat;
+			unsigned long ulDataoffset = ulEBDTPos + subTable.Header.imageDataOffset;
+			
+			ulDataoffset += subTable.SubTable1.vtsbitOffsets[i];
+			fseek(m_pFontFile, ulDataoffset, SEEK_SET);
+			unsigned long dataLen = subTable.SubTable1.vtsbitOffsets[i + 1] - subTable.SubTable1.vtsbitOffsets[i];
 
-				if (usImgFormat == 1){					
-					CBDTFormat1 format1;
-					DecodeEBDTFormat1(format1,dataLen);
-					subTable.vtDdataForm1.push_back(format1);
-				}
-				if (usImgFormat == 2) {
-					CBDTFormat2 format2;
-					DecodeEBDTFormat2(format2, dataLen);
-					subTable.vtDdataForm2.push_back(format2);
-				}
-				if (usImgFormat == 5) {
-					CBDTFormat5 format5;
-					DecodeEBDTFormat5(format5, dataLen);
-					subTable.vtDdataForm5.push_back(format5);
-				}
-				if (usImgFormat == 6) {
-					CBDTFormat6 format6;
-					DecodeEBDTFormat6(format6, dataLen);
-					subTable.vtDdataForm6.push_back(format6);
-				}
-				if (usImgFormat == 7) {
-					CBDTFormat7 format7;
-					DecodeEBDTFormat7(format7, dataLen);
-					subTable.vtDdataForm7.push_back(format7);
-				}
-				if (usImgFormat == 8) {
-					CBDTFormat8 format8;
-					DecodeEBDTFormat8(format8);
-					subTable.vtDdataForm8.push_back(format8);
-				}
-				if (usImgFormat == 9) {
-					CBDTFormat9 format9;
-					DecodeEBDTFormat9(format9);
-					subTable.vtDdataForm9.push_back(format9);
-				}
-				if (usImgFormat == 17) {
-					CBDTFormat17 format17;
-					DecodeEBDTFormat17(format17);
-					subTable.vtDdataForm17.push_back(format17);
-				}
-				if (usImgFormat == 18) {
-					CBDTFormat18 format18;
-					DecodeEBDTFormat18(format18);
-					subTable.vtDdataForm18.push_back(format18);
-				}
-				if (usImgFormat == 19) {
-					CBDTFormat19 format19;
-					DecodeEBDTFormat19(format19);
-					subTable.vtDdataForm19.push_back(format19);
-				}
-			}			
+			if (usImgFormat == 1){					
+				CBDTFormat1& format1 = subTable.dataFrmt1;
+				DecodeEBDTFormat1(format1,dataLen);
+			}
+			if (usImgFormat == 2) {
+				CBDTFormat2& format2 = subTable.dataFrmt2;
+				DecodeEBDTFormat2(format2, dataLen);
+			}
+			if (usImgFormat == 5) {
+				CBDTFormat5& format5 = subTable.dataFrmt5;
+				DecodeEBDTFormat5(format5, dataLen);
+			}
+			if (usImgFormat == 6) {
+				CBDTFormat6& format6 = subTable.dataFrmt6;
+				DecodeEBDTFormat6(format6, dataLen);
+			}
+			if (usImgFormat == 7) {
+				CBDTFormat7& format7 = subTable.dataFrmt7;
+				DecodeEBDTFormat7(format7, dataLen);					
+			}
+			if (usImgFormat == 8) {
+				CBDTFormat8& format8 = subTable.dataFrmt8;
+				DecodeEBDTFormat8(format8);
+					
+			}
+			if (usImgFormat == 9) {
+				CBDTFormat9& format9 = subTable.dataFrmt9;
+				DecodeEBDTFormat9(format9);					
+			}
+			if (usImgFormat == 17) {
+				CBDTFormat17& format17 = subTable.dataFrmt17;
+				DecodeEBDTFormat17(format17);					
+			}
+			if (usImgFormat == 18) {
+				CBDTFormat18& format18 = subTable.dataFrmt18;
+				DecodeEBDTFormat18(format18);					
+			}
+			if (usImgFormat == 19) {
+				CBDTFormat19& format19 = subTable.dataFrmt19;
+				DecodeEBDTFormat19(format19);					
+			}						
 		}
 	
 	}	// end of void CHYFontCodec::DecodeEBDTData()
@@ -8415,14 +8423,14 @@ namespace HYFONTCODEC
 		fwrite(&usTmp, 2, 1, m_pFontFile);
 		usTmp = hy_cdr_int16_to(m_HYCBDT.minorVersion);
 		fwrite(&usTmp, 2, 1, m_pFontFile);
-
+#if 0
 		size_t stBTSzTb = m_HYCblc.vtBitmapSizeTb.size();
 		for (size_t i = 0; i < stBTSzTb; i++){
 			BitmapSize& bitmapSizeTB = m_HYCblc.vtBitmapSizeTb[i];
-			size_t tbArraySize = bitmapSizeTB.vtIndexSubTableArray.size();
+			size_t tbArraySize = m_HYCblc.vtIndexSubTableArray.size();
 			for (size_t j = 0; j < tbArraySize; j++){
 				size_t tArySize = 0;
-				IndexSubTableArray& SubTableArray = bitmapSizeTB.vtIndexSubTableArray[j];
+				IndexSubTableArray& SubTableArray = m_HYCblc.vtIndexSubTableArray[j];
 				IndexSUBTable& SUBTable = SubTableArray.IndexSubTb;
 
 				switch (SUBTable.Header.imageFormat)
@@ -8462,7 +8470,56 @@ namespace HYFONTCODEC
 				}
 			}
 		}	
+#else 
+		size_t stBTSzTb = m_HYCblc.vtBitmapSizeTb.size();
+		for (size_t i = 0; i < stBTSzTb; i++) {
+			BitmapSize& bitmapSizeTB = m_HYCblc.vtBitmapSizeTb[i];
+			IndexSubTableArray& SubTableArray = m_HYCblc.vtIndexSubTableArray[i];
+			for (size_t j = 0; j < tbArraySize; j++) {
+				size_t tArySize = 0;
+				IndexSubTableArray& SubTableArray = m_HYCblc.vtIndexSubTableArray[j];
+				IndexSUBTable& SUBTable = SubTableArray.IndexSubTb;
 
+				switch (SUBTable.Header.imageFormat)
+				{
+				case 1:
+					EncodeEBDTFormat1(SubTableArray, uloffsetEBDT);
+					break;
+				case 2:
+					EncodeEBDTFormat2(SubTableArray, uloffsetEBDT);
+					break;
+				case 5:
+					EncodeEBDTFormat5(SubTableArray, uloffsetEBDT);
+					break;
+				case 6:
+					EncodeEBDTFormat6(SubTableArray, uloffsetEBDT);
+					break;
+				case 7:
+					EncodeEBDTFormat7(SubTableArray, uloffsetEBDT);
+					break;
+				case 8:
+					EncodeEBDTFormat8(SubTableArray, uloffsetEBDT);
+					break;
+				case 9:
+					EncodeEBDTFormat9(SubTableArray, uloffsetEBDT);
+					break;
+				case 17:
+					EncodeEBDTFormat17(SubTableArray, uloffsetEBDT);
+					break;
+				case 18:
+					EncodeEBDTFormat18(SubTableArray, uloffsetEBDT);
+					break;
+				case 19:
+					EncodeEBDTFormat19(SubTableArray, uloffsetEBDT);
+					break;
+				default:
+					break;
+				}
+			}
+		}
+
+
+#endif 
 		return true;
 
 	}	// end of int CHYFontCodec::EncodeBDTData()
@@ -8918,6 +8975,7 @@ namespace HYFONTCODEC
 		}
 
 	}	// end of void CHYFontCodec::EncodeEBDTFormat19()
+#endif 
 
 	int	CHYFontCodec::Decodehead()
 	{
@@ -15225,27 +15283,94 @@ namespace HYFONTCODEC
 
 	int CHYFontCodec::DecodeBASE()
 	{
+		if (m_pFontFile)
+		{
+			int iEntryIndex = m_HYTbDirectory.FindTableEntry(BASE_TAG);
+			if (iEntryIndex == -1) return FONT_ERR_BASE_DECODE;
 
-		return HY_NOERROR;
+			CHYTableEntry& tbEntry = m_HYTbDirectory.vtTableEntry[iEntryIndex];
+			fseek(m_pFontFile, tbEntry.offset, SEEK_SET);
+
+			TableData tbData;
+			tbData.iTableFlg = BASE_TAG;
+
+			char chData;
+			for (int i = 0; i < tbEntry.length; i++) {
+				fread(&chData, 1, 1, m_pFontFile);
+				tbData.vtData.push_back(chData);
+			}
+			tbData.ulDataSize = tbEntry.length;
+
+			m_mulpTableData.vtTableData.push_back(tbData);
+
+			return HY_NOERROR;
+		}
+
+		return FONT_ERR_BASE_DECODE;
 
 	}	// end of int CHYFontCodec::DecodeBASE()
 
 	int	CHYFontCodec::DecodeGDEF()
 	{
+		if (m_pFontFile)
+		{
+			int iEntryIndex = m_HYTbDirectory.FindTableEntry(GDEF_TAG);
+			if (iEntryIndex == -1) return FONT_ERR_GDEF_DECODE;
 
-		return HY_NOERROR;
+			CHYTableEntry& tbEntry = m_HYTbDirectory.vtTableEntry[iEntryIndex];
+			fseek(m_pFontFile, tbEntry.offset, SEEK_SET);
+
+			TableData tbData;
+			tbData.iTableFlg = GDEF_TAG;
+
+			char chData;
+			for (int i = 0; i < tbEntry.length; i++) {
+				fread(&chData, 1, 1, m_pFontFile);
+				tbData.vtData.push_back(chData);
+			}
+			tbData.ulDataSize = tbEntry.length;
+
+			m_mulpTableData.vtTableData.push_back(tbData);
+
+			return HY_NOERROR;
+		}
+
+		return FONT_ERR_GDEF_DECODE;
 
 	}	// end of int CHYFontCodec::DecodeGDEF()
 
 	int	CHYFontCodec::DecodeGPOS()
 	{
+		if (m_pFontFile)
+		{
+			int iEntryIndex = m_HYTbDirectory.FindTableEntry(GPOS_TAG);
+			if (iEntryIndex == -1) return FONT_ERR_GPOS_DECODE;
 
-		return HY_NOERROR;
+			CHYTableEntry& tbEntry = m_HYTbDirectory.vtTableEntry[iEntryIndex];
+			fseek(m_pFontFile, tbEntry.offset, SEEK_SET);
+
+			TableData tbData;
+			tbData.iTableFlg = GPOS_TAG;
+
+			char chData;
+			for (int i = 0; i < tbEntry.length; i++) {
+				fread(&chData, 1, 1, m_pFontFile);
+				tbData.vtData.push_back(chData);
+			}
+			tbData.ulDataSize = tbEntry.length;
+
+			m_mulpTableData.vtTableData.push_back(tbData);
+
+			return HY_NOERROR;
+		}
+
+		return FONT_ERR_GPOS_DECODE;
 
 	}	// end of int CHYFontCodec::DecodeGPOS()
 
 	int CHYFontCodec::DecodeGSUB()
-	{		
+	{	
+#if 0
 		if (m_pFontFile)
 		{
 			int iEntryIndex = m_HYTbDirectory.FindTableEntry(GSUB_TAG);
@@ -15279,8 +15404,31 @@ namespace HYFONTCODEC
 			DecodeFeaturetList(tbEntry.offset+FeatureListOffset);
 			DecodeLookupList(tbEntry.offset+LookupListOffset);
 
-			return HY_NOERROR;		
+			return HY_NOERROR;	
 		}
+#else 
+		if (m_pFontFile)
+		{
+			int iEntryIndex = m_HYTbDirectory.FindTableEntry(GSUB_TAG);
+			if (iEntryIndex == -1) return FONT_ERR_GSUB_DECODE;
+
+			CHYTableEntry& tbEntry = m_HYTbDirectory.vtTableEntry[iEntryIndex];
+			fseek(m_pFontFile, tbEntry.offset, SEEK_SET);
+			
+			TableData tbData;
+			tbData.iTableFlg = GSUB_TAG;
+
+			char chData;
+			for (int i = 0; i < tbEntry.length; i++) {
+				fread(&chData, 1, 1, m_pFontFile);
+				tbData.vtData.push_back(chData);
+			}
+			tbData.ulDataSize = tbEntry.length;
+			m_mulpTableData.vtTableData.push_back(tbData);
+
+			return HY_NOERROR;
+		}
+#endif 
 
 		return FONT_ERR_GSUB_DECODE;		
 
@@ -15614,6 +15762,8 @@ namespace HYFONTCODEC
 
 		tbEntry.length = ftell(m_pFontFile) - tbEntry.offset;
 		::HY_4ByteAlign(m_pFontFile, tbEntry.length);
+
+		return HY_NOERROR;
 
 	}	// end of int CHYFontCodec::BulidGSUB()
 
@@ -15992,26 +16142,21 @@ namespace HYFONTCODEC
 
 	int CHYFontCodec::EncodeGPOS() 
 	{
-		if (m_pFontFile) {
-			if (this->m_tagOption.bCmplLayout) {
-				//BulidGPOS();
-			}
-			else {
-				int iEntryIndex = m_HYTbDirectory.FindTableEntry(GPOS_TAG);
-				if (iEntryIndex == -1) return FONT_ERR_GPOS_ENCODE;
-				CHYTableEntry& tbEntry = m_HYTbDirectory.vtTableEntry[iEntryIndex];
-				tbEntry.offset = ftell(m_pFontFile);
+		if (m_pFontFile) {			
+			int iEntryIndex = m_HYTbDirectory.FindTableEntry(GPOS_TAG);
+			if (iEntryIndex == -1) return FONT_ERR_GPOS_ENCODE;
+			CHYTableEntry& tbEntry = m_HYTbDirectory.vtTableEntry[iEntryIndex];
+			tbEntry.offset = ftell(m_pFontFile);
 
-				TableData* pGSUBData = m_mulpTableData.FindTableData(GPOS_TAG);
-				if (pGSUBData) {
-					for (int i = 0; i < pGSUBData->ulDataSize; i++) {
-						fwrite(&pGSUBData->vtData[i], 1, 1, m_pFontFile);
-					}
+			TableData* pGSUBData = m_mulpTableData.FindTableData(GPOS_TAG);
+			if (pGSUBData) {
+				for (int i = 0; i < pGSUBData->ulDataSize; i++) {
+					fwrite(&pGSUBData->vtData[i], 1, 1, m_pFontFile);
 				}
-
-				tbEntry.length = ftell(m_pFontFile) - tbEntry.offset;
-				::HY_4ByteAlign(m_pFontFile,tbEntry.length);				
 			}
+
+			tbEntry.length = ftell(m_pFontFile) - tbEntry.offset;
+			::HY_4ByteAlign(m_pFontFile,tbEntry.length);
 		}
 
 	}	// end of int CHYFontCodec::EncodeGPOS() 
@@ -16028,12 +16173,19 @@ namespace HYFONTCODEC
 		m_HYGasp.SetDefault();
 
 		m_HYGasp.Head.version = 1;
-		m_HYGasp.Head.numRanges = 1;
+		m_HYGasp.Head.numRanges = 3;
 
 		CHYGasp_RangeRecord RangeRecord;
+		RangeRecord.rangeMaxPPEM = 8;
+		RangeRecord.rangeGaspBehavior = 0x000e;
+		m_HYGasp.vtRangeRecord.push_back(RangeRecord);
+
+		RangeRecord.rangeMaxPPEM = 16;
+		RangeRecord.rangeGaspBehavior = 0x0007;
+		m_HYGasp.vtRangeRecord.push_back(RangeRecord);
 
 		RangeRecord.rangeMaxPPEM = 65535;
-		RangeRecord.rangeGaspBehavior = 0x000a;	//GASP_SYMMETRIC_SMOOTHING|GASP_SYMMETRIC_GRIDFIT 
+		RangeRecord.rangeGaspBehavior = 0x000f;
 
 		m_HYGasp.vtRangeRecord.push_back(RangeRecord);
 
