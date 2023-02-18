@@ -8502,7 +8502,6 @@ namespace HYFONTCODEC
 				}
 			}
 		}
-
 		return true;
 
 	}	// end of int CHYFontCodec::EncodeBDTData()
