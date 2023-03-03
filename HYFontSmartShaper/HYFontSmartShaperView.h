@@ -138,6 +138,8 @@ public:
 	CString						m_strFontFileName;
 	HANDLE						m_hdLoadFontThread;
 	HANDLE						m_hdLoadFontStepThread;
+	UINT						m_adsAdw;	// 用于指定字形宽度
+	UINT						m_adsAdh;	// 用于指定字形高度
 
 	afx_msg void OnFntCvtpramMu();
 	afx_msg void OnXmlCvtMu();
@@ -147,7 +149,7 @@ public:
 	afx_msg void OnFntMerge();
 	afx_msg void OnBnSetfocusMnCvtTtfRd();
 	afx_msg void OnBnSetfocusMnCvtOtfRd();
-	afx_msg void OnEmojiExport();
+	
 	afx_msg void OnSvgCvtMu();
 	afx_msg void OnSvgEotMu();
 	afx_msg void OnToWoffMu();
@@ -188,10 +190,22 @@ public:
 	//导出字库postscript name
 	afx_msg void OnMnExptname();
 
-	// 用于调整中文字符的AdvanceWidth
-	UINT		m_adsAdw;
-	UINT		m_adsAdh;
+	// 用于调整中文字符的AdvanceWidth	
 	afx_msg void OnFlnm2numnm();
+	afx_msg void OnEnChangeMnAdwEdt();
+	afx_msg void OnEnChangeMnAdhEdt();
+	afx_msg void OnMnCmptxt();
+	afx_msg void OnMnChkerttf();
+	afx_msg void OnMnChkerotf();
+
+	// 导出Emoji字库
+	afx_msg void OnEmojiExport();
+	// 生成Emoji字库	
+	void	XmlToHead(CMarkup& mkEmoji, CHYFontCodec& FontEnCodec);
+	void	XmlToHhea(CMarkup& mkEmoji, CHYFontCodec& FontEnCodec);
+	void	XmlTomaxp(CMarkup& mkEmoji, CHYFontCodec& FontEnCodec);
+	void	XmlToEmoji(CMarkup& mkEmoji, CHYFontCodec& FontEnCodec);
+	afx_msg void OnEmojiMk();
 	
 	void	GetOTFSawtooth(std::vector<CHYPoint>& vtInPnts, std::vector<CHYPoint>& vtOutPnts);
 	void	Smooth(CHYGlyph& inglyph, CHYGlyph& Outglyph);
@@ -204,11 +218,5 @@ public:
 		return reinterpret_cast<CHYFontSmartShaperDoc*>(m_pDocument);
 	}
 #endif
-	
-	afx_msg void OnEnChangeMnAdwEdt();
-	afx_msg void OnEnChangeMnAdhEdt();
-	afx_msg void OnMnCmptxt();
-	afx_msg void OnMnChkerttf();
-	afx_msg void OnMnChkerotf();
-	afx_msg void OnEmojiMk();
+	afx_msg void OnMnCodemap();
 };

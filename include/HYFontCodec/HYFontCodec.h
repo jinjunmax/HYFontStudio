@@ -207,12 +207,13 @@ namespace HYFONTCODEC
 
 		int		EncodeSVG(char* pSVGFile);
 		int		EncodeEOT(const char* pEotFile, const char* pFontFile);
-#if 0	//emjio 改造临时屏蔽
+
 		int		EncodeEmojiOpentypeFont(char* pFontFile, char* EmojiProfile);
+#if 0	//emjio 改造临时屏蔽
 		int		EncodeEmojiOAppleFont(char* pFontFile, char* EmojiProfile);
 #endif 
 		int		MakeTableDirectory(std::vector<unsigned long> vtFlag);
-		int		MakeHYCodeMap(std::vector<CHYGlyph>& vtHYGlyphs);
+		int		MakeHYCodeMap();
 
 		void	MixKangxiChars();
 		void	MixVariantcharacters();
@@ -222,9 +223,11 @@ namespace HYFONTCODEC
 		void	SetCmapEntry(std::vector<CMAP_TABLE_ENTRY>&	vtEntry);
 		void	MakeCmap();		
 		int		MakeBitmapGlyphs(char* pProfile);
-		void	MakeVheaVmtx();
+		//void	MakeVheaVmtx();
 		void	MakeVerticalMetrics();
 		void	CountVerticalMetrics();
+
+		void	SetAdHeight(UINT adh, CHYGlyph& Glyphs);
 		int	    SetCheckSumAdjustment(const char* pFontFile);
 
 	public:
@@ -428,14 +431,10 @@ namespace HYFONTCODEC
 		int			EncodeLookupList();
 
 		int			EncodeGPOS();
-
 		int			DecodeJSTF();
-		void		DumpJSTF();
-
 		//Other OpenType Tables	
 		int			MakeGasp_ClearType();
 		int			Decodegasp();
-		void		Dumpgasp();
 		int			Encodegasp();
 
 		int			Decodehdmx();
@@ -535,7 +534,8 @@ namespace HYFONTCODEC
 		int				FindGryphIndexByUnciodeEx(unsigned long ulUnicode);
 		// 通过name Gryph Index获取
 		int				FindGryphIndexByGlyName(string strGName);
-
+		// 通过GID获取Name
+		std::string		FindNameByIndex(int iGID);
 		// 通过Gryph Index 获取 Unicode,一个GryphIndex 可能会对应多个Uncoide 编码	
 		void			FindGryphUncidoByIndex(unsigned long  ulGlyphIndex, std::vector<unsigned long>& szUnicode);
 
@@ -610,14 +610,11 @@ namespace HYFONTCODEC
 		CHYGasp					m_HYGasp;
 
 		TableDataS				m_mulpTableData;
-
 		std::multimap<unsigned long,unsigned long>	m_mpVariantChar;
 		std::multimap<unsigned long,unsigned long>	m_mpCompatChar;
 		std::multimap<unsigned long, unsigned long>	m_mpJ2FChar;
 		std::multimap<unsigned long, unsigned long>	m_mpKangxiChar;
-
-
-		HY_OPTION_PRM			m_tagOption;	
+		HY_OPTION_PRM			m_tagOption;
 	};
 };
 

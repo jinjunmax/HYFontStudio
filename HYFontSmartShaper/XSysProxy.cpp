@@ -652,6 +652,11 @@ void CXSysProxy::InitEncodeOption(CHYFontCodec& Encode)
 		Encode.m_HYhead.created[i] = p[7 - i];
 		Encode.m_HYhead.modified[i] = p[7 - i];
 	}
+	Encode.m_HYhead.lowestRecPPEM = 9;
+	Encode.m_HYhead.fontDirectionHint = 2;
+	Encode.m_HYhead.indexToLocFormat = 1;
+	Encode.m_HYhead.glyphDataFormat = 0;
+
 	// Hhea
 	Encode.m_HYHhea.version.value = 1;
 	Encode.m_HYHhea.version.fract = 0;
@@ -673,6 +678,15 @@ void CXSysProxy::InitEncodeOption(CHYFontCodec& Encode)
 				break;
 		}
 		Encode.m_HYHhea.numberOfHMetrics = (unsigned short)Encode.m_vtHYGlyphs.size() - Encode.m_HYHhea.numberOfHMetrics;
+	}
+	//HMTX
+	Encode.m_HYHmtx.SetDefault();
+	for (size_t i = 0; i < Encode.m_HYMaxp.numGlyphs; i++)
+	{
+		HMTX_LONGHORMERTRIC  h_Mertric;
+		h_Mertric.advanceWidth = Encode.m_vtHYGlyphs[i].advanceWidth;
+		h_Mertric.lsb = Encode.m_vtHYGlyphs[i].minX;
+		Encode.m_HYHmtx.vtLonghormetric.push_back(h_Mertric);
 	}
 	//OS2
 	Encode.m_HYOS2.usWeightClass = ::XSysproxy().m_tagOpeionPrm.usWeight;
@@ -781,8 +795,13 @@ void CXSysProxy::InitEncodeOption(CHYFontCodec& Encode)
 
 void CXSysProxy::SetEncodeOption(CHYFontCodec& Encode, CHYFontCodec& Original)
 {
+	Encode.m_tagOption = ::XSysproxy().m_tagOpeionPrm;
+
 	// Head
 	Encode.m_HYhead.unitsPerEm = Original.m_HYhead.unitsPerEm;
+	Encode.m_HYhead.lowestRecPPEM = Original.m_HYhead.lowestRecPPEM;
+	Encode.m_HYhead.fontDirectionHint = Original.m_HYhead.fontDirectionHint;
+	Encode.m_HYhead.glyphDataFormat = Original.m_HYhead.glyphDataFormat;
 	memcpy(Encode.m_HYhead.created, Original.m_HYhead.created, 8);
 
 	// Hhea
@@ -846,6 +865,11 @@ void CXSysProxy::SetEncodeOption(CHYFontCodec& Encode, CHYFontCodec& Original)
 
 	if (!::XSysproxy().m_tagOpeionPrm.bFontname) {
 		Encode.m_HYName = Original.m_HYName;
+	}
+
+	if (::XSysproxy().m_tagOpeionPrm.bCmplVert) {		
+		Encode.CountVerticalMetrics();
+		Encode.MakeVerticalMetrics();
 	}
 
 }	// end of void CXSysProxy::SetEncodeOption()

@@ -25,6 +25,7 @@ CFontSetupOptionPage::CFontSetupOptionPage()
 	, m_bLayout(FALSE)
 	, m_bCorrect(FALSE)
 	, m_bHanyi(TRUE)
+	, m_cmtADH(0)
 {
 	m_bReVert = TRUE;
 	m_bRePsName = FALSE;
@@ -63,13 +64,14 @@ void CFontSetupOptionPage::DoDataExchange(CDataExchange* pDX)
 	DDX_Check(pDX, IDC_PTN_CORRECT_CHK, m_bCorrect);
 	DDX_Check(pDX, IDC_PTN_HYSND_CHK, m_bHanyi);
 	DDX_Check(pDX, IDC_PTN_KANGXI_CHK, m_bKangxi);
-	
+	DDX_Text(pDX, IDC_PTN_SETADH_EDT, m_cmtADH);
 }	// end of void CFontSetupOptionPage::DoDataExchange()
 
 BEGIN_MESSAGE_MAP(CFontSetupOptionPage, CPropertyPage)
 	ON_WM_DESTROY()	
 	ON_BN_CLICKED(IDC_PTN_RENAME_CHK, &CFontSetupOptionPage::OnBnClickedPtnRenameChk)
 	
+	ON_BN_CLICKED(IDC_PTN_SETADH_CHK, &CFontSetupOptionPage::OnBnClickedPtnSetadhChk)
 END_MESSAGE_MAP()
 
 void	CFontSetupOptionPage::Init()
@@ -82,6 +84,16 @@ void	CFontSetupOptionPage::Init()
 	m_bCustomCmap = ::XSysproxy().m_tagOpeionPrm.bCmplCMAP;
 	m_bSetAdw	= ::XSysproxy().m_tagOpeionPrm.bsetADW;
 	m_bSetAdh	= ::XSysproxy().m_tagOpeionPrm.bsetADH;
+	if (m_bSetAdh)
+	{
+		GetDlgItem(IDC_PTN_SETADH_EDT)->EnableWindow();
+	}
+	else
+	{
+		GetDlgItem(IDC_PTN_SETADH_EDT)->CloseWindow();
+	}
+	m_cmtADH = ::XSysproxy().m_tagOpeionPrm.usSetADH;
+
 	m_bLayout = ::XSysproxy().m_tagOpeionPrm.bCmplLayout;
 	m_bCorrect = ::XSysproxy().m_tagOpeionPrm.bCnturCorrect;
 	m_bHanyi = ::XSysproxy().m_tagOpeionPrm.bHanyi;
@@ -131,6 +143,8 @@ void	CFontSetupOptionPage::Save()
 		::XSysproxy().m_tagOpeionPrm.bCnturCorrect = m_bCorrect;	
 		::XSysproxy().m_tagOpeionPrm.bHanyi = m_bHanyi;
 		::XSysproxy().m_tagOpeionPrm.bKangXi = m_bKangxi;
+		::XSysproxy().m_tagOpeionPrm.usSetADH = m_cmtADH;
+
 		if (m_bRename) {
 			ZeroMemory(::XSysproxy().m_tagOpeionPrm.CHSFaimlyName,MAX_PATH);
 			strcpy(::XSysproxy().m_tagOpeionPrm.CHSFaimlyName, (LPCSTR)(LPCTSTR)m_strCHSFaimlyName);
@@ -190,3 +204,15 @@ void CFontSetupOptionPage::OnBnClickedPtnRenameChk()
 
 } // end of void CFontSetupOptionPage::OnBnClickedPtnRenameChk()
 
+void CFontSetupOptionPage::OnBnClickedPtnSetadhChk()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	if (m_bSetAdh)
+	{
+		GetDlgItem(IDC_PTN_SETADH_EDT)->EnableWindow();
+	}
+	else
+	{
+		GetDlgItem(IDC_PTN_SETADH_EDT)->CloseWindow();
+	}
+}	// end of void CFontSetupOptionPage::OnBnClickedPtnSetadhChk()

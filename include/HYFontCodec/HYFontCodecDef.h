@@ -58,6 +58,7 @@ typedef struct _HY_OPTION_PRM
 {
 	BOOL 			bCmplVert;	// 是否重新编译竖排表
 	BOOL			bsetADH;	// 用于调整中文竖排高度
+	unsigned short	usSetADH;
 	BOOL			bsetADW;	// 用于调整中文竖排宽度
 	BOOL			bRePsName;
 	BOOL			bReSortUni;
@@ -365,6 +366,8 @@ typedef struct _HY_IMG_OPTIM
 
 #define		AXES_WIDTH				"wdth"
 #define		AXES_WEIGHT				"wght"
+
+#define		HY_CHARARRY_MAX			2048
 
 // 
 /*

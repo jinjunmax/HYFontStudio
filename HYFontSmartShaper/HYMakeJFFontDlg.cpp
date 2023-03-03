@@ -136,7 +136,6 @@ void CHYMakeJFFontDlg::MakeJ(CHYFontCodec& FontWDecode, CString strJPath, std::v
 		vtFullJ.push_back(vtJ[i]);
 	}
 
-
 	MakeHYCodeMap(vtFullJ);
 	MakeName(FontWDecode.m_HYName, m_HYNewName, MAKE_J);
 	m_HYNewCmap = FontWDecode.m_HYCmap;

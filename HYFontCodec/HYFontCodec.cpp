@@ -172,7 +172,7 @@ namespace HYFONTCODEC
 	CHYFontCodec::CHYFontCodec(void)
 	{
 		m_pFontFile		= 0;
-		m_iFontType		= -1;
+		m_iFontType		= FONTTYPE_TTF;
 		m_iStepNo		= 0;
 
 		::memset(&m_tagOption, 0, sizeof(HY_OPTION_PRM));
@@ -1903,6 +1903,9 @@ namespace HYFONTCODEC
 		m_iStepNo = 0;		
 
 		CloseFile();
+
+		m_HYCodeMap.vtHYCodeMap.clear();
+
 		m_vtHYGlyphs.clear();
 		m_HYCmap.SetDefault();
 		m_HYMaxp.SetDefault();
@@ -1966,7 +1969,6 @@ namespace HYFONTCODEC
 		if(FindTableEntry(VMTX_TAG)){
 			Decodevmtx();
 		}
-
 		// 解析CBLC表
 		if(FindTableEntry(CBLC_TAG)){
 			DecodeCBLC();
@@ -1974,7 +1976,6 @@ namespace HYFONTCODEC
 		if (FindTableEntry(EBLC_TAG)) {
 			DecodeEBLC();
 		}
-#if 0 //emjio 改造临时屏蔽
 		// 解析CBDT表
 		if (FindTableEntry(CBDT_TAG)) {
 			DecodeCBDT();
@@ -1984,7 +1985,6 @@ namespace HYFONTCODEC
 		if (FindTableEntry(EBDT_TAG)) {
 			DecodeEBDT();
 		}
-#endif
 		//解析sbix表
 		if(FindTableEntry(SBIX_TAG)){
 			Decodesbix();				
@@ -2377,8 +2377,7 @@ namespace HYFONTCODEC
 
 	int CHYFontCodec::Encode(char* pFontFile, std::vector<unsigned long> vtFlag)
 	{		
-		::memset(&m_tagOption,0,sizeof(HY_OPTION_PRM));
-		m_tagOption.bCmplVert = TRUE;
+		::memset(&m_tagOption,0,sizeof(HY_OPTION_PRM));		
 		return Encode(pFontFile, vtFlag, m_tagOption);
 	
 	}	// end of int CHYFontCodec::Encode()
@@ -2393,11 +2392,14 @@ namespace HYFONTCODEC
 		if (vtFlag.size() ==0) return FONT_ERR_BASE;
 		if (FindFlag(vtFlag,CFF_TAG))	m_iFontType=FONTTYPE_OTF;	
 		if (FindFlag(vtFlag,GLYF_TAG))	m_iFontType=FONTTYPE_TTF;
-		MakeHYCodeMap(m_vtHYGlyphs);
 
 		MakeTableDirectory(vtFlag);		
 		EncodeTableDirectory();
-#if 0	//emjio 改造临时屏蔽
+
+		HYFIXED fxVersion;
+		fxVersion.value = 3;
+		fxVersion.fract = 0;
+
 		if (FindFlag(vtFlag, CBDT_TAG)) {
 			EncodeCBDT();
 		}
@@ -2408,9 +2410,9 @@ namespace HYFONTCODEC
 			EncodeEBDT();
 		}
 		if (FindFlag(vtFlag, EBLC_TAG)) {
-			EncodeEBLC();
+			EncodeEBLC();			
 		}
-#endif
+
 		if (FindFlag(vtFlag, COLR_TAG)){
 			EncodeCOLR();
 		}		
@@ -2436,24 +2438,12 @@ namespace HYFONTCODEC
 			Encodecmap(m_pFontFile,m_HYTbDirectory);
 		}
 		if (FindFlag(vtFlag, VHEA_TAG)){
-			//CustomADH 的优先级大于ReVert
-			if (m_tagOption.bsetADH) {
-				MakeVerticalMetrics();
-			}
-			else if (m_tagOption.bCmplVert) {
-				CountVerticalMetrics();
-				MakeVerticalMetrics();
-			}
 			Encodevhea();
 		}		
 		if (FindFlag(vtFlag, VMTX_TAG)){
 			Encodevmtx();
 		}		
 		if (FindFlag(vtFlag,CFF_TAG)){
-			HYFIXED fxVersion;
-			fxVersion.value = 3;
-			fxVersion.fract = 0;
-			Encodepost(fxVersion);
 			EncodeCFF();
 			EncodeVORG();
 		}
@@ -2470,12 +2460,15 @@ namespace HYFONTCODEC
 			if (FindFlag(vtFlag, CVT_TAG)){
 				EncodeCVT();
 			}
-			HYFIXED fxVersion;
+
 			fxVersion.value = 2;
-			fxVersion.fract = 0;
-			Encodepost(fxVersion);
+			fxVersion.fract = 0;			
 			EncodeGlyph();
 			Encodeloca();
+		}
+
+		if (FindFlag(vtFlag, POST_TAG)) {
+			Encodepost(fxVersion);
 		}
 
 		if (FindFlag(vtFlag, GPOS_TAG)) {
@@ -2974,7 +2967,7 @@ namespace HYFONTCODEC
 		return HY_NOERROR;
 
 	}	// end of int	CHYFontCodec::EncodeEOT()
-#if 0//emjio 改造临时屏蔽
+
 	int	CHYFontCodec::EncodeEmojiOpentypeFont(char* pFontFile, char* EmojiProfile)
 	{
 		int iRtn = CreateFile(pFontFile);	
@@ -3443,6 +3436,7 @@ namespace HYFONTCODEC
 
 	}	// end of int	CHYFontCodec::EncodeEmojiOpentypeFont()
 
+#if 0//emjio 改造临时屏蔽
 	int CHYFontCodec::EncodeEmojiOAppleFont(char* pFontFile, char* EmojiProfile)
 	{
 		return HY_ERR_BASE;
@@ -4253,23 +4247,28 @@ namespace HYFONTCODEC
 			m_HYTbDirectory.vtTableEntry.push_back(HYEntry);
 		}
 
-		//VHEA
-		if (FindFlag(vtFlag,VHEA_TAG)){
-			HYEntry.tag =VHEA_TAG;
-			m_HYTbDirectory.vtTableEntry.push_back(HYEntry);
-		}
-		//VMTX
-		if (FindFlag(vtFlag,VMTX_TAG)){
-			HYEntry.tag = VMTX_TAG;
-			m_HYTbDirectory.vtTableEntry.push_back(HYEntry);
+		if (m_tagOption.bCmplVert)
+		{
+			//VHEA
+			if (FindFlag(vtFlag, VHEA_TAG)) {
+				HYEntry.tag = VHEA_TAG;
+				m_HYTbDirectory.vtTableEntry.push_back(HYEntry);
+			}
+			//VMTX
+			if (FindFlag(vtFlag, VMTX_TAG)) {
+				HYEntry.tag = VMTX_TAG;
+				m_HYTbDirectory.vtTableEntry.push_back(HYEntry);
+			}
 		}
 		
 		return HY_NOERROR;
 
 	}	// end of int	CHYFontCodec::MakeTableDirectory()
 
-	int	CHYFontCodec::MakeHYCodeMap(std::vector<CHYGlyph>& vtHYGlyphs)
+	int	CHYFontCodec::MakeHYCodeMap()
 	{
+		std::vector<CHYGlyph>& vtHYGlyphs = m_vtHYGlyphs;
+
 		m_HYCodeMap.vtHYCodeMap.clear();
 
 		CHYCodeMapItem  mapItm;
@@ -4829,7 +4828,7 @@ namespace HYFONTCODEC
 		return HY_NOERROR;
 
 	}	// end of int CHYFontCodec::MakeBitmapGlyphs()
-
+	/*
 	void CHYFontCodec::MakeVheaVmtx()
 	{
 		m_HYVhea.SetDefault();
@@ -4848,13 +4847,7 @@ namespace HYFONTCODEC
 		size_t stGlyphNum = m_vtHYGlyphs.size();
 		m_HYVhea.yMaxExtent	= m_HYhead.yMin;
 		for (size_t i=0; i<stGlyphNum; i++)	{			
-			CHYGlyph& Gryph = m_vtHYGlyphs[i];
-
-			if (i == 345)
-			{
-				int ijin = 0;
-
-			}
+			CHYGlyph& Gryph = m_vtHYGlyphs[i];			
 			// 此种计算方式与蒙纳的计算方式一致。
 			short Tsb = m_HYOS2.sTypoAscender-m_vtHYGlyphs[i].maxY;
 			if (i<m_HYVhea.numOfLongVerMetrics)	{
@@ -4886,6 +4879,7 @@ namespace HYFONTCODEC
 		m_HYVhea.metricDataFormat	= 0;	
 
 	}	// end of void CHYFontCodec::MakeVheaVmtx()
+	*/
 
 	void CHYFontCodec::MakeVerticalMetrics()
 	{	
@@ -4954,9 +4948,38 @@ namespace HYFONTCODEC
 			short Tsb = m_HYOS2.sTypoAscender - m_vtHYGlyphs[i].maxY;
 			Gryph.topSB = Tsb;
 			Gryph.advanceHeight = usADH;
+
+			if (this->m_tagOption.bsetADH)
+			{
+				SetAdHeight(m_tagOption.usSetADH, Gryph);
+			}
 		}
 
 	}	// end of void CHYFontCodec::CountVerticalMetrics()
+
+	void CHYFontCodec::SetAdHeight(UINT adh, CHYGlyph& Glyphs)
+	{
+		// 增大或缩小中文竖排字间距
+		
+		BOOL B = FALSE;
+		if (Glyphs.vtUnicode.size() > 0) {
+			unsigned long  unicode = Glyphs.vtUnicode[0];
+			if (unicode >= 0x2E80 && unicode <= 0x2EFF) B = TRUE;
+			if (unicode >= 0x2F00 && unicode <= 0x2FDF) B = TRUE;
+			if (unicode >= 0x3000 && unicode <= 0x303F) B = TRUE;
+			if (unicode >= 0x31C0 && unicode <= 0x31EF) B = TRUE;
+			if (unicode >= 0x3300 && unicode <= 0x33FF) B = TRUE;
+			if (unicode >= 0x3400 && unicode <= 0x4DBF) B = TRUE;
+			if (unicode >= 0x4E00 && unicode <= 0x9FFF) B = TRUE;
+			if (unicode >= 0xF900 && unicode <= 0xFAFF) B = TRUE;
+			if (unicode >= 0x20000 && unicode <= 0x2FA1F) B = TRUE;
+		}
+		if (B) {
+			Glyphs.topSB = Glyphs.topSB - (Glyphs.advanceHeight - adh) / 2.0 + 0.5;
+			Glyphs.advanceHeight = adh;
+		}
+
+	}	// end of void CHYFontCodec::SetAdHeight()
 	
 	void	CHYFontCodec::CountUnicodeRange(unsigned long& uni1, unsigned long& uni2,unsigned long& uni3,unsigned long& uni4)
 	{
@@ -8170,60 +8193,55 @@ namespace HYFONTCODEC
 
 		unsigned long ulDataoffset = ulEBDTPos + subTable.Header.imageDataOffset;
 		
-		for (int i = 0; i < iLoop; i++) {
-			ulDataoffset += subTable.SubTable1.vtsbitOffsets[i];			
-			fseek(m_pFontFile, ulDataoffset, SEEK_SET);
+		int iGID = arrySubtable.firstGlyphIndex;
+		for (int i = 0; i < iLoop; i++) {			
+			fseek(m_pFontFile, ulDataoffset+subTable.SubTable1.vtsbitOffsets[i], SEEK_SET);
 	
 			unsigned long dataLen = subTable.SubTable1.vtsbitOffsets[i + 1] - subTable.SubTable1.vtsbitOffsets[i];
-			if (usImgFormat == 1){					
-				CBDTFormat1 format1;
-				DecodeEBDTFormat1(format1,dataLen);
-				subTable.vtDataFrmt1.push_back(format1);
+
+			CEBData	emjData;
+			emjData.DataFromat = usImgFormat;
+			emjData.GID = iGID++;
+
+			if (usImgFormat == 1){
+				DecodeEBDTFormat1(emjData.DataFrmt1,dataLen);
+				subTable.vtEBData.push_back(emjData);
 			}
-			if (usImgFormat == 2) {
-				CBDTFormat2 format2;
-				DecodeEBDTFormat2(format2, dataLen);
-				subTable.vtDataFrmt2.push_back(format2);
+			if (usImgFormat == 2) {				
+				DecodeEBDTFormat2(emjData.DataFrmt2, dataLen);
+				subTable.vtEBData.push_back(emjData);
 			}
-			if (usImgFormat == 5) {
-				CBDTFormat5 format5;
-				DecodeEBDTFormat5(format5, dataLen);
-				subTable.vtDataFrmt5.push_back(format5);
+			if (usImgFormat == 5) {				
+				DecodeEBDTFormat5(emjData.DataFrmt5, dataLen);
+				subTable.vtEBData.push_back(emjData);
 			}
-			if (usImgFormat == 6) {
-				CBDTFormat6 format6;
-				DecodeEBDTFormat6(format6, dataLen);
-				subTable.vtDataFrmt6.push_back(format6);
+			if (usImgFormat == 6) {				
+				DecodeEBDTFormat6(emjData.DataFrmt6, dataLen);
+				subTable.vtEBData.push_back(emjData);
 			}
-			if (usImgFormat == 7) {
-				CBDTFormat7 format7;
-				DecodeEBDTFormat7(format7, dataLen);
-				subTable.vtDataFrmt7.push_back(format7);
+			if (usImgFormat == 7) {				
+				DecodeEBDTFormat7(emjData.DataFrmt7, dataLen);
+				subTable.vtEBData.push_back(emjData);
 			}
-			if (usImgFormat == 8) {
-				CBDTFormat8 format8;
-				DecodeEBDTFormat8(format8);
-				subTable.vtDataFrmt8.push_back(format8);
+			if (usImgFormat == 8) {				
+				DecodeEBDTFormat8(emjData.DataFrmt8);
+				subTable.vtEBData.push_back(emjData);
 			}
-			if (usImgFormat == 9) {
-				CBDTFormat9 format9;
-				DecodeEBDTFormat9(format9);
-				subTable.vtDataFrmt9.push_back(format9);
+			if (usImgFormat == 9) {				
+				DecodeEBDTFormat9(emjData.DataFrmt9);
+				subTable.vtEBData.push_back(emjData);
 			}
-			if (usImgFormat == 17) {
-				CBDTFormat17 format17;
-				DecodeEBDTFormat17(format17);
-				subTable.vtDataFrmt17.push_back(format17);
+			if (usImgFormat == 17) {				
+				DecodeEBDTFormat17(emjData.DataFrmt17);
+				subTable.vtEBData.push_back(emjData);
 			}
-			if (usImgFormat == 18) {
-				CBDTFormat18 format18;
-				DecodeEBDTFormat18(format18);
-				subTable.vtDataFrmt18.push_back(format18);
+			if (usImgFormat == 18) {				
+				DecodeEBDTFormat18(emjData.DataFrmt18);
+				subTable.vtEBData.push_back(emjData);
 			}
-			if (usImgFormat == 19) {
-				CBDTFormat19 format19;
-				DecodeEBDTFormat19(format19);
-				subTable.vtDataFrmt19.push_back(format19);
+			if (usImgFormat == 19) {				
+				DecodeEBDTFormat19(emjData.DataFrmt19);
+				subTable.vtEBData.push_back(emjData);
 			}						
 		}
 	
@@ -8433,8 +8451,8 @@ namespace HYFONTCODEC
 		m_HYCBDT.majorVersion = 3;
 		m_HYCBDT.minorVersion = 0;
 
-		int iEntryIndex = m_HYTbDirectory.FindTableEntry(EBDT_TAG);
-		if (iEntryIndex == -1) return FONT_ERR_EBDT_ENCODE;
+		int iEntryIndex = m_HYTbDirectory.FindTableEntry(CBDT_TAG);
+		if (iEntryIndex == -1) return FONT_ERR_CBDT_ENCODE;
 
 		CHYTableEntry& tbEntry = m_HYTbDirectory.vtTableEntry[iEntryIndex];
 		tbEntry.offset = ftell(m_pFontFile);
@@ -8514,7 +8532,7 @@ namespace HYFONTCODEC
 		unsigned long GlyphOffset = 0;
 
 		for (int i = SubTableArray.firstGlyphIndex; i <= SubTableArray.lastGlyphIndex; i++) {
-			CBDTFormat1& Foramt1 = SubTableArray.IndxSubTable.vtDataFrmt1[iseek];
+			CBDTFormat1& Foramt1 = SubTableArray.IndxSubTable.vtEBData[iseek].DataFrmt1;
 			fwrite(&Foramt1.SmlGlyphMtcs.height, 1, 1, m_pFontFile);
 			fwrite(&Foramt1.SmlGlyphMtcs.width, 1, 1, m_pFontFile);
 			fwrite(&Foramt1.SmlGlyphMtcs.BearingX, 1, 1, m_pFontFile);
@@ -8569,7 +8587,7 @@ namespace HYFONTCODEC
 		SubTableArray.IndxSubTable.Header.imageDataOffset = ulCurrent - uloffsetEBDT;
 		unsigned long GlyphOffset = 0;
 		for (int i = SubTableArray.firstGlyphIndex; i <= SubTableArray.lastGlyphIndex; i++) {
-			CBDTFormat2& Foramt2 = SubTableArray.IndxSubTable.vtDataFrmt2[iseek];
+			CBDTFormat2& Foramt2 = SubTableArray.IndxSubTable.vtEBData[iseek].DataFrmt2;
 			fwrite(&Foramt2.SmlGlyphMtcs.height, 1, 1, m_pFontFile);
 			fwrite(&Foramt2.SmlGlyphMtcs.width, 1, 1, m_pFontFile);
 			fwrite(&Foramt2.SmlGlyphMtcs.BearingX, 1, 1, m_pFontFile);
@@ -8624,7 +8642,7 @@ namespace HYFONTCODEC
 		SubTableArray.IndxSubTable.Header.imageDataOffset = ulCurrent - uloffsetEBDT;
 
 		for (int i = SubTableArray.firstGlyphIndex; i <= SubTableArray.lastGlyphIndex; i++) {
-			CBDTFormat5& Foramt5 = SubTableArray.IndxSubTable.vtDataFrmt5[iseek];
+			CBDTFormat5& Foramt5 = SubTableArray.IndxSubTable.vtEBData[iseek].DataFrmt5;
 			size_t stSize = Foramt5.imagedata.size();
 			for (size_t y = 0; y < stSize; y++) {
 				fwrite(&Foramt5.imagedata[y], 1, 1, m_pFontFile);
@@ -8642,7 +8660,7 @@ namespace HYFONTCODEC
 		unsigned long GlyphOffset = 0;
 
 		for (int i = SubTableArray.firstGlyphIndex; i <= SubTableArray.lastGlyphIndex; i++) {
-			CBDTFormat6& Foramt6 = SubTableArray.IndxSubTable.vtDataFrmt6[iseek];
+			CBDTFormat6& Foramt6 = SubTableArray.IndxSubTable.vtEBData[iseek].DataFrmt6;
 			fwrite(&Foramt6.bigGlyphMtcs.height, 1, 1, m_pFontFile);
 			fwrite(&Foramt6.bigGlyphMtcs.width, 1, 1, m_pFontFile);
 			fwrite(&Foramt6.bigGlyphMtcs.horiBearingX, 1, 1, m_pFontFile);
@@ -8701,7 +8719,7 @@ namespace HYFONTCODEC
 		unsigned long GlyphOffset = 0;
 
 		for (int i = SubTableArray.firstGlyphIndex; i <= SubTableArray.lastGlyphIndex; i++) {
-			CBDTFormat7& Format7 = SubTableArray.IndxSubTable.vtDataFrmt7[iseek];
+			CBDTFormat7& Format7 = SubTableArray.IndxSubTable.vtEBData[iseek].DataFrmt7;
 			fwrite(&Format7.bigGlyphMtcs.height, 1, 1, m_pFontFile);
 			fwrite(&Format7.bigGlyphMtcs.width, 1, 1, m_pFontFile);
 			fwrite(&Format7.bigGlyphMtcs.horiBearingX, 1, 1, m_pFontFile);
@@ -8761,7 +8779,7 @@ namespace HYFONTCODEC
 		char cPad = 0;
 		unsigned short usTmp = 0;
 		for (int i = SubTableArray.firstGlyphIndex; i <= SubTableArray.lastGlyphIndex; i++) {
-			CBDTFormat8& Foramt8 = SubTableArray.IndxSubTable.vtDataFrmt8[iseek];
+			CBDTFormat8& Foramt8 = SubTableArray.IndxSubTable.vtEBData[iseek].DataFrmt8;
 			fwrite(&Foramt8.smallGlyphMtcs.height, 1, 1, m_pFontFile);
 			fwrite(&Foramt8.smallGlyphMtcs.width, 1, 1, m_pFontFile);
 			fwrite(&Foramt8.smallGlyphMtcs.BearingX, 1, 1, m_pFontFile);
@@ -8794,7 +8812,7 @@ namespace HYFONTCODEC
 		char cPad = 0;
 		unsigned short usTmp = 0;
 		for (int i = SubTableArray.firstGlyphIndex; i <= SubTableArray.lastGlyphIndex; i++) {
-			CBDTFormat9& Foramt9 = SubTableArray.IndxSubTable.vtDataFrmt9[iseek];
+			CBDTFormat9& Foramt9 = SubTableArray.IndxSubTable.vtEBData[iseek].DataFrmt9;
 			fwrite(&Foramt9.bigGlyphMtcs.height, 1, 1, m_pFontFile);
 			fwrite(&Foramt9.bigGlyphMtcs.width, 1, 1, m_pFontFile);
 			fwrite(&Foramt9.bigGlyphMtcs.horiBearingX, 1, 1, m_pFontFile);
@@ -8831,7 +8849,7 @@ namespace HYFONTCODEC
 		unsigned long ulTmp = 0, GlyphOffset=0;
 
 		for (int i = SubTableArray.firstGlyphIndex; i <= SubTableArray.lastGlyphIndex; i++) {
-			CBDTFormat17& Foramt17 = SubTableArray.IndxSubTable.vtDataFrmt17[iseek];
+			CBDTFormat17& Foramt17 = SubTableArray.IndxSubTable.vtEBData[iseek].DataFrmt17;
 			fwrite(&Foramt17.smallGlyphMtcs.height, 1, 1, m_pFontFile);
 			fwrite(&Foramt17.smallGlyphMtcs.width, 1, 1, m_pFontFile);
 			fwrite(&Foramt17.smallGlyphMtcs.BearingX, 1, 1, m_pFontFile);
@@ -8888,7 +8906,7 @@ namespace HYFONTCODEC
 		
 		unsigned long ulTmp = 0, GlyphOffset = 0;
 		for (int i = SubTableArray.firstGlyphIndex; i <= SubTableArray.lastGlyphIndex; i++) {
-			CBDTFormat18& Foramt18 = SubTableArray.IndxSubTable.vtDataFrmt18[iseek];
+			CBDTFormat18& Foramt18 = SubTableArray.IndxSubTable.vtEBData[iseek].DataFrmt18;
 			fwrite(&Foramt18.bigGlyphMtcs.height, 1, 1, m_pFontFile);
 			fwrite(&Foramt18.bigGlyphMtcs.width, 1, 1, m_pFontFile);
 			fwrite(&Foramt18.bigGlyphMtcs.horiBearingX, 1, 1, m_pFontFile);
@@ -8948,7 +8966,7 @@ namespace HYFONTCODEC
 		
 		unsigned long ulTmp = 0, GlyphOffset = 0;
 		for (int i = SubTableArray.firstGlyphIndex; i <= SubTableArray.lastGlyphIndex; i++) {
-			CBDTFormat19& Foramt19 = SubTableArray.IndxSubTable.vtDataFrmt19[iseek];
+			CBDTFormat19& Foramt19 = SubTableArray.IndxSubTable.vtEBData[iseek].DataFrmt19;
 			ulTmp = hy_cdr_int32_to(Foramt19.dataLen);
 			fwrite(&ulTmp, 4, 1, m_pFontFile);
 			for (int y = 0; y < Foramt19.dataLen; y++) {
@@ -8957,7 +8975,6 @@ namespace HYFONTCODEC
 		}
 
 	}	// end of void CHYFontCodec::EncodeEBDTFormat19()
-
 
 	int	CHYFontCodec::Decodehead()
 	{
@@ -9316,11 +9333,10 @@ namespace HYFONTCODEC
 			CHYTableEntry& tbEntry = m_HYTbDirectory.vtTableEntry[iEntryIndex];
 			tbEntry.offset = ftell(m_pFontFile);
 			
-			size_t			szGlyphNum			= m_vtHYGlyphs.size();
-			unsigned short longhormetricNums	= m_HYHhea.numberOfHMetrics;
-			unsigned short lefsidebearNums		= szGlyphNum - m_HYHhea.numberOfHMetrics;
-
-			for (size_t i=0; i<szGlyphNum; i++)
+			//size_t			szGlyphNum			= m_vtHYGlyphs.size();
+			unsigned short longhormetricNums	= m_HYHhea.numberOfHMetrics;	
+#if 0
+			for (size_t i=0; i< m_HYMaxp.numGlyphs; i++)
 			{					
 				if (i<longhormetricNums)
 				{
@@ -9328,16 +9344,31 @@ namespace HYFONTCODEC
 					fwrite(&usTmp,2,1,m_pFontFile);
 
 					usTmp = hy_cdr_int16_to(m_vtHYGlyphs[i].minX);
-					fwrite(&usTmp,2,1,m_pFontFile);					
+					fwrite(&usTmp,2,1,m_pFontFile);				
 				}
 				else 
 				{
-
 					usTmp = hy_cdr_int16_to(m_vtHYGlyphs[i].minX);
 					fwrite(&usTmp,2,1,m_pFontFile);
 				}
 			}
-
+#else 
+			for (size_t i = 0; i < m_HYMaxp.numGlyphs; i++)
+			{
+				if (i<longhormetricNums)
+				{					
+					usTmp = hy_cdr_int16_to(m_HYHmtx.vtLonghormetric[i].advanceWidth);
+					fwrite(&usTmp, 2, 1, m_pFontFile);
+					usTmp = hy_cdr_int16_to(m_HYHmtx.vtLonghormetric[i].lsb);
+					fwrite(&usTmp, 2, 1, m_pFontFile);
+				}
+				else
+				{
+					usTmp = hy_cdr_int16_to(m_HYHmtx.vtLonghormetric[i].lsb);
+					fwrite(&usTmp, 2, 1, m_pFontFile);
+				}
+			}
+#endif
 			tbEntry.length = ftell(m_pFontFile) - tbEntry.offset;
 			int iTail = 4-tbEntry.length%4;
 			if (tbEntry.length%4>0)
@@ -10043,7 +10074,7 @@ namespace HYFONTCODEC
 
 	}	// end of int CHYFontCodec::EncodeOS2()
 
-	// vesion 2.5 在opentypeV1.3标准后已经被弃用，本程序目前暂不支持编解码。
+	// vesion 2.5 在opentypeV1.3标准后已经被弃用
 	int CHYFontCodec::Decodepost()
 	{
 		m_HYPost.SetDefault();
@@ -20053,6 +20084,12 @@ namespace HYFONTCODEC
 
 	}	// end of int CHYFontCodec::FindGryphIndexByGlyName()
 
+	std::string CHYFontCodec::FindNameByIndex(int iGID)
+	{		
+		return m_HYPost.FindNameByGID(iGID);
+
+	}	// end of int	CHYFontCodec::FindNameByIndex()
+
 	// 通过Gryph Index 获取 Unicode,一个GryphIndex 可能会对应多个Uncoide 编码	
 	void CHYFontCodec::FindGryphUncidoByIndex(unsigned long ulGlyphIndex, std::vector<unsigned long>& szUnicode)
 	{
@@ -20476,12 +20513,12 @@ namespace HYFONTCODEC
 		if ( pDest == NULL ) return false;
 		if ( pSrc == NULL )	return false;
 
-		WCHAR	wpString[260]	= {0};
+		WCHAR	wpString[HY_CHARARRY_MAX]	= {0};
 		int		iWStringLen			= 0;	
 
 		iWStringLen = MultiByteToWideChar(CP_ACP,0, pSrc, -1, NULL, 0 );
 		if (iWStringLen == 0 )					return false;		
-		if (iWStringLen >= MAX_PATH / 2 )		return false ;	
+		if (iWStringLen >= HY_CHARARRY_MAX / 2 )		return false ;
 
 		MultiByteToWideChar(CP_ACP, 0, pSrc, strlen(pSrc), wpString, iWStringLen);
 

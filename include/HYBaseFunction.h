@@ -69,6 +69,7 @@ std::string			HY_DLL_API	HY_StringToUppercase (std::string str);
 std::string			HY_DLL_API	HY_String_to_hex(const std::string& str);
 std::string			HY_DLL_API  HY_Hex_to_string(const std::string& str);
 std::string			HY_DLL_API	HY_StringFormat(const char *fmt, ...);
+long				HY_DLL_API	HY_HexStringToInt(std::string hex);
 
 unsigned long		HY_DLL_API	HY_CalcFontTableChecksum(unsigned long *Table, unsigned long Length);
 

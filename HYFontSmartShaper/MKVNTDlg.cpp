@@ -136,6 +136,7 @@ void CMKVNTDlg::OnBnClickedFntMkvntMkBtn()
 			m_MKVFntCodec.m_HYPost.InsertName(defGlyph.strPostName);
 		}
 
+		m_MKVFntCodec.MakeHYCodeMap();
 		if (m_MKVFntCodec.Encode((LPTSTR)(LPCTSTR)strDstFileName, ulTableFlag, ::XSysproxy().m_tagOpeionPrm) == HY_NOERROR)
 			AfxMessageBox(_T("字库生成完成"));
 		else

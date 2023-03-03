@@ -288,6 +288,8 @@ void CHYGridParamDlg::OnBnClickedBtnChktest()
 	ulTableFlag.push_back(PREP_TAG);
 	
 	CString strFontName = openFileDlg1.GetPathName();
+
+	::XSysproxy().m_hyFontCodec.MakeHYCodeMap();
 	::XSysproxy().m_hyFontCodec.Encode((LPSTR)(LPCTSTR)strFontName, ulTableFlag);
 
 }	// end of void CHYGridParamDlg::OnBnClickedBtnChktest()

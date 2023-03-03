@@ -214,6 +214,16 @@ namespace HYFONTCODEC
 
 	}	// end of void IndexSUBTable::Setdefault()
 
+	CEBData::CEBData()
+	{
+
+	}	//end of CEBData::CEBData()
+
+	CEBData::~CEBData()
+	{
+
+	}	//end of CEBData::~CEBData()
+
 	IndexSUBTable::IndexSUBTable()
 	{
 

@@ -239,6 +239,7 @@
 #define IDC_PTN_VER_EDT                 1189
 #define IDC_RSTNM_NAME_BTN              1189
 #define IDC_RSTNM_DSTFNT_BTN            1190
+#define IDC_PTN_SETADH_EDT              1190
 #define IDC_RSTNM_SRCFNT_EDT            1191
 #define IDC_RSTNM_PRS_BTN               1192
 #define IDC_MMRG_FNTS_LST               1194
@@ -370,13 +371,16 @@
 #define ID_EMOJI_32908                  32908
 #define ID_EMOJI_BUD                    32909
 #define ID_EMOJI_MK                     32910
+#define ID_32911                        32911
+#define ID_MN_CODEMAP                   32912
+#define ID_32913                        32913
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        379
-#define _APS_NEXT_COMMAND_VALUE         32911
+#define _APS_NEXT_COMMAND_VALUE         32914
 #define _APS_NEXT_CONTROL_VALUE         1207
 #define _APS_NEXT_SYMED_VALUE           310
 #endif

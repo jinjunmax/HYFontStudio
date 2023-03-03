@@ -400,6 +400,12 @@ std::string HY_StringFormat(const char *fmt, ...)
 
 }	// end of std::string HY_StringFormat()
 
+long HY_HexStringToInt(std::string hex)
+{
+	return strtol(hex.c_str(), NULL, 16);
+
+}	// end of long HY_HexStringToInt()
+
 unsigned long HY_CalcFontTableChecksum(unsigned long *Table, unsigned long Length)
 {
 	unsigned long	Sum = 0L;	

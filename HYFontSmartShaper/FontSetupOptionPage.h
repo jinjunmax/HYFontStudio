@@ -43,7 +43,7 @@ protected:
 	CString		m_strENGFamilyName;
 	CString		m_strENGSubName;
 	CString		m_strVersion;
-
+	int			m_cmtADH;
 public:
 	void			Save();
 	CHYFontCodec*	m_pHYFoncCodec;
@@ -54,4 +54,6 @@ public:
 	afx_msg void OnBnClickedPtnRenameChk();
 	
 	
+	
+	afx_msg void OnBnClickedPtnSetadhChk();
 };

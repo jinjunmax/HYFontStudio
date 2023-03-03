@@ -135,6 +135,7 @@ void CResetPsNameDlg::OnBnClickedRstnmPrsBtn()
 	ZeroMemory(&tagOpnPrm,sizeof(HY_OPTION_PRM));
 	tagOpnPrm.bCmplCMAP = true;
 
+	srcFntCdec.MakeHYCodeMap();
 	if (srcFntCdec.Encode((LPSTR)(LPCTSTR)m_strDstFile, vtFlag, tagOpnPrm) == HY_NOERROR){
 		AfxMessageBox("处理完成");
 	}
