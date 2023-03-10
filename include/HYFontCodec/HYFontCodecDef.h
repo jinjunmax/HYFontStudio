@@ -56,14 +56,15 @@ typedef int BOOL;
 #define HY_OPTION_STRUCT
 typedef struct _HY_OPTION_PRM
 {
-	BOOL 			bCmplVert;	// 是否重新编译竖排表
-	BOOL			bsetADH;	// 用于调整中文竖排高度
-	unsigned short	usSetADH;
-	BOOL			bsetADW;	// 用于调整中文竖排宽度
+	BOOL 			bCmplVert;		// 是否重新编译竖排表
+	BOOL			bsetADH;		// 调整中文竖排高度
+	unsigned short	usSetADH;		// 高度值	
+	BOOL			bsetADW;		// 调整中文竖排宽度
 	BOOL			bRePsName;
 	BOOL			bReSortUni;
-	BOOL			bCmplCMAP;	// 是否重新编译CMAP
-	BOOL			bYitizi;
+	BOOL			bCmplCMAP;		// 是否重新编译CMAP
+	BOOL			bYitizi;		// 是否兼容CJK兼容字符
+	BOOL			bOldStandard;	// 是否兼容旧标准
 	BOOL			bKangXi;		// 是否兼容康熙部首
 	BOOL			bCnturCorrect;	// 是否做轮廓纠错	
 	BOOL			bFontname;		// 是否需要重新命名字库名称	

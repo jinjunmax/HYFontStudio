@@ -3,8 +3,6 @@
 
 #include "stdafx.h"
 #include "HYBaseFunction.h"
-#include <iostream>
-#include <fstream>
 #include <ios>
 #include <io.h>
 #include <sys/types.h>
@@ -18,6 +16,10 @@
 #include <math.h>
 #include <iomanip>
 #include <fstream>
+#include <sstream>
+#include <iostream>
+#include <fstream>
+
 using namespace std;
 
 unsigned int HY_NumerAlign(unsigned int n, unsigned int align)
@@ -384,6 +386,15 @@ std::string HY_Hex_to_string(const std::string& Hex)
 	return output;
 
 }	// end of std::string hex_to_string()
+
+std::string HY_Int_to_Hexstring(long l)
+{	
+	std::stringstream sstream;
+	sstream << std::hex << l;
+
+	return HY_StringToUppercase(sstream.str());
+
+}	// end of std::string HY_Int_to_Hexstring()
 
 std::string HY_StringFormat(const char *fmt, ...)
 {

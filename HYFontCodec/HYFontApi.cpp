@@ -85,7 +85,7 @@ void EmojiToXml(CMarkup& Emoji,char* pDirectory,CHYFontCodec& FontCodec)
 			{
 				IndexSubTableArray& subTableArray = btMapSzTable.vtIndexSubTableArray[y];
 
-				string strSaveDir = szbmpSaveDir[y] + "Gid" + std::to_string(subTableArray.firstGlyphIndex)
+				string strSaveDir = szbmpSaveDir[i] + "Gid" + std::to_string(subTableArray.firstGlyphIndex)
 					+ "ToGid" + std::to_string(subTableArray.lastGlyphIndex)
 					+ "\\";
 				string strmd = "md " + strSaveDir;
@@ -247,12 +247,11 @@ void maxpToXml(CMarkup& xml, CHYFontCodec& FontCodec)
 void OS2ToXml(CMarkup& xml, CHYFontCodec& FontCodec)
 {
 	xml.AddElem("OS2");
-	xml.IntoElem();
-	xml.AddElem("version", FontCodec.m_HYOS2.version);
+
+	xml.IntoElem();	
 	xml.AddElem("AvgCharWidth", FontCodec.m_HYOS2.xAvgCharWidth);
 	xml.AddElem("WeightClass", FontCodec.m_HYOS2.usWeightClass);
-	xml.AddElem("WidthClass", FontCodec.m_HYOS2.usWidthClass);
-	xml.AddElem("fsType", FontCodec.m_HYOS2.fsType);
+	xml.AddElem("WidthClass", FontCodec.m_HYOS2.usWidthClass);	
 	xml.AddElem("SubscriptXSize", FontCodec.m_HYOS2.ySubscriptXSize);
 	xml.AddElem("SubscriptYSize", FontCodec.m_HYOS2.ySubscriptYSize);
 	xml.AddElem("SubscriptXOffset", FontCodec.m_HYOS2.ySubscriptXOffset);
@@ -263,47 +262,22 @@ void OS2ToXml(CMarkup& xml, CHYFontCodec& FontCodec)
 	xml.AddElem("SuperscriptYOffset", FontCodec.m_HYOS2.ySuperscriptYOffset);
 	xml.AddElem("StrikeoutSize", FontCodec.m_HYOS2.yStrikeoutSize);
 	xml.AddElem("StrikeoutPosition", FontCodec.m_HYOS2.yStrikeoutPosition);
-	xml.AddElem("FamilyClass", FontCodec.m_HYOS2.sFamilyClass);
-	xml.AddElem("FamilyType", FontCodec.m_HYOS2.panose.FamilyType);
-	xml.AddElem("SerifStyle", FontCodec.m_HYOS2.panose.SerifStyle);
-	xml.AddElem("Weight", FontCodec.m_HYOS2.panose.Weight);
-	xml.AddElem("Proportion", FontCodec.m_HYOS2.panose.Proportion);
-	xml.AddElem("Contrast", FontCodec.m_HYOS2.panose.Contrast);
-	xml.AddElem("StrokeVariation;", FontCodec.m_HYOS2.panose.StrokeVariation);
-	xml.AddElem("ArmStyle;", FontCodec.m_HYOS2.panose.ArmStyle);
-	xml.AddElem("Letterform;", FontCodec.m_HYOS2.panose.Letterform);
-	xml.AddElem("Midline", FontCodec.m_HYOS2.panose.Midline);
-	xml.AddElem("XHeigh", FontCodec.m_HYOS2.panose.XHeight);
 	xml.AddElem("UnicodeRange1", FontCodec.m_HYOS2.ulUnicodeRange1);
 	xml.AddElem("UnicodeRange2", FontCodec.m_HYOS2.ulUnicodeRange2);
 	xml.AddElem("UnicodeRange3", FontCodec.m_HYOS2.ulUnicodeRange3);
 	xml.AddElem("UnicodeRange4", FontCodec.m_HYOS2.ulUnicodeRange4);
-
-	std::string VendID(FontCodec.m_HYOS2.vtachVendID.begin(), FontCodec.m_HYOS2.vtachVendID.end());
-	xml.AddElem("achVendID", VendID.c_str());
-
 	xml.AddElem("fsSelection", FontCodec.m_HYOS2.fsSelection);
-
 	xml.AddElem("FirstCharIndex", FontCodec.m_HYOS2.usFirstCharIndex);
 	xml.AddElem("LastCharIndex", FontCodec.m_HYOS2.usLastCharIndex);
-
 	xml.AddElem("TypoAscender", FontCodec.m_HYOS2.sTypoAscender);
 	xml.AddElem("TypoDescender", FontCodec.m_HYOS2.sTypoDescender);
 	xml.AddElem("TypoLineGap", FontCodec.m_HYOS2.sTypoLineGap);
-
 	xml.AddElem("WinAscent", FontCodec.m_HYOS2.usWinAscent);
-	xml.AddElem("WinDescent", FontCodec.m_HYOS2.usWinDescent);
-	
+	xml.AddElem("WinDescent", FontCodec.m_HYOS2.usWinDescent);	
 	xml.AddElem("CodePageRange1", FontCodec.m_HYOS2.ulCodePageRange1);
 	xml.AddElem("CodePageRange2", FontCodec.m_HYOS2.ulCodePageRange2);
-
-
-
-
-	
-
-
-
+	xml.AddElem("Height", FontCodec.m_HYOS2.sxHeight);
+	xml.AddElem("CapHeight", FontCodec.m_HYOS2.sCapHeight);
 	xml.OutOfElem();
 
 }	// end of void OS2ToXml()
@@ -326,11 +300,12 @@ int	__cdecl	EmojiToImage(char* pFontName, char* pDirectory)
 
 	Emoji.SetDoc("<?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n");
 
-	Emoji.AddElem("Head");
+	Emoji.AddElem("Font");
 	Emoji.IntoElem();
 	maxpToXml(Emoji, FontCodec);
 	HeadToXml(Emoji,FontCodec);
-	HheaToXml(Emoji,FontCodec);	
+	HheaToXml(Emoji,FontCodec);
+	OS2ToXml(Emoji, FontCodec);
 	EmojiToXml(Emoji,pDirectory, FontCodec);	
 	Emoji.OutOfElem();
 	// ¥Ê≈Ã	

@@ -44,6 +44,7 @@ protected:
 	afx_msg	LRESULT 	OnUpdateAllViews(WPARAM waram, LPARAM lparam);
 	afx_msg void		GetDrawParam(UINT iID);
 	afx_msg void		OnBnClickedMnSeekBtn();
+	// 生成设置
 	afx_msg void		OnFntEncodeParam();
 	afx_msg void		OnBnClickedMnFntstBtn();
 	afx_msg void		OnBnClickedMnCvtsBtn();
@@ -204,6 +205,7 @@ public:
 	void	XmlToHead(CMarkup& mkEmoji, CHYFontCodec& FontEnCodec);
 	void	XmlToHhea(CMarkup& mkEmoji, CHYFontCodec& FontEnCodec);
 	void	XmlTomaxp(CMarkup& mkEmoji, CHYFontCodec& FontEnCodec);
+	void	XmlToOS(CMarkup& mkEmoji, CHYFontCodec& FontEnCodec);
 	void	XmlToEmoji(CMarkup& mkEmoji, CHYFontCodec& FontEnCodec);
 	afx_msg void OnEmojiMk();
 	
@@ -218,5 +220,6 @@ public:
 		return reinterpret_cast<CHYFontSmartShaperDoc*>(m_pDocument);
 	}
 #endif
+	// 导入码表
 	afx_msg void OnMnCodemap();
 };

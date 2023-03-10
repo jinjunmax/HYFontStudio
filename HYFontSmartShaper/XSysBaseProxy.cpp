@@ -117,6 +117,10 @@ void CXSysBaseProxy::LoadLocalProfile()
 	GetPrivateProfileString("Option", "YITIZI", _T("0"), szInfo, MAX_PATH, strProfileName);
 	m_tagOpeionPrm.bYitizi = atoi(szInfo) == 0 ? FALSE: TRUE;
 	ZeroMemory(szInfo, MAX_PATH);
+	GetPrivateProfileString("Option", "OLDSTANDARD", _T("1"), szInfo, MAX_PATH, strProfileName);
+	m_tagOpeionPrm.bOldStandard = atoi(szInfo) == 0 ? FALSE : TRUE;
+
+	ZeroMemory(szInfo, MAX_PATH);
 	GetPrivateProfileString("Option", "KANGXI", _T("0"), szInfo, MAX_PATH, strProfileName);
 	m_tagOpeionPrm.bKangXi = atoi(szInfo) == 0 ? FALSE : TRUE;
 	ZeroMemory(szInfo, MAX_PATH);
@@ -219,6 +223,8 @@ void CXSysBaseProxy::StoreLocalProfile()
 	WritePrivateProfileString("Option", "SORTUNI", strTmp, strProfileName);
 	strTmp.Format(_T("%d"), m_tagOpeionPrm.bYitizi);
 	WritePrivateProfileString("Option", "YITIZI", strTmp, strProfileName);
+	strTmp.Format(_T("%d"), m_tagOpeionPrm.bOldStandard);
+	WritePrivateProfileString("Option", "OLDSTANDARD", strTmp, strProfileName);
 	strTmp.Format(_T("%d"), m_tagOpeionPrm.bKangXi);
 	WritePrivateProfileString("Option", "KANGXI", strTmp, strProfileName);
 	strTmp.Format(_T("%d"), m_tagOpeionPrm.bCnturCorrect);

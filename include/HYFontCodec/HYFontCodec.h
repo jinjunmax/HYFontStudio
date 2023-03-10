@@ -290,12 +290,12 @@ namespace HYFONTCODEC
 		int		EncodeCBLC();
 		int		EncodeEBLC();
 		void	EncodeBLCInfo(CHYCBLC& HYCblc,unsigned long ulBLCPos);
-		void	EncodeIndexSubTableArray(IndexSubTableArray& subtableArray, int additionalOffset);
-		void	EncodeIndexSubTable1(IndexSubTableArray& IndexArray, unsigned long additionalOffset);
-		void	EncodeIndexSubTable2(IndexSubTableArray& IndexArray, unsigned long additionalOffset);
-		void	EncodeIndexSubTable3(IndexSubTableArray& IndexArray, unsigned long additionalOffset);
-		void	EncodeIndexSubTable4(IndexSubTableArray& IndexArray, unsigned long additionalOffset);
-		void	EncodeIndexSubTable5(IndexSubTableArray& IndexArray, unsigned long additionalOffset);
+		void	EncodeIndexSubTableArray(IndexSubTableArray& subtableArray, unsigned long& additionalOffset);
+		void	EncodeIndexSubTable1(IndexSubTableArray& IndexArray, unsigned long& additionalOffset);
+		void	EncodeIndexSubTable2(IndexSubTableArray& IndexArray, unsigned long& additionalOffset);
+		void	EncodeIndexSubTable3(IndexSubTableArray& IndexArray, unsigned long& additionalOffset);
+		void	EncodeIndexSubTable4(IndexSubTableArray& IndexArray, unsigned long& additionalOffset);
+		void	EncodeIndexSubTable5(IndexSubTableArray& IndexArray, unsigned long& additionalOffset);
 
 		// EBDT CBDT Table
 		int		DecodeEBDT();

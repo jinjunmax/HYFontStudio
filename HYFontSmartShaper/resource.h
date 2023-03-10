@@ -230,16 +230,9 @@
 #define IDC_CHARS_COMPARE_ADD_LST       1181
 #define IDC_CHARS_COMPARE_DEL_LST       1182
 #define IDC_CHARS_COMPARE_MK_LST        1183
-#define IDC_PTN_RENAME_CHK              1184
-#define IDC_PTN_CHS_EDT                 1185
-#define IDC_PTN_ENG_EDT                 1186
-#define IDC_PTN_CHSSUB_EDT              1187
-#define IDC_PTN_ENGSUB_EDT              1188
 #define IDC_RSTNM_SRCFNT_BTN            1188
-#define IDC_PTN_VER_EDT                 1189
 #define IDC_RSTNM_NAME_BTN              1189
 #define IDC_RSTNM_DSTFNT_BTN            1190
-#define IDC_PTN_SETADH_EDT              1190
 #define IDC_RSTNM_SRCFNT_EDT            1191
 #define IDC_RSTNM_PRS_BTN               1192
 #define IDC_MMRG_FNTS_LST               1194
@@ -257,6 +250,7 @@
 #define IDC_TCMPNB_RD                   1204
 #define IDC_TCMPDST_BTN                 1205
 #define IDC_TCMPFL1_RD                  1206
+#define IDC_PTN_OLDSTND_CHK             1207
 #define IDC_TSC_ISCIDY_RAD              1235
 #define IDC_TSC_ISCIDN_RAD              1236
 #define IDC_TSC_RGST_EDIT               1237
@@ -290,15 +284,20 @@
 #define IDC_PTN_SRTUNI_CHK              2602
 #define IDC_PTN_YITIZI_CHK              2603
 #define IDC_PTN_RMRPPNT_CHK             2604
-#define IDC_PTN_ALIGNPNT_CHK            2605
 #define IDC_PTN_CORRECT_CHK             2605
-#define IDC_RBSVG_CHK                   2606
 #define IDC_PTN_CMP_CHK                 2607
 #define IDC_PTN_SETADW_CHK              2608
 #define IDC_PTN_SETADH_CHK              2609
 #define IDC_PTN_LYT_CHK                 2610
 #define IDC_PTN_HYSND_CHK               2611
 #define IDC_PTN_KANGXI_CHK              2612
+#define IDC_PTN_SETADH_EDT              2613
+#define IDC_PTN_RENAME_CHK              2614
+#define IDC_PTN_CHS_EDT                 2615
+#define IDC_PTN_ENG_EDT                 2616
+#define IDC_PTN_CHSSUB_EDT              2617
+#define IDC_PTN_ENGSUB_EDT              2618
+#define IDC_PTN_VER_EDT                 2619
 #define IDC_MRG_SRC1_EDT                3101
 #define IDC_MRG_SRC2_EDT                3102
 #define IDC_MRG_DST_EDT                 3103
@@ -310,7 +309,6 @@
 #define IDC_MRG_SRC2TXT_BTN             3110
 #define IDC_MMRG_SRC2TXT_BTN            3111
 #define IDC_MMRG_SRC2TXT_EDT            3112
-#define IDC_MMRG_SRC2TXT_BTN2           3113
 #define IDS_NAME_ID_0_EN                10000
 #define IDS_NAME_ID_0_CHS               10001
 #define IDS_NAME_ID_8_EN                10002
@@ -356,24 +354,15 @@
 #define ID_FNT_RP_NODEF                 32887
 #define ID_FNT_RP_TWFNT                 32888
 #define ID_NOBOX_MNU                    32890
-#define ID_BDT_MN                       32892
 #define ID_FNT_RSETNAME                 32895
 #define ID_MN_EXPTNAME                  32897
 #define ID_FLNM2NUMNM                   32899
-#define ID_32900                        32900
 #define ID_MN_CMPTXT                    32901
 #define ID_FILE_NEW1                    32902
-#define ID_32903                        32903
-#define ID_32904                        32904
-#define ID_32905                        32905
 #define ID_MN_CHKERTTF                  32906
 #define ID_MN_CHKEROTF                  32907
-#define ID_EMOJI_32908                  32908
-#define ID_EMOJI_BUD                    32909
 #define ID_EMOJI_MK                     32910
-#define ID_32911                        32911
 #define ID_MN_CODEMAP                   32912
-#define ID_32913                        32913
 
 // Next default values for new objects
 // 
@@ -381,7 +370,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        379
 #define _APS_NEXT_COMMAND_VALUE         32914
-#define _APS_NEXT_CONTROL_VALUE         1207
+#define _APS_NEXT_CONTROL_VALUE         1208
 #define _APS_NEXT_SYMED_VALUE           310
 #endif
 #endif
