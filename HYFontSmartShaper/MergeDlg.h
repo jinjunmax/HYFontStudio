@@ -24,7 +24,7 @@ public:
 	afx_msg void OnBnClickedMrg1Src2Btn();
 	afx_msg void OnBnClickedMrg1DstBtn();
 	afx_msg void OnBnClickedMgr1MergeBtn();	
-	afx_msg void OnBnClickedMrg1TxtBtn();	
+	afx_msg void OnBnClickedMrg1TxtBtn();
 	afx_msg void OnBnClickedMmrgSrc2txtBtn();
 	afx_msg void OnBnClickedMmrgAddBtn();
 	afx_msg void OnBnClickedMmrgDelBtn();

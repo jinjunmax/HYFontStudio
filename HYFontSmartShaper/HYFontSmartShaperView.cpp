@@ -25,6 +25,7 @@
 #include "FontExtract.h"
 #include "ResetPsNameDlg.h"
 #include "TXTCmpDlg.h"
+#include "CHYEmjioDlg.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -259,15 +260,12 @@ void CHYFontSmartShaperView::OnFileSave()
 	ulTableFlag.push_back(NAME_TAG);
 	ulTableFlag.push_back(OS2_TAG);
 	ulTableFlag.push_back(POST_TAG);
+	ulTableFlag.push_back(GASP_TAG);
 
 	if (::XSysproxy().m_tagOpeionPrm.bCmplVert) {
 		ulTableFlag.push_back(VHEA_TAG);
 		ulTableFlag.push_back(VMTX_TAG);
 	}
-	
-	ulTableFlag.push_back(GASP_TAG);
-	ulTableFlag.push_back(GSUB_TAG);	
-
 	if (iCheckNo == IDC_MN_CVT_TTF_RD) {		
 		TCHAR szFilters[] = _T("Truetype 文件(*.ttf)|*.ttf||");
 		CFileDialog  saveFileDlg(FALSE, _T(""), _T(""), OFN_LONGNAMES | OFN_FILEMUSTEXIST, szFilters);
@@ -301,8 +299,12 @@ void CHYFontSmartShaperView::OnFileSave()
 	{
 		::XSysproxy().LoadAdvancedTypographicTables(&m_FontEnCodec);
 	}
-
+	else if (m_FontDeCodec.FindFlag(GSUB_TAG))
+	{
+		ulTableFlag.push_back(GSUB_TAG);
+	}
 	m_FontEnCodec.MakeHYCodeMap();
+
 	if (m_FontEnCodec.Encode((LPTSTR)(LPCTSTR)strFileName, ulTableFlag, ::XSysproxy().m_tagOpeionPrm) == HY_NOERROR)
 		AfxMessageBox(_T("字库生成完成"));
 	else
@@ -3018,7 +3020,7 @@ void CHYFontSmartShaperView::OnChnvert()
 		CString strOutLine;
 		//strOutLine.Format("sub \\%s by \\%s.vert;\n", strLine, strLine);
 		//临时用于calt
-		strOutLine.Format("sub \\uni%s \\uni%s by \\uni2E80;\n", strLine, strLine);
+		strOutLine.Format("sub \\uni%s \\uni%s ' by \\uni2E80;\n", strLine, strLine);
 		stdOutFile.WriteString(strOutLine);
 	}
 	stdOutFile.Flush();
@@ -3112,6 +3114,9 @@ void	CHYFontSmartShaperView::GetFntSubset(char* strSrcFnt, std::vector<unsigned 
 	Encode.m_iFontType = Decode.m_iFontType;
 	Encode.m_HYOS2.version = Decode.m_HYOS2.version;
 
+
+	//miss char 是必须的
+	Encode.m_vtHYGlyphs.push_back(Decode.m_vtHYGlyphs[0]);	
 	CHYFontFunc::GetSubsetbyUni(Decode.m_vtHYGlyphs, vtUni, Encode.m_vtHYGlyphs);
 
 	::XSysproxy().InitEncodeOption(Encode);
@@ -3339,488 +3344,10 @@ void CHYFontSmartShaperView::OnEmojiExport()
 
 }	// end of void CHYFontSmartShaperView::OnEmojiExport()
 
-void CHYFontSmartShaperView::XmlToHead(CMarkup& mkEmoji, CHYFontCodec& FontEnCodec)
-{
-	if (mkEmoji.FindElem("Head"))
-	{	
-		mkEmoji.IntoElem();
-		mkEmoji.FindElem("version");
-		FontEnCodec.m_HYhead.version.value = ::HY_float_to_HYFIXED(atof(mkEmoji.GetData())).value;
-		FontEnCodec.m_HYhead.version.fract = ::HY_float_to_HYFIXED(atof(mkEmoji.GetData())).fract;
-		mkEmoji.FindElem("fontversion");
-		FontEnCodec.m_HYhead.fontRevision.value = ::HY_float_to_HYFIXED(atof(mkEmoji.GetData())).value;
-		FontEnCodec.m_HYhead.fontRevision.fract = ::HY_float_to_HYFIXED(atof(mkEmoji.GetData())).fract;
-		mkEmoji.FindElem("flag");
-		FontEnCodec.m_HYhead.flags = ::HY_float_to_HYFIXED(atof(mkEmoji.GetData())).value;
-		mkEmoji.FindElem("Em");
-		FontEnCodec.m_HYhead.unitsPerEm = atoi(mkEmoji.GetData());
-		mkEmoji.FindElem("xMin");
-		FontEnCodec.m_HYhead.xMin = atoi(mkEmoji.GetData());
-		mkEmoji.FindElem("yMin");
-		FontEnCodec.m_HYhead.yMin = atoi(mkEmoji.GetData());
-		mkEmoji.FindElem("xMax");
-		FontEnCodec.m_HYhead.xMax = atoi(mkEmoji.GetData());
-		mkEmoji.FindElem("yMax");
-		FontEnCodec.m_HYhead.yMax = atoi(mkEmoji.GetData());
-		mkEmoji.OutOfElem();
-
-		FontEnCodec.m_HYhead.magicNumber = 0x5F0F3CF5;
-
-		__time64_t	 tspace = 2082844799;
-		CTime tCurTime = CTime::GetCurrentTime();
-		__time64_t  t64CurTime = tCurTime.GetTime();
-		t64CurTime += tspace;
-		char p[8] = { 0 };
-		CopyMemory((PBYTE)p, &t64CurTime, sizeof(__time64_t));
-		for (int i = 0; i < 8; i++) {
-			FontEnCodec.m_HYhead.created[i] = p[7 - i];
-			FontEnCodec.m_HYhead.modified[i] = p[7 - i];
-		}
-	}
-
-}	// end of void CHYFontSmartShaperView::XmlToHead()
-
-void CHYFontSmartShaperView::XmlToHhea(CMarkup& mkEmoji, CHYFontCodec& FontEnCodec)
-{
-	if (mkEmoji.FindElem("Hhea"))
-	{
-		mkEmoji.IntoElem();
-		mkEmoji.FindElem("ascender");
-		FontEnCodec.m_HYHhea.Ascender = atoi(mkEmoji.GetData());		
-		mkEmoji.FindElem("descender");
-		FontEnCodec.m_HYHhea.Descender = atoi(mkEmoji.GetData());		
-		mkEmoji.FindElem("lineGap");
-		FontEnCodec.m_HYHhea.LineGap = atoi(mkEmoji.GetData());		
-		mkEmoji.OutOfElem();
-
-		FontEnCodec.m_HYHhea.version.value = 1;
-		FontEnCodec.m_HYHhea.version.fract = 0;
-		FontEnCodec.m_HYHhea.advanceWidthMax = FontEnCodec.m_HYhead.unitsPerEm;
-		FontEnCodec.m_HYHhea.minLeftSideBearing = 0;
-		FontEnCodec.m_HYHhea.minRightSideBearing = 0;
-		FontEnCodec.m_HYHhea.xMaxExtent = FontEnCodec.m_HYhead.unitsPerEm;
-		FontEnCodec.m_HYHhea.caretSlopeRise = 1;
-		FontEnCodec.m_HYHhea.caretSlopeRun = 0;
-		FontEnCodec.m_HYHhea.caretOffset = 0;
-		FontEnCodec.m_HYHhea.reserved1 = 0;
-		FontEnCodec.m_HYHhea.reserved2 = 0;
-		FontEnCodec.m_HYHhea.reserved3 = 0;
-		FontEnCodec.m_HYHhea.reserved4 = 0;
-		FontEnCodec.m_HYHhea.metricDataFormat = 0;
-		FontEnCodec.m_HYHhea.numberOfHMetrics = 1;
-	}
-
-	for (int i = 0; i < FontEnCodec.m_HYMaxp.numGlyphs; i++)
-	{
-		HMTX_LONGHORMERTRIC h_Mertric;
-		h_Mertric.advanceWidth = FontEnCodec.m_HYhead.unitsPerEm;
-		h_Mertric.lsb = 0;
-		FontEnCodec.m_HYHmtx.vtLonghormetric.push_back(h_Mertric);
-	}
-
-}	// void CHYFontSmartShaperView::XmlToHhea()
-
-void CHYFontSmartShaperView::XmlTomaxp(CMarkup& mkEmoji, CHYFontCodec& FontEnCodec)
-{
-	if (mkEmoji.FindElem("maxp"))
-	{
-		mkEmoji.IntoElem();
-		mkEmoji.FindElem("numgGlyphs");
-		FontEnCodec.m_HYMaxp.numGlyphs = atoi(mkEmoji.GetData());
-		mkEmoji.OutOfElem();
-	}
-
-	FontEnCodec.m_HYMaxp.version.value = 1;
-	FontEnCodec.m_HYMaxp.version.fract = 0;
-	FontEnCodec.m_HYMaxp.maxPoints = 8;
-	FontEnCodec.m_HYMaxp.maxContours = 2;
-	FontEnCodec.m_HYMaxp.maxCompositePoints = 0;
-	FontEnCodec.m_HYMaxp.maxCompositeContours = 0;
-	FontEnCodec.m_HYMaxp.maxZones = 2;
-	FontEnCodec.m_HYMaxp.maxTwilightPoints = 0;
-	FontEnCodec.m_HYMaxp.maxStorage = 1;
-	FontEnCodec.m_HYMaxp.maxFunctionDefs = 1;
-	FontEnCodec.m_HYMaxp.maxInstructionDefs = 0;
-	FontEnCodec.m_HYMaxp.maxStackElements = 64;
-	FontEnCodec.m_HYMaxp.maxSizeOfInstructions = 46;
-	FontEnCodec.m_HYMaxp.maxComponentElements = 0;
-	FontEnCodec.m_HYMaxp.maxComponentDepth = 0;
-
-}	// end of void CHYFontSmartShaperView::XmlTomaxp()
-
-void CHYFontSmartShaperView::XmlToOS(CMarkup& mkEmoji, CHYFontCodec& FontEnCodec)
-{
-	if (mkEmoji.FindElem("OS2"))
-	{
-		mkEmoji.IntoElem();
-
-		FontEnCodec.m_HYOS2.version = 3;
-		mkEmoji.FindElem("AvgCharWidth");
-		FontEnCodec.m_HYOS2.xAvgCharWidth = atoi(mkEmoji.GetData());
-		mkEmoji.FindElem("WeightClass");
-		FontEnCodec.m_HYOS2.usWeightClass = atoi(mkEmoji.GetData());
-		mkEmoji.FindElem("WidthClass");
-		FontEnCodec.m_HYOS2.usWidthClass = atoi(mkEmoji.GetData());		
-		FontEnCodec.m_HYOS2.fsType = 8;
-		mkEmoji.FindElem("SubscriptXSize");
-		FontEnCodec.m_HYOS2.ySubscriptXSize = atoi(mkEmoji.GetData());
-		mkEmoji.FindElem("SubscriptYSize");
-		FontEnCodec.m_HYOS2.ySubscriptYSize = atoi(mkEmoji.GetData());
-		mkEmoji.FindElem("SubscriptXOffset");
-		FontEnCodec.m_HYOS2.ySubscriptXOffset = atoi(mkEmoji.GetData());
-		mkEmoji.FindElem("SubscriptYOffset");
-		FontEnCodec.m_HYOS2.ySubscriptXOffset = atoi(mkEmoji.GetData());
-		mkEmoji.FindElem("SuperscriptXSize");
-		FontEnCodec.m_HYOS2.ySuperscriptXSize = atoi(mkEmoji.GetData());
-		mkEmoji.FindElem("SuperscriptYSize");
-		FontEnCodec.m_HYOS2.ySuperscriptYSize = atoi(mkEmoji.GetData());
-		mkEmoji.FindElem("SuperscriptXOffset");
-		FontEnCodec.m_HYOS2.ySuperscriptXOffset = atoi(mkEmoji.GetData());
-		mkEmoji.FindElem("SuperscriptYOffset");
-		FontEnCodec.m_HYOS2.ySuperscriptYOffset = atoi(mkEmoji.GetData());
-		mkEmoji.FindElem("StrikeoutSize");
-		FontEnCodec.m_HYOS2.yStrikeoutSize = atoi(mkEmoji.GetData());
-		mkEmoji.FindElem("StrikeoutPosition");
-		FontEnCodec.m_HYOS2.yStrikeoutPosition = atoi(mkEmoji.GetData());
-		mkEmoji.FindElem("UnicodeRange1");
-		FontEnCodec.m_HYOS2.ulUnicodeRange1 = atoi(mkEmoji.GetData());
-		mkEmoji.FindElem("UnicodeRange2");
-		FontEnCodec.m_HYOS2.ulUnicodeRange2 = atoi(mkEmoji.GetData());
-		mkEmoji.FindElem("UnicodeRange3");
-		FontEnCodec.m_HYOS2.ulUnicodeRange3 = atoi(mkEmoji.GetData());
-		mkEmoji.FindElem("UnicodeRange4");
-		FontEnCodec.m_HYOS2.ulUnicodeRange4 = atoi(mkEmoji.GetData());
-		mkEmoji.FindElem("fsSelection");
-		FontEnCodec.m_HYOS2.fsSelection = atoi(mkEmoji.GetData());
-		mkEmoji.FindElem("FirstCharIndex");
-		FontEnCodec.m_HYOS2.usFirstCharIndex = atoi(mkEmoji.GetData());
-		mkEmoji.FindElem("LastCharIndex");
-		FontEnCodec.m_HYOS2.usLastCharIndex = atoi(mkEmoji.GetData());
-		mkEmoji.FindElem("TypoAscender");
-		FontEnCodec.m_HYOS2.sTypoAscender = atoi(mkEmoji.GetData());
-		mkEmoji.FindElem("TypoDescender");
-		FontEnCodec.m_HYOS2.sTypoDescender = atoi(mkEmoji.GetData());
-		mkEmoji.FindElem("TypoLineGap");
-		FontEnCodec.m_HYOS2.sTypoLineGap = atoi(mkEmoji.GetData());
-		mkEmoji.FindElem("WinAscent");
-		FontEnCodec.m_HYOS2.usWinAscent = atoi(mkEmoji.GetData());
-		mkEmoji.FindElem("WinDescent");
-		FontEnCodec.m_HYOS2.usWinDescent = atoi(mkEmoji.GetData());
-		mkEmoji.FindElem("CodePageRange1");
-		FontEnCodec.m_HYOS2.ulCodePageRange1 = atoi(mkEmoji.GetData());
-		mkEmoji.FindElem("CodePageRange2");
-		FontEnCodec.m_HYOS2.ulCodePageRange2 = atoi(mkEmoji.GetData());		
-		mkEmoji.FindElem("Height");
-		FontEnCodec.m_HYOS2.sxHeight = atoi(mkEmoji.GetData());
-		mkEmoji.FindElem("CapHeight");
-		FontEnCodec.m_HYOS2.sCapHeight = atoi(mkEmoji.GetData());
-		
-		FontEnCodec.m_HYOS2.vtachVendID.push_back('H');
-		FontEnCodec.m_HYOS2.vtachVendID.push_back('N');
-		FontEnCodec.m_HYOS2.vtachVendID.push_back('Y');
-		FontEnCodec.m_HYOS2.vtachVendID.push_back('I');
-		FontEnCodec.m_HYOS2.usDefaultChar = 0;
-		FontEnCodec.m_HYOS2.usBreakChar = 0x0020;
-		FontEnCodec.m_HYOS2.usMaxContext = 1;	
-
-		mkEmoji.OutOfElem();
-	}
-
-}	// end of void CHYFontSmartShaperView::XmlToOS()
-
-void CHYFontSmartShaperView::XmlToEmoji(CMarkup& mkEmoji,CHYFontCodec& FontEnCodec)
-{
-	CHYCodeMap& HYCodeMap = m_FontEnCodec.m_HYCodeMap;	
-	CHYCBLC& CBLC = m_FontEnCodec.m_HYCblc;
-	CHYCBDT& CBDT = m_FontEnCodec.m_HYCBDT;
-
-	CBLC.Header.version.value = 3;
-	CBLC.Header.version.fract = 0;
-
-	if (mkEmoji.FindElem("Emoji"))
-	{
-		mkEmoji.IntoElem();
-		if (mkEmoji.FindElem("OpenType"))
-		{
-			mkEmoji.IntoElem();
-			while (mkEmoji.FindElem("bitmapSizeTable"))
-			{
-				mkEmoji.IntoElem();
-				BitmapSize bmpSz;
-
-				if (mkEmoji.FindElem("sbitLineMetrics_hori"))
-				{
-					mkEmoji.IntoElem();
-
-					mkEmoji.FindElem("ascender");
-					bmpSz.Hori.ascender = (char)atoi(mkEmoji.GetData());
-					mkEmoji.FindElem("descender");
-					bmpSz.Hori.descender = (char)atoi(mkEmoji.GetData());
-					mkEmoji.FindElem("widthMax");
-					bmpSz.Hori.widthMax = (unsigned char)atoi(mkEmoji.GetData());
-					mkEmoji.FindElem("caretSlopeNumerator");
-					bmpSz.Hori.caretSlopeNumerator = (char)atoi(mkEmoji.GetData());
-					mkEmoji.FindElem("caretSlopeDenominator");
-					bmpSz.Hori.caretSlopeDenominator = (char)atoi(mkEmoji.GetData());
-					mkEmoji.FindElem("caretOffset");
-					bmpSz.Hori.caretOffset = (char)atoi(mkEmoji.GetData());
-					mkEmoji.FindElem("minOriginSB");
-					bmpSz.Hori.minOriginSB = (char)atoi(mkEmoji.GetData());
-					mkEmoji.FindElem("minAdvanceSB");
-					bmpSz.Hori.minAdvanceSB = (char)atoi(mkEmoji.GetData());
-					mkEmoji.FindElem("maxBeforeBL");
-					bmpSz.Hori.maxBeforeBL = (char)atoi(mkEmoji.GetData());
-					mkEmoji.FindElem("minAfterBL");
-					bmpSz.Hori.minAfterBL = (char)atoi(mkEmoji.GetData());
-					mkEmoji.FindElem("pad1");
-					bmpSz.Hori.pad1 = (char)atoi(mkEmoji.GetData());
-					mkEmoji.FindElem("pad2");
-					bmpSz.Hori.pad2 = (char)atoi(mkEmoji.GetData());
-					mkEmoji.OutOfElem();
-				}
-
-				if (mkEmoji.FindElem("sbitLineMetrics_vert"))
-				{
-					mkEmoji.IntoElem();
-					mkEmoji.FindElem("ascender");
-					bmpSz.Vert.ascender = (char)atoi(mkEmoji.GetData());
-					mkEmoji.FindElem("descender");
-					bmpSz.Vert.descender = (char)atoi(mkEmoji.GetData());
-					mkEmoji.FindElem("widthMax");
-					bmpSz.Vert.widthMax = (unsigned char)atoi(mkEmoji.GetData());
-					mkEmoji.FindElem("caretSlopeNumerator");
-					bmpSz.Vert.caretSlopeNumerator = (char)atoi(mkEmoji.GetData());
-					mkEmoji.FindElem("caretSlopeDenominator");
-					bmpSz.Vert.caretSlopeDenominator = (char)atoi(mkEmoji.GetData());
-					mkEmoji.FindElem("caretOffset");
-					bmpSz.Vert.caretOffset = (char)atoi(mkEmoji.GetData());
-					mkEmoji.FindElem("minOriginSB");
-					bmpSz.Vert.minOriginSB = (char)atoi(mkEmoji.GetData());
-					mkEmoji.FindElem("minAdvanceSB");
-					bmpSz.Vert.minAdvanceSB = (char)atoi(mkEmoji.GetData());
-					mkEmoji.FindElem("maxBeforeBL");
-					bmpSz.Vert.maxBeforeBL = (char)atoi(mkEmoji.GetData());
-					mkEmoji.FindElem("minAfterBL");
-					bmpSz.Vert.minAfterBL = (char)atoi(mkEmoji.GetData());
-					mkEmoji.FindElem("pad1");
-					bmpSz.Vert.pad1 = (char)atoi(mkEmoji.GetData());
-					mkEmoji.FindElem("pad2");
-					bmpSz.Vert.pad2 = (char)atoi(mkEmoji.GetData());
-					mkEmoji.OutOfElem();
-				}
-
-				if (mkEmoji.FindElem("startGlyphIndex"))
-				{
-					bmpSz.startGlyphIndex = (unsigned short)atoi(mkEmoji.GetData());
-				}
-
-				if (mkEmoji.FindElem("endGlyphIndex"))
-				{
-					bmpSz.endGlyphIndex = (unsigned short)atoi(mkEmoji.GetData());
-				}
-
-				if (mkEmoji.FindElem("ppemX"))
-				{
-					bmpSz.ppemX = (unsigned char)atoi(mkEmoji.GetData());
-				}
-
-				if (mkEmoji.FindElem("ppemY"))
-				{
-					bmpSz.ppemY = (unsigned char)atoi(mkEmoji.GetData());
-				}
-
-				if (mkEmoji.FindElem("bitDepth"))
-				{
-					bmpSz.bitDepth = (unsigned char)atoi(mkEmoji.GetData());
-				}
-
-				if (mkEmoji.FindElem("flags"))
-				{
-					bmpSz.Flags = (unsigned char)atoi(mkEmoji.GetData());
-				}
-
-				if (mkEmoji.FindElem("indexSubTableArray"))
-				{	
-					IndexSubTableArray	subTableArray;
-					subTableArray.firstGlyphIndex = (unsigned short)atoi(mkEmoji.GetAttrib("firstGlyphIndex"));
-					subTableArray.lastGlyphIndex = (unsigned short)atoi(mkEmoji.GetAttrib("lastGlyphIndex"));
-					subTableArray.IndxSubTable.Header.indexFormat = (unsigned short)atoi(mkEmoji.GetAttrib("IndexSubFormat"));
-					subTableArray.IndxSubTable.Header.imageFormat = (unsigned short)atoi(mkEmoji.GetAttrib("ImageFormat"));
-
-					mkEmoji.IntoElem();
-					while (mkEmoji.FindElem("glyphLoc"))
-					{	
-						CEBData	imgData;
-						if (mkEmoji.GetAttrib("unicode") != "")
-						{							
-							imgData.GID = atoi(mkEmoji.GetAttrib("id"));
-							imgData.unicode = strtol(mkEmoji.GetAttrib("unicode"), NULL, 16);
-							CHYCodeMapItem CodeItem;
-							CodeItem.iGlyphIndex = imgData.GID;
-							CodeItem.ulGlyphNo = imgData.unicode;
-							CodeItem.psName = mkEmoji.GetAttrib("name");
-							HYCodeMap.vtHYCodeMap.push_back(CodeItem);
-						}
-
-						mkEmoji.IntoElem();
-						if (subTableArray.IndxSubTable.Header.imageFormat == 17)
-						{
-							imgData.DataFromat = 17;
-							CBDTFormat17& Data17 = imgData.DataFrmt17;
-							if (mkEmoji.FindElem("smallGlyphMetrics"))
-							{
-								mkEmoji.IntoElem();
-								mkEmoji.FindElem("height");
-								Data17.smallGlyphMtcs.height = (char)atoi(mkEmoji.GetData());
-								mkEmoji.FindElem("width");
-								Data17.smallGlyphMtcs.width = (char)atoi(mkEmoji.GetData());
-								mkEmoji.FindElem("BearingX");
-								Data17.smallGlyphMtcs.BearingX = (char)atoi(mkEmoji.GetData());
-								mkEmoji.FindElem("BearingY");
-								Data17.smallGlyphMtcs.BearingY = (char)atoi(mkEmoji.GetData());
-								mkEmoji.FindElem("Advance");
-								Data17.smallGlyphMtcs.Advance = (char)atoi(mkEmoji.GetData());
-								mkEmoji.OutOfElem();
-							}
-
-							if (mkEmoji.FindElem("Path"))
-							{		
-								CString str = mkEmoji.GetData();
-								FILE* PngFile = fopen(str, "rb");
-								if (PngFile != NULL)
-								{
-									unsigned long fLength = HY_FileLength(mkEmoji.GetData());
-									fseek(PngFile, 0, SEEK_SET);
-
-									unsigned char uc;
-									Data17.dataLen = fLength;
-									for (unsigned long z1 = 0; z1 < fLength; z1++)
-									{
-										fread(&uc, 1, 1, PngFile);
-										Data17.data.push_back(uc);
-									}
-									fclose(PngFile);
-								}								
-							}
-						}
-						mkEmoji.OutOfElem();
-
-						subTableArray.IndxSubTable.vtEBData.push_back(imgData);
-						
-					}
-					bmpSz.vtIndexSubTableArray.push_back(subTableArray);
-					mkEmoji.OutOfElem();
-
-				}	// end of indexSubTableArray
-
-				mkEmoji.OutOfElem();
-				bmpSz.numberofIndexSubTables = bmpSz.vtIndexSubTableArray.size();
-				CBLC.vtBitmapSizeTb.push_back(bmpSz);
-			}
-			mkEmoji.OutOfElem();
-			CBLC.Header.numsizes = CBLC.vtBitmapSizeTb.size();
-		}
-		mkEmoji.OutOfElem();
-		HYCodeMap.QuickSortbyUnicode();
-	}
-
-}	// end of void CHYFontSmartShaperView::XmlToEmoji()
-
 void CHYFontSmartShaperView::OnEmojiMk()
 {
-	TCHAR	szFilters[] = _T("XML 文件(*.xml)|*.xml||");
-	CFileDialog  openFileDlg(TRUE, _T(""), _T(""), OFN_LONGNAMES | OFN_FILEMUSTEXIST, szFilters);
-	if (openFileDlg.DoModal() != IDOK)	return;
-
-	CString strXmlFile = openFileDlg.GetPathName();	
-
-	m_FontEnCodec.SetDefault();
-
-	CMarkup mkEmoji;
-	if (!mkEmoji.Load(strXmlFile)) return;
-	mkEmoji.ResetMainPos();
-	if (mkEmoji.FindElem("Font"))
-	{
-		mkEmoji.IntoElem();
-		XmlTomaxp(mkEmoji, m_FontEnCodec);
-		XmlToHead(mkEmoji, m_FontEnCodec);
-		XmlToHhea(mkEmoji, m_FontEnCodec);
-		XmlToOS(mkEmoji, m_FontEnCodec);
-		XmlToEmoji(mkEmoji, m_FontEnCodec);
-		mkEmoji.OutOfElem();
-	}	
-
-	size_t stGlyphNum = m_FontEnCodec.m_vtHYGlyphs.size();
-	std::vector<unsigned long> ulTableFlag;
-	ulTableFlag.push_back(CMAP_TAG);	
-	ulTableFlag.push_back(HEAD_TAG);
-	ulTableFlag.push_back(HHEA_TAG);
-	ulTableFlag.push_back(HMTX_TAG);
-	ulTableFlag.push_back(MAXP_TAG);
-	ulTableFlag.push_back(NAME_TAG);
-	ulTableFlag.push_back(OS2_TAG);
-	ulTableFlag.push_back(POST_TAG);
-	ulTableFlag.push_back(CBLC_TAG);
-	ulTableFlag.push_back(CBDT_TAG);
-	
-	std::string strEmoji = ::HY_GetDirFromPath(string(strXmlFile))+ HY_GetFileNameFromPath(string(strXmlFile))
-		+".ttf";
-	
-	// 
-	CHYCodeMapItem   mapItem;
-	mapItem.iGlyphIndex = 0;
-	mapItem.ulGlyphNo = 0xffff;
-	m_FontEnCodec.m_HYCodeMap.vtHYCodeMap.push_back(mapItem);
-	mapItem.iGlyphIndex = 1;
-	mapItem.ulGlyphNo = 0x0000;
-	m_FontEnCodec.m_HYCodeMap.vtHYCodeMap.push_back(mapItem);
-	mapItem.iGlyphIndex = 2;
-	mapItem.ulGlyphNo = 0x000d;
-	m_FontEnCodec.m_HYCodeMap.vtHYCodeMap.push_back(mapItem);
-	mapItem.iGlyphIndex = 3;
-	mapItem.ulGlyphNo = 0x0020;
-	m_FontEnCodec.m_HYCodeMap.vtHYCodeMap.push_back(mapItem);
-	mapItem.iGlyphIndex = 4;
-	mapItem.ulGlyphNo = 0x200d;
-	m_FontEnCodec.m_HYCodeMap.vtHYCodeMap.push_back(mapItem);
-	m_FontEnCodec.m_HYCodeMap.QuickSortbyUnicode();
-
-	m_FontEnCodec.m_HYCmap.SetDefault();
-	CMAP_TABLE_ENTRY	entry;	
-	entry.plat_ID = 3;
-	entry.plat_encod_ID = 10;
-	entry.format = CMAP_ENCODE_FT_12;
-	m_FontEnCodec.m_HYCmap.vtCamp_tb_entry.push_back(entry);
-	m_FontEnCodec.m_HYCmap.version = 0;
-	m_FontEnCodec.m_HYCmap.numSubTable = (unsigned short)m_FontEnCodec.m_HYCmap.vtCamp_tb_entry.size();
-
-	// Hhea
-	CHYHhea& Hhea = m_FontEnCodec.m_HYHhea;
-	Hhea.version.value = 1;
-	Hhea.version.fract = 0;
-	Hhea.Ascender = m_FontEnCodec.m_HYhead.yMax;
-	Hhea.Descender = m_FontEnCodec.m_HYhead.yMin;
-	Hhea.LineGap = 0;
-	Hhea.advanceWidthMax = m_FontEnCodec.m_HYhead.unitsPerEm;
-	Hhea.minLeftSideBearing = 0;
-	Hhea.minRightSideBearing = 0;
-	Hhea.xMaxExtent = m_FontEnCodec.m_HYHhea.minLeftSideBearing + (m_FontEnCodec.m_HYhead.xMax - m_FontEnCodec.m_HYhead.xMin);
-	Hhea.numberOfHMetrics = 1;
-	//HMTX
-	m_FontEnCodec.m_HYHmtx.SetDefault();
-	for (size_t i = 0; i < m_FontEnCodec.m_HYMaxp.numGlyphs; i++)
-	{
-		HMTX_LONGHORMERTRIC  h_Mertric;
-		h_Mertric.advanceWidth = m_FontEnCodec.m_HYhead.unitsPerEm;
-		h_Mertric.lsb = 0;
-		m_FontEnCodec.m_HYHmtx.vtLonghormetric.push_back(h_Mertric);
-	}
-	::XSysproxy().MakeFontName(m_FontEnCodec);
-
-	if (m_FontEnCodec.Encode((char*)strEmoji.c_str(), ulTableFlag, ::XSysproxy().m_tagOpeionPrm) == HY_NOERROR)
-		AfxMessageBox(_T("字库生成完成"));
-	else
-		AfxMessageBox(_T("字库生成失败"));
+	CHYEmjioDlg dlg;
+	dlg.DoModal();
 
 }	// end of void CHYFontSmartShaperView::OnEmojiMk()
 

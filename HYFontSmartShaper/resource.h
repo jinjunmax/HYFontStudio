@@ -36,6 +36,7 @@
 #define ID_CHARS_COMPARE_DLG            369
 #define IDD_RSTNM_DLG                   374
 #define IDD_TXTCMP_DLG                  377
+#define IDD_EMJ_DLG                     379
 #define IDC_MN_CNVTR_STC                1001
 #define IDC_MN_CNTRL_STC                1002
 #define IDC_MN_CVTS_BTN                 1003
@@ -251,6 +252,14 @@
 #define IDC_TCMPDST_BTN                 1205
 #define IDC_TCMPFL1_RD                  1206
 #define IDC_PTN_OLDSTND_CHK             1207
+#define IDC_EMJ_CNGFILE_BTN             1208
+#define IDC_EMJ_CNGFILE_EDIT            1209
+#define IDC_EMJ_CDEFILE_EDIT            1210
+#define IDC_EMJ_CDEFILE_BTN             1211
+#define IDC_EMJ_MK_BTN                  1212
+#define IDC_EMJ_HMFILE_EDIT             1213
+#define IDC_EMJ_CDEFILE_BTN2            1214
+#define IDC_EMJ_HMEFILE_BTN             1214
 #define IDC_TSC_ISCIDY_RAD              1235
 #define IDC_TSC_ISCIDN_RAD              1236
 #define IDC_TSC_RGST_EDIT               1237
@@ -368,9 +377,9 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        379
+#define _APS_NEXT_RESOURCE_VALUE        381
 #define _APS_NEXT_COMMAND_VALUE         32914
-#define _APS_NEXT_CONTROL_VALUE         1208
+#define _APS_NEXT_CONTROL_VALUE         1210
 #define _APS_NEXT_SYMED_VALUE           310
 #endif
 #endif

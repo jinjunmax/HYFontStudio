@@ -1,6 +1,5 @@
 // FongSVGDlg.cpp : implementation file
 //
-
 #include "stdafx.h"
 #include "HYFontSmartShaper.h"
 #include "FongSVGDlg.h"

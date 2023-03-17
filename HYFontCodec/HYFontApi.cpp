@@ -220,6 +220,7 @@ void HeadToXml(CMarkup& xml, CHYFontCodec& FontCodec)
 	xml.AddElem("yMin", FontCodec.m_HYhead.yMin);
 	xml.AddElem("xMax", FontCodec.m_HYhead.xMax);
 	xml.AddElem("yMax", FontCodec.m_HYhead.yMax);
+	xml.AddElem("macStyle", FontCodec.m_HYhead.macStyle);
 	xml.OutOfElem();
 
 }	// end of void HeadToXml()
@@ -231,6 +232,13 @@ void HheaToXml(CMarkup& xml, CHYFontCodec& FontCodec)
 	xml.AddElem("ascender", FontCodec.m_HYHhea.Ascender);
 	xml.AddElem("descender", FontCodec.m_HYHhea.Descender);	
 	xml.AddElem("lineGap", FontCodec.m_HYHhea.LineGap);
+	xml.AddElem("minLeftSideBearing", FontCodec.m_HYHhea.minLeftSideBearing);
+	xml.AddElem("minRightSideBearing", FontCodec.m_HYHhea.minRightSideBearing);
+	xml.AddElem("advanceWidthMax", FontCodec.m_HYHhea.advanceWidthMax);
+	xml.AddElem("xMaxExtent", FontCodec.m_HYHhea.xMaxExtent);
+	xml.AddElem("caretSlopeRise", FontCodec.m_HYHhea.caretSlopeRise);
+	xml.AddElem("caretSlopeRun", FontCodec.m_HYHhea.caretSlopeRun);
+	xml.AddElem("caretOffset", FontCodec.m_HYHhea.caretOffset);
 	xml.OutOfElem();
 
 }	// end of void HheaToXml()
@@ -240,6 +248,19 @@ void maxpToXml(CMarkup& xml, CHYFontCodec& FontCodec)
 	xml.AddElem("maxp");
 	xml.IntoElem();
 	xml.AddElem("numgGlyphs", FontCodec.m_HYMaxp.numGlyphs);
+	xml.AddElem("maxPoints", FontCodec.m_HYMaxp.maxPoints);
+	xml.AddElem("maxContours", FontCodec.m_HYMaxp.maxContours);
+	xml.AddElem("maxCompositePoints", FontCodec.m_HYMaxp.maxCompositePoints);
+	xml.AddElem("maxCompositeContours", FontCodec.m_HYMaxp.maxCompositeContours);
+	xml.AddElem("maxZones", FontCodec.m_HYMaxp.maxZones);
+	xml.AddElem("maxTwilightPoints", FontCodec.m_HYMaxp.maxTwilightPoints);
+	xml.AddElem("maxStorage", FontCodec.m_HYMaxp.maxStorage);
+	xml.AddElem("maxFunctionDefs", FontCodec.m_HYMaxp.maxFunctionDefs);
+	xml.AddElem("maxInstructionDefs", FontCodec.m_HYMaxp.maxInstructionDefs);
+	xml.AddElem("maxStackElements", FontCodec.m_HYMaxp.maxStackElements);
+	xml.AddElem("maxSizeOfInstructions", FontCodec.m_HYMaxp.maxSizeOfInstructions);
+	xml.AddElem("maxComponentElements", FontCodec.m_HYMaxp.maxComponentElements);
+	xml.AddElem("maxComponentDepth", FontCodec.m_HYMaxp.maxComponentDepth);
 	xml.OutOfElem();
 
 }	// end of void maxpToXml()
@@ -249,9 +270,11 @@ void OS2ToXml(CMarkup& xml, CHYFontCodec& FontCodec)
 	xml.AddElem("OS2");
 
 	xml.IntoElem();	
+	xml.AddElem("version", FontCodec.m_HYOS2.version);
 	xml.AddElem("AvgCharWidth", FontCodec.m_HYOS2.xAvgCharWidth);
 	xml.AddElem("WeightClass", FontCodec.m_HYOS2.usWeightClass);
-	xml.AddElem("WidthClass", FontCodec.m_HYOS2.usWidthClass);	
+	xml.AddElem("WidthClass", FontCodec.m_HYOS2.usWidthClass);
+	xml.AddElem("fsType", FontCodec.m_HYOS2.fsType);
 	xml.AddElem("SubscriptXSize", FontCodec.m_HYOS2.ySubscriptXSize);
 	xml.AddElem("SubscriptYSize", FontCodec.m_HYOS2.ySubscriptYSize);
 	xml.AddElem("SubscriptXOffset", FontCodec.m_HYOS2.ySubscriptXOffset);
@@ -262,6 +285,7 @@ void OS2ToXml(CMarkup& xml, CHYFontCodec& FontCodec)
 	xml.AddElem("SuperscriptYOffset", FontCodec.m_HYOS2.ySuperscriptYOffset);
 	xml.AddElem("StrikeoutSize", FontCodec.m_HYOS2.yStrikeoutSize);
 	xml.AddElem("StrikeoutPosition", FontCodec.m_HYOS2.yStrikeoutPosition);
+	xml.AddElem("sFamilyClass", FontCodec.m_HYOS2.sFamilyClass);
 	xml.AddElem("UnicodeRange1", FontCodec.m_HYOS2.ulUnicodeRange1);
 	xml.AddElem("UnicodeRange2", FontCodec.m_HYOS2.ulUnicodeRange2);
 	xml.AddElem("UnicodeRange3", FontCodec.m_HYOS2.ulUnicodeRange3);
@@ -278,6 +302,9 @@ void OS2ToXml(CMarkup& xml, CHYFontCodec& FontCodec)
 	xml.AddElem("CodePageRange2", FontCodec.m_HYOS2.ulCodePageRange2);
 	xml.AddElem("Height", FontCodec.m_HYOS2.sxHeight);
 	xml.AddElem("CapHeight", FontCodec.m_HYOS2.sCapHeight);
+	xml.AddElem("usDefaultChar", FontCodec.m_HYOS2.usDefaultChar);
+	xml.AddElem("usBreakChar", FontCodec.m_HYOS2.usBreakChar);
+	xml.AddElem("usMaxContext", FontCodec.m_HYOS2.usMaxContext);
 	xml.OutOfElem();
 
 }	// end of void OS2ToXml()

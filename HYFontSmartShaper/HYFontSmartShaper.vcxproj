@@ -129,6 +129,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="CharsCompareDlg.cpp" />
+    <ClCompile Include="CHYEmjioDlg.cpp" />
     <ClCompile Include="CVrMasters.cpp" />
     <ClCompile Include="MakeTTCDlg.cpp" />
     <ClCompile Include="MKVNTDlg.cpp" />
@@ -179,6 +180,7 @@
   <ItemGroup>
     <ClInclude Include="..\include\HYFontSmartCore\HY_Global.h" />
     <ClInclude Include="CharsCompareDlg.h" />
+    <ClInclude Include="CHYEmjioDlg.h" />
     <ClInclude Include="CVrMasters.h" />
     <ClInclude Include="MakeTTCDlg.h" />
     <ClInclude Include="MKVNTDlg.h" />
