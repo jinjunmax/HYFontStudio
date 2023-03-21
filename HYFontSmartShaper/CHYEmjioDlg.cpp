@@ -131,11 +131,13 @@ void CHYEmjioDlg::XmlTomaxp(CMarkup& mkEmoji, CHYFontCodec& FontEnCodec)
 {
 	if (mkEmoji.FindElem("maxp"))
 	{
+		FontEnCodec.m_vtHYGlyphs.clear();
 		FontEnCodec.m_HYMaxp.SetDefault();
 
 		mkEmoji.IntoElem();
 		mkEmoji.FindElem("numgGlyphs");
 		FontEnCodec.m_HYMaxp.numGlyphs = atoi(mkEmoji.GetData());
+		FontEnCodec.m_vtHYGlyphs.resize(FontEnCodec.m_HYMaxp.numGlyphs);		
 		mkEmoji.FindElem("maxPoints");
 		FontEnCodec.m_HYMaxp.maxPoints = atoi(mkEmoji.GetData());
 		mkEmoji.FindElem("maxContours");
@@ -258,9 +260,44 @@ void CHYEmjioDlg::XmlToOS(CMarkup& mkEmoji, CHYFontCodec& FontEnCodec)
 
 }	// end of void CHYEmjioDlg::XmlToOS()
 
+void CHYEmjioDlg::XmlToNoImageChar(CMarkup& mkEmoji, CHYFontCodec& FontEnCodec)
+{
+	int iGid = 0;
+	std::vector<CHYGlyph>& vtHYGlyphs =  FontEnCodec.m_vtHYGlyphs;
+	if (mkEmoji.FindElem("NoImgChar"))
+	{
+		mkEmoji.IntoElem();
+		while (mkEmoji.FindElem("Char"))
+		{
+			mkEmoji.IntoElem();
+
+			mkEmoji.FindElem("GID");
+			iGid = atoi(mkEmoji.GetData());			
+			mkEmoji.FindElem("Name");
+			vtHYGlyphs[iGid].strPostName = mkEmoji.GetData();
+			mkEmoji.FindElem("unicode");
+			if (!mkEmoji.GetData().IsEmpty())
+			{				
+				vtHYGlyphs[iGid].vtUnicode.push_back(strtol(mkEmoji.GetData(), NULL, 16));
+			}
+			
+			mkEmoji.FindElem("minLeftSideBearing");
+			vtHYGlyphs[iGid].minX = atoi(mkEmoji.GetData());
+			mkEmoji.FindElem("advanceWidth");
+			vtHYGlyphs[iGid].advanceWidth = atoi(mkEmoji.GetData());
+
+			mkEmoji.OutOfElem();
+		}		
+		mkEmoji.OutOfElem();
+	}
+
+}	// end of void CHYEmjioDlg::XmlToNoImageChar()
+
 void CHYEmjioDlg::XmlToEmoji(CMarkup& mkEmoji, CHYFontCodec& FntEncode)
 {
-	CHYCodeMap& HYCodeMap = FntEncode.m_HYCodeMap;
+	std::vector<CHYGlyph>& vtGlyphs = FntEncode.m_vtHYGlyphs;
+
+	//CHYCodeMap& HYCodeMap = FntEncode.m_HYCodeMap;
 	CHYCBLC& CBLC = FntEncode.m_HYCblc;
 	CHYCBDT& CBDT = FntEncode.m_HYCBDT;
 
@@ -384,16 +421,15 @@ void CHYEmjioDlg::XmlToEmoji(CMarkup& mkEmoji, CHYFontCodec& FntEncode)
 					while (mkEmoji.FindElem("glyphLoc"))
 					{
 						CEBData	imgData;
-						if (mkEmoji.GetAttrib("unicode") != "")
-						{
-							imgData.GID = atoi(mkEmoji.GetAttrib("id"));
+						imgData.GID = atoi(mkEmoji.GetAttrib("id"));
+
+						if (!mkEmoji.GetAttrib("unicode").IsEmpty()) {
 							imgData.unicode = strtol(mkEmoji.GetAttrib("unicode"), NULL, 16);
-							CHYCodeMapItem CodeItem;
-							CodeItem.iGlyphIndex = imgData.GID;
-							CodeItem.ulGlyphNo = imgData.unicode;
-							CodeItem.psName = mkEmoji.GetAttrib("name");
-							//HYCodeMap.vtHYCodeMap.push_back(CodeItem);
+							vtGlyphs[imgData.GID].vtUnicode.push_back(imgData.unicode);
 						}
+						vtGlyphs[imgData.GID].minX = 0;
+						vtGlyphs[imgData.GID].advanceWidth = FntEncode.m_HYHhea.advanceWidthMax;
+						vtGlyphs[imgData.GID].strPostName = mkEmoji.GetAttrib("name");
 
 						mkEmoji.IntoElem();
 						if (subTableArray.IndxSubTable.Header.imageFormat == 17)
@@ -467,22 +503,47 @@ void CHYEmjioDlg::SetTables(CHYFontCodec& FntEncode)
 	entry.format = CMAP_ENCODE_FT_12;
 	FntEncode.m_HYCmap.vtCamp_tb_entry.push_back(entry);
 	FntEncode.m_HYCmap.version = 0;
-	FntEncode.m_HYCmap.numSubTable = (unsigned short)FntEncode.m_HYCmap.vtCamp_tb_entry.size();
-	
-	//HMTX
+	FntEncode.m_HYCmap.numSubTable = (unsigned short)FntEncode.m_HYCmap.vtCamp_tb_entry.size();	
+
 	FntEncode.m_HYHhea.numberOfHMetrics = 0;
-	int nums = FntEncode.m_HYMaxp.numGlyphs;
-
-	int iBaseadvanceWidth = FntEncode.m_HYHmtx.vtLonghormetric[--nums].advanceWidth;
-	while (--nums >= 0) {
-		if (FntEncode.m_HYHmtx.vtLonghormetric[nums].advanceWidth == iBaseadvanceWidth)
-			FntEncode.m_HYHhea.numberOfHMetrics++;
-		else
-			break;
+	int szGlyphNum = FntEncode.m_HYMaxp.numGlyphs;
+	if (szGlyphNum > 0) {
+		int iBaseadvanceWidth = FntEncode.m_vtHYGlyphs[--szGlyphNum].advanceWidth;
+		while (--szGlyphNum >= 0) {
+			if (FntEncode.m_vtHYGlyphs[szGlyphNum].advanceWidth == iBaseadvanceWidth)
+				FntEncode.m_HYHhea.numberOfHMetrics++;
+			else
+				break;
+		}
+		FntEncode.m_HYHhea.numberOfHMetrics = (unsigned short)FntEncode.m_HYMaxp.numGlyphs - FntEncode.m_HYHhea.numberOfHMetrics;
 	}
-	FntEncode.m_HYHhea.numberOfHMetrics = (unsigned short)FntEncode.m_HYMaxp.numGlyphs - FntEncode.m_HYHhea.numberOfHMetrics;
+	//HMTX
+	FntEncode.m_HYHmtx.SetDefault();
+	for (size_t i = 0; i < FntEncode.m_HYMaxp.numGlyphs; i++)
+	{
+		HMTX_LONGHORMERTRIC  h_Mertric;
+		h_Mertric.advanceWidth = FntEncode.m_vtHYGlyphs[i].advanceWidth;
+		h_Mertric.lsb = FntEncode.m_vtHYGlyphs[i].minX;
+		FntEncode.m_HYHmtx.vtLonghormetric.push_back(h_Mertric);
+	}
 
-	
+	FntEncode.m_tagOption.bCmplVert = FALSE;
+	FntEncode.m_tagOption.bKangXi = FALSE;
+	FntEncode.m_tagOption.bHanyi = FALSE;
+	FntEncode.m_tagOption.bCmplCMAP = TRUE;
+	FntEncode.m_tagOption.bOldStandard = FALSE;
+	FntEncode.m_tagOption.bRePsName = FALSE;
+	FntEncode.m_tagOption.bReSortUni = FALSE;
+	FntEncode.m_tagOption.bsetADW = FALSE;
+	FntEncode.m_tagOption.bsetADH = FALSE;
+	FntEncode.m_tagOption.bYitizi = FALSE;
+
+	for (size_t i = 0; i < FntEncode.m_HYMaxp.numGlyphs; i++) {
+		const CHYGlyph& glyph = FntEncode.m_vtHYGlyphs[i];
+		FntEncode.m_HYPost.InsertName(glyph.strPostName);
+	}
+
+	FntEncode.MakeHYCodeMap();
 
 }	// end of void CHYEmjioDlg::SetTables()
 
@@ -559,10 +620,11 @@ void CHYEmjioDlg::OnBnClickedEmjCngfileBtn()
 	if (mkEmoji.FindElem("Font"))
 	{
 		mkEmoji.IntoElem();
-		XmlTomaxp(mkEmoji, m_Encode);
+		XmlTomaxp(mkEmoji, m_Encode);		
 		XmlToHead(mkEmoji, m_Encode);
 		XmlToHhea(mkEmoji, m_Encode);
 		XmlToOS(mkEmoji, m_Encode);
+		XmlToNoImageChar(mkEmoji, m_Encode);
 		XmlToEmoji(mkEmoji, m_Encode);
 		mkEmoji.OutOfElem();
 	}
@@ -599,6 +661,7 @@ void CHYEmjioDlg::OnBnClickedEmjHmefileBtn()
 
 void CHYEmjioDlg::OnBnClickedEmjMkBtn()
 {
+	/*
 	if (m_strCnfgFile == "")	{
 		AfxMessageBox("emjio配置文件不能为空");
 		return;
@@ -608,6 +671,7 @@ void CHYEmjioDlg::OnBnClickedEmjMkBtn()
 		AfxMessageBox("编码映射文件不能为空");
 		return;
 	}
+	*/
 
 	::XSysproxy().MakeFontName(m_Encode);
 	SetTables(m_Encode);

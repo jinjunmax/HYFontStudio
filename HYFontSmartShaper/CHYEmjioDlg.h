@@ -20,6 +20,7 @@ protected:
 	void	XmlToHhea(CMarkup& mkEmoji, CHYFontCodec& FntEncode);
 	void	XmlTomaxp(CMarkup& mkEmoji, CHYFontCodec& FntEncode);
 	void	XmlToOS(CMarkup& mkEmoji, CHYFontCodec& FntEncode);
+	void	XmlToNoImageChar(CMarkup& mkEmoji, CHYFontCodec& FontEnCodec);
 	void	XmlToEmoji(CMarkup& mkEmoji, CHYFontCodec& FntEncode);
 	void	SetTables(CHYFontCodec& FntEncode);
 	void	loadCodeFile(CString strFile,CHYFontCodec& Encode);

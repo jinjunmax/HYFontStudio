@@ -2388,17 +2388,21 @@ namespace HYFONTCODEC
 
 		int iRtn = CreateFile(pFontFile);		
 		if (iRtn != HY_NOERROR)  return iRtn;
-
 		if (vtFlag.size() ==0) return FONT_ERR_BASE;
-		if (FindFlag(vtFlag,CFF_TAG))	m_iFontType=FONTTYPE_OTF;	
-		if (FindFlag(vtFlag,GLYF_TAG))	m_iFontType=FONTTYPE_TTF;
+
+		HYFIXED fxVersion;
+		fxVersion.value = 2;
+		fxVersion.fract = 0;
+		m_iFontType = FONTTYPE_TTF;
+
+		if (FindFlag(vtFlag, CFF_TAG)) {
+			m_iFontType = FONTTYPE_OTF;
+			fxVersion.value = 3;
+			fxVersion.fract = 0;
+		}
 
 		MakeTableDirectory(vtFlag);		
 		EncodeTableDirectory();
-
-		HYFIXED fxVersion;
-		fxVersion.value = 3;
-		fxVersion.fract = 0;
 
 		if (FindFlag(vtFlag, CBDT_TAG)) {
 			EncodeCBDT();
@@ -2442,7 +2446,7 @@ namespace HYFONTCODEC
 		if (FindFlag(vtFlag, VMTX_TAG)){
 			Encodevmtx();
 		}		
-		if (FindFlag(vtFlag,CFF_TAG)){
+		if (FindFlag(vtFlag,CFF_TAG)){			
 			EncodeCFF();
 			EncodeVORG();
 		}
@@ -2458,10 +2462,7 @@ namespace HYFONTCODEC
 			}	
 			if (FindFlag(vtFlag, CVT_TAG)){
 				EncodeCVT();
-			}
-
-			fxVersion.value = 2;
-			fxVersion.fract = 0;			
+			}		
 			EncodeGlyph();
 			Encodeloca();
 		}
@@ -2469,7 +2470,6 @@ namespace HYFONTCODEC
 		if (FindFlag(vtFlag, POST_TAG)) {
 			Encodepost(fxVersion);
 		}
-
 		if (FindFlag(vtFlag, GPOS_TAG)) {
 			EncodeGPOS();
 		}
@@ -2491,7 +2491,7 @@ namespace HYFONTCODEC
 		}
 		if (FindFlag(vtFlag, GVAR_TAG)){
 			Encodegvar();
-		}		
+		}
 
 		// 对每一个表生成校验码
 		fflush(m_pFontFile);
@@ -4271,21 +4271,26 @@ namespace HYFONTCODEC
 		m_HYCodeMap.vtHYCodeMap.clear();
 
 		CHYCodeMapItem  mapItm;
-		mapItm.ulGlyphNo = 0xffff;
-		mapItm.iGlyphIndex = 0;
-		m_HYCodeMap.vtHYCodeMap.push_back(mapItm);
-
 		size_t	stGlyphNum = vtHYGlyphs.size();		
-		for (size_t i=1; i<stGlyphNum; i++){		
-			std::vector<unsigned  long>& vtUnicode = vtHYGlyphs[i].vtUnicode;
-			size_t stUnicodeNum = vtUnicode.size();
+		for (size_t i=0; i<stGlyphNum; i++){
 
-			for (size_t j=0; j<stUnicodeNum; j++){			
-				CHYCodeMapItem  mapItm;
-				mapItm.ulGlyphNo = vtUnicode[j];
-				mapItm.iGlyphIndex = i;
-				m_HYCodeMap.vtHYCodeMap.push_back(mapItm);				
-			}				
+			std::vector<unsigned  long>& vtUnicode = vtHYGlyphs[i].vtUnicode;
+			if (i == 0)
+			{						
+				mapItm.ulGlyphNo = 0xffff;
+				mapItm.iGlyphIndex = 0;
+				m_HYCodeMap.vtHYCodeMap.push_back(mapItm);								
+			}
+			else
+			{
+				size_t stUnicodeNum = vtUnicode.size();
+				for (size_t j = 0; j < stUnicodeNum; j++) {					
+					mapItm.ulGlyphNo = vtUnicode[j];
+					mapItm.iGlyphIndex = i;
+					m_HYCodeMap.vtHYCodeMap.push_back(mapItm);
+				}
+
+			}			
 		}
 
 		// CJK兼容字符
