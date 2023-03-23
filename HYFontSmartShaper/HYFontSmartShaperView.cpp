@@ -249,7 +249,10 @@ void CHYFontSmartShaperView::OnFileSave()
 
 	if (m_FontEnCodec.m_vtHYGlyphs.size() == 0) return;
 
-	size_t stGlyphNum = m_FontEnCodec.m_vtHYGlyphs.size();
+	::XSysproxy().SetEncodeOption(m_FontEnCodec, m_FontDeCodec);
+	m_FontEnCodec.m_mulpTableData.setDefault();
+	m_FontEnCodec.m_mulpTableData = m_FontDeCodec.m_mulpTableData;
+	
 	std::vector<unsigned long> ulTableFlag;
 	ulTableFlag.push_back(CMAP_TAG);
 	ulTableFlag.push_back(DSIG_TAG);
@@ -266,6 +269,15 @@ void CHYFontSmartShaperView::OnFileSave()
 		ulTableFlag.push_back(VHEA_TAG);
 		ulTableFlag.push_back(VMTX_TAG);
 	}
+	if (::XSysproxy().m_tagOpeionPrm.bCmplLayout)
+	{
+		ulTableFlag.push_back(GSUB_TAG);
+	}
+	else if (m_FontDeCodec.FindFlag(GSUB_TAG))
+	{
+		ulTableFlag.push_back(GSUB_TAG);
+	}
+	
 	if (iCheckNo == IDC_MN_CVT_TTF_RD) {		
 		TCHAR szFilters[] = _T("Truetype 文件(*.ttf)|*.ttf||");
 		CFileDialog  saveFileDlg(FALSE, _T(""), _T(""), OFN_LONGNAMES | OFN_FILEMUSTEXIST, szFilters);
@@ -274,11 +286,7 @@ void CHYFontSmartShaperView::OnFileSave()
 		strFileName = saveFileDlg.GetPathName();
 		ulTableFlag.push_back(GLYF_TAG);
 		ulTableFlag.push_back(LOCA_TAG);
-		ulTableFlag.push_back(PREP_TAG);
-		for (size_t i = 0; i<stGlyphNum; i++) {
-			const CHYGlyph& glyph = m_FontEnCodec.m_vtHYGlyphs[i];
-			m_FontEnCodec.m_HYPost.InsertName(glyph.strPostName);
-		}
+		ulTableFlag.push_back(PREP_TAG);		
 	}
 	else if (iCheckNo == IDC_MN_CVT_OTF_RD) {
 		TCHAR szFilters[] = _T("OpenType 文件(*.otf)|*.otf||");
@@ -289,21 +297,6 @@ void CHYFontSmartShaperView::OnFileSave()
 		ulTableFlag.push_back(CFF_TAG);	
 		ulTableFlag.push_back(VORG_TAG);
 	}
-
-	::XSysproxy().InitEncodeOption(m_FontEnCodec);
-	::XSysproxy().SetEncodeOption(m_FontEnCodec, m_FontDeCodec);
-	m_FontEnCodec.m_mulpTableData.setDefault();	
-	m_FontEnCodec.m_mulpTableData = m_FontDeCodec.m_mulpTableData;
-
-	if (::XSysproxy().m_tagOpeionPrm.bCmplLayout)
-	{
-		::XSysproxy().LoadAdvancedTypographicTables(&m_FontEnCodec);
-	}
-	else if (m_FontDeCodec.FindFlag(GSUB_TAG))
-	{
-		ulTableFlag.push_back(GSUB_TAG);
-	}
-	m_FontEnCodec.MakeHYCodeMap();
 
 	if (m_FontEnCodec.Encode((LPTSTR)(LPCTSTR)strFileName, ulTableFlag, ::XSysproxy().m_tagOpeionPrm) == HY_NOERROR)
 		AfxMessageBox(_T("字库生成完成"));
@@ -3119,7 +3112,7 @@ void	CHYFontSmartShaperView::GetFntSubset(char* strSrcFnt, std::vector<unsigned 
 	Encode.m_vtHYGlyphs.push_back(Decode.m_vtHYGlyphs[0]);	
 	CHYFontFunc::GetSubsetbyUni(Decode.m_vtHYGlyphs, vtUni, Encode.m_vtHYGlyphs);
 
-	::XSysproxy().InitEncodeOption(Encode);
+	//::XSysproxy().InitEncodeOption(Encode);
 	::XSysproxy().SetEncodeOption(Encode, Decode);
 
 	size_t stGlyphNum = Encode.m_vtHYGlyphs.size();

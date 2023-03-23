@@ -27,6 +27,14 @@ public:
 	void SumVrGlyphs(std::vector<CVrGlyphs>& invtVrGlyphs, CVrGlyphs& outVrGlyph);
 	void SubVrGlyphs(CVrGlyphs& inVrGlyph1, CVrGlyphs& inVrGlyph2, CVrGlyphs& outVrGlyph);
 
+
+	void InitHheaTb(CHYFontCodec& Encode);
+	void InitHmtxTb(CHYFontCodec& Encode);
+	void InitHeadTb(CHYFontCodec& Encode);
+	void InitMaxpTb(CHYFontCodec& Encode);
+	void InitOS2Tb(CHYFontCodec& Encode);
+	void InitPostTb(CHYFontCodec& Encode);
+	void InitCFFTb(CHYFontCodec& Encode);
 	void InitEncodeOption(CHYFontCodec& Encode);
 	void SetEncodeOption(CHYFontCodec& Encode, CHYFontCodec& Original);
 

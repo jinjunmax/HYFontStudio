@@ -554,7 +554,7 @@ BEGIN
     EDITTEXT        IDC_PTN_VER_EDT,292,110,57,14,ES_AUTOHSCROLL
     LTEXT           "版本号",IDC_STATIC,261,113,25,8
     LTEXT           "子名称(非家族字可不填)",IDC_STATIC,261,91,86,8
-    CONTROL         "重编译CMAP",IDC_PTN_CMP_CHK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,9,75,59,10
+    CONTROL         "重编译CMAP",IDC_PTN_CMP_CHK,"Button",BS_AUTOCHECKBOX | WS_DISABLED | WS_TABSTOP,9,75,59,10
     CONTROL         "自定义中文字宽",IDC_PTN_SETADW_CHK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,9,123,72,10
     CONTROL         "自定义中文字高",IDC_PTN_SETADH_CHK,"Button",BS_AUTOCHECKBOX | WS_GROUP | WS_TABSTOP,129,81,72,10
     CONTROL         "重编译Layout",IDC_PTN_LYT_CHK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,130,10,62,10
@@ -1412,8 +1412,8 @@ END
 
 STRINGTABLE
 BEGIN
-    IDS_NAME_ID_0_EN        "Copyright ? 2022 Beijing Hanyi Innovation Technology Co.,Ltd"
-    IDS_NAME_ID_0_CHS       "? 2022 北京汉仪创新科技股份有限公司 版权所有"
+    IDS_NAME_ID_0_EN        "Copyright (c) 2023 Beijing Hanyi Innovation Technology Co.,Ltd"
+    IDS_NAME_ID_0_CHS       "(c) 2023 北京汉仪创新科技股份有限公司 版权所有"
     IDS_NAME_ID_8_EN        "Hanyi Fonts"
     IDS_NAME_ID_8_CHS       "汉仪字库"
     IDS_NAME_ID_11          "http://www.hanyi.com.cn/"

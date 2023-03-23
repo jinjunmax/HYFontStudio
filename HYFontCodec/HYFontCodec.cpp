@@ -6431,7 +6431,6 @@ namespace HYFONTCODEC
 					fwrite(&c,1,1,pFontFile);
 				}				
 			}
-
 			return HY_NOERROR;
 		}
 

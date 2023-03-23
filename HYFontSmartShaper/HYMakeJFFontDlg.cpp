@@ -339,18 +339,36 @@ void CHYMakeJFFontDlg::MakeName(CHYName& inName, CHYName& outName, int iJFFlag)
 	std::string strSubFamileEN = inName.GetSubFamilyEN();
 	std::string strFamilyCN = inName.GetFamilyNameCN();
 	std::string strSubFamileCN = inName.GetSubFamilyCN();
+	std::string	strVersion = inName.GetNamestring(5);
 
 	std::string strJFEN = "";
 	std::string strJFCN = "";
 	if (iJFFlag == MAKE_J)
 	{
-		strJFEN = _T("J");
-		strJFCN = _T("¼ò");
+		if (strSubFamileEN.back() == 'W')
+		{
+			strJFEN = strSubFamileEN.substr(0, strSubFamileEN.length()-1)+_T("J");
+			strJFCN = strSubFamileEN.substr(0, strSubFamileEN.length() - 1) + _T("¼ò");
+		}
+		else
+		{
+			strJFEN = strSubFamileEN + _T("J");
+			strJFCN = strSubFamileEN + _T("¼ò");
+		}
+		
 	}
 	if (iJFFlag == MAKE_F)
 	{
-		strJFEN = _T("F");
-		strJFCN = _T("·±");
+		if (strSubFamileEN.back() == 'W')
+		{
+			strJFEN = strSubFamileEN.substr(0, strSubFamileEN.length() - 1) + _T("F");
+			strJFCN = strSubFamileEN.substr(0, strSubFamileEN.length() - 1) + _T("·±");
+		}
+		else
+		{
+			strJFEN = strSubFamileEN + _T("F");
+			strJFCN = strSubFamileCN + _T("·±");
+		}
 	}
 	NAMERECORD outnmRecord;
 
@@ -358,9 +376,9 @@ void CHYMakeJFFontDlg::MakeName(CHYName& inName, CHYName& outName, int iJFFlag)
 	outnmRecord.platformID = 1;
 	outnmRecord.encodingID = 0;
 	outnmRecord.languageID = 0;
-	outnmRecord.nameID = 0;			
-	outnmRecord.strContent = inName.GetNamestring(outnmRecord.platformID, outnmRecord.encodingID, outnmRecord.languageID,0);
-	outName.vtNameRecord.push_back(outnmRecord);			
+	//outnmRecord.nameID = 0;			
+	//outnmRecord.strContent = inName.GetNamestring(outnmRecord.platformID, outnmRecord.encodingID, outnmRecord.languageID,0);
+	//outName.vtNameRecord.push_back(outnmRecord);			
 	outnmRecord.nameID = 1;
 	outnmRecord.strContent = strFamilyEN;
 	outName.vtNameRecord.push_back(outnmRecord);
@@ -368,40 +386,40 @@ void CHYMakeJFFontDlg::MakeName(CHYName& inName, CHYName& outName, int iJFFlag)
 	outnmRecord.strContent = strJFEN;
 	outName.vtNameRecord.push_back(outnmRecord);
 	outnmRecord.nameID = 3;
-	outnmRecord.strContent = "Hanyi "+ strFamilyEN + "-"+ strJFEN +" v9.00.00";
+	outnmRecord.strContent = strFamilyEN + "-" + strJFEN + " " + strVersion;
 	outName.vtNameRecord.push_back(outnmRecord);
 	outnmRecord.nameID = 4;
 	outnmRecord.strContent = strFamilyEN + " "+strJFEN;
 	outName.vtNameRecord.push_back(outnmRecord);
-	outnmRecord.nameID = 5;
-	outnmRecord.strContent = inName.GetNamestring(outnmRecord.platformID, outnmRecord.encodingID, outnmRecord.languageID, 5);
-	outName.vtNameRecord.push_back(outnmRecord);
+	//outnmRecord.nameID = 5;
+	//outnmRecord.strContent = inName.GetNamestring(outnmRecord.platformID, outnmRecord.encodingID, outnmRecord.languageID, 5);
+	//outName.vtNameRecord.push_back(outnmRecord);
 	outnmRecord.nameID = 6;
 	outnmRecord.strContent = strFamilyEN + "-"+ strJFEN;
 	outName.vtNameRecord.push_back(outnmRecord);
-	outnmRecord.nameID = 7;
-	outnmRecord.strContent = inName.GetNamestring(outnmRecord.platformID, outnmRecord.encodingID, outnmRecord.languageID, 7);
-	outName.vtNameRecord.push_back(outnmRecord);
-	outnmRecord.nameID = 8;
-	outnmRecord.strContent = inName.GetNamestring(outnmRecord.platformID, outnmRecord.encodingID, outnmRecord.languageID, 8);
-	outName.vtNameRecord.push_back(outnmRecord);
-	outnmRecord.nameID = 11;
-	outnmRecord.strContent = inName.GetNamestring(outnmRecord.platformID, outnmRecord.encodingID, outnmRecord.languageID, 11);
-	outName.vtNameRecord.push_back(outnmRecord);
-	outnmRecord.nameID = 13;
-	outnmRecord.strContent = inName.GetNamestring(outnmRecord.platformID, outnmRecord.encodingID, outnmRecord.languageID, 13);
-	outName.vtNameRecord.push_back(outnmRecord);
-	outnmRecord.nameID = 14;
-	outnmRecord.strContent = inName.GetNamestring(outnmRecord.platformID, outnmRecord.encodingID, outnmRecord.languageID, 14);
-	outName.vtNameRecord.push_back(outnmRecord);
-
+	//outnmRecord.nameID = 7;
+	//outnmRecord.strContent = inName.GetNamestring(outnmRecord.platformID, outnmRecord.encodingID, outnmRecord.languageID, 7);
+	//outName.vtNameRecord.push_back(outnmRecord);
+	//outnmRecord.nameID = 8;
+	//outnmRecord.strContent = inName.GetNamestring(outnmRecord.platformID, outnmRecord.encodingID, outnmRecord.languageID, 8);
+	//outName.vtNameRecord.push_back(outnmRecord);
+	//outnmRecord.nameID = 11;
+	//outnmRecord.strContent = inName.GetNamestring(outnmRecord.platformID, outnmRecord.encodingID, outnmRecord.languageID, 11);
+	//outName.vtNameRecord.push_back(outnmRecord);
+	//outnmRecord.nameID = 13;
+	//outnmRecord.strContent = inName.GetNamestring(outnmRecord.platformID, outnmRecord.encodingID, outnmRecord.languageID, 13);
+	//outName.vtNameRecord.push_back(outnmRecord);
+	//outnmRecord.nameID = 14;
+	//outnmRecord.strContent = inName.GetNamestring(outnmRecord.platformID, outnmRecord.encodingID, outnmRecord.languageID, 14);
+	//outName.vtNameRecord.push_back(outnmRecord);
+	
 	//1.25.33
 	outnmRecord.platformID = 1;
 	outnmRecord.encodingID = 25;
 	outnmRecord.languageID = 33;
-	outnmRecord.nameID = 0;
-	outnmRecord.strContent = inName.GetNamestring(outnmRecord.platformID, outnmRecord.encodingID, outnmRecord.languageID, 0);
-	outName.vtNameRecord.push_back(outnmRecord);
+	//outnmRecord.nameID = 0;
+	//outnmRecord.strContent = inName.GetNamestring(outnmRecord.platformID, outnmRecord.encodingID, outnmRecord.languageID, 0);
+	//outName.vtNameRecord.push_back(outnmRecord);
 	outnmRecord.nameID = 1;
 	outnmRecord.strContent = strFamilyCN;
 	outName.vtNameRecord.push_back(outnmRecord);
@@ -411,15 +429,17 @@ void CHYMakeJFFontDlg::MakeName(CHYName& inName, CHYName& outName, int iJFFlag)
 	outnmRecord.nameID = 4;
 	outnmRecord.strContent = strFamilyCN + " " + strJFCN;
 	outName.vtNameRecord.push_back(outnmRecord);
-	outnmRecord.nameID = 7;
-	outnmRecord.strContent = inName.GetNamestring(outnmRecord.platformID, outnmRecord.encodingID, outnmRecord.languageID, 7);
-	outName.vtNameRecord.push_back(outnmRecord);
-	outnmRecord.nameID = 8;
-	outnmRecord.strContent = inName.GetNamestring(outnmRecord.platformID, outnmRecord.encodingID, outnmRecord.languageID, 8);
-	outName.vtNameRecord.push_back(outnmRecord);	
-	outnmRecord.nameID = 13;
-	outnmRecord.strContent = inName.GetNamestring(outnmRecord.platformID, outnmRecord.encodingID, outnmRecord.languageID, 13);
-	outName.vtNameRecord.push_back(outnmRecord);
+	//outnmRecord.nameID = 7;
+	//outnmRecord.strContent = inName.GetNamestring(outnmRecord.platformID, outnmRecord.encodingID, outnmRecord.languageID, 7);
+	//outName.vtNameRecord.push_back(outnmRecord);
+	//outnmRecord.nameID = 8;
+	//outnmRecord.strContent = inName.GetNamestring(outnmRecord.platformID, outnmRecord.encodingID, outnmRecord.languageID, 8);
+	//outName.vtNameRecord.push_back(outnmRecord);	
+	//outnmRecord.nameID = 13;
+	//outnmRecord.strContent = inName.GetNamestring(outnmRecord.platformID, outnmRecord.encodingID, outnmRecord.languageID, 13);
+	//outName.vtNameRecord.push_back(outnmRecord);	
+	//nmRecord.strContent = inName.GetNamestring(outnmRecord.platformID, outnmRecord.encodingID, outnmRecord.languageID, 14);
+	//FnCdc.m_HYName.vtNameRecord.push_back(nmRecord);
 
 	//3.1.1033
 	outnmRecord.platformID = 3;
@@ -435,7 +455,7 @@ void CHYMakeJFFontDlg::MakeName(CHYName& inName, CHYName& outName, int iJFFlag)
 	outnmRecord.strContent = inName.GetNamestring(outnmRecord.platformID, outnmRecord.encodingID, outnmRecord.languageID, 2);
 	outName.vtNameRecord.push_back(outnmRecord);
 	outnmRecord.nameID = 3;
-	outnmRecord.strContent = "Hanyi " + strFamilyEN + "-" + strJFEN +" v9.00.00";
+	outnmRecord.strContent = strFamilyEN + "-" + strJFEN +" "+ strVersion;
 	outName.vtNameRecord.push_back(outnmRecord);
 	outnmRecord.nameID = 4;
 	outnmRecord.strContent = strFamilyEN + " " + strJFEN;
@@ -490,8 +510,14 @@ void CHYMakeJFFontDlg::MakeName(CHYName& inName, CHYName& outName, int iJFFlag)
 	outnmRecord.nameID = 8;
 	outnmRecord.strContent = inName.GetNamestring(outnmRecord.platformID, outnmRecord.encodingID, outnmRecord.languageID, 8);
 	outName.vtNameRecord.push_back(outnmRecord);
+	outnmRecord.nameID = 11;
+	outnmRecord.strContent = inName.GetNamestring(outnmRecord.platformID, outnmRecord.encodingID, outnmRecord.languageID, 11);
+	outName.vtNameRecord.push_back(outnmRecord);
 	outnmRecord.nameID = 13;
 	outnmRecord.strContent = inName.GetNamestring(outnmRecord.platformID, outnmRecord.encodingID, outnmRecord.languageID, 13);
+	outName.vtNameRecord.push_back(outnmRecord);
+	outnmRecord.nameID = 14;
+	outnmRecord.strContent = inName.GetNamestring(outnmRecord.platformID, outnmRecord.encodingID, outnmRecord.languageID, 14);
 	outName.vtNameRecord.push_back(outnmRecord);
 	outnmRecord.nameID = 16;
 	outnmRecord.strContent = inName.GetNamestring(outnmRecord.platformID, outnmRecord.encodingID, outnmRecord.languageID, 16);
@@ -843,12 +869,15 @@ void CHYMakeJFFontDlg::BulidHead(CHYFontCodec& FontCodec, FILE* pCreatFile, std:
 	CopyMemory((PBYTE)p, &t64CurTime, sizeof(__time64_t));
 
 	char created[8] = { 0 };
-	char modified[8] = { 0 };
+	CopyMemory((PBYTE)p, &t64CurTime, sizeof(__time64_t));
+	for (int i = 0; i < 8; i++) {
+		created[i] = p[7 - i];
+	}
 
 	//created			
 	fwrite(created, 8, 1, pCreatFile);
 	//modified
-	fwrite(modified, 8, 1, pCreatFile);
+	fwrite(created, 8, 1, pCreatFile);
 
 	short xMin=0, yMin=0, xMax=0, yMax=0;
 	CountFontBound(xMin, yMin, xMax, yMax,vtGlyfData);

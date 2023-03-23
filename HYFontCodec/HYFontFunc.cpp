@@ -31,6 +31,8 @@ void CHYFontFunc::MergeGlyphs(std::vector<CHYGlyph>& src1Glyphs, std::vector<CHY
 				continue;
 			if (src2Gly.vtUnicode[0] == 0x000d)
 				continue;
+			if (src2Gly.vtUnicode[0] == 0x0000)
+				continue;
 
 			//如果unicode重复后边覆盖前边
 			unsigned long ulUni1 = src2Gly.vtUnicode[0];

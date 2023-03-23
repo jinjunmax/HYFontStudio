@@ -108,7 +108,6 @@ protected:
 	afx_msg void		OnMnCmptxt();
 	afx_msg void		OnMnChkerttf();
 	afx_msg void		OnMnChkerotf();
-
 	// 导出Emoji字库
 	afx_msg void OnEmojiExport();
 	// 生成Emoji字库	

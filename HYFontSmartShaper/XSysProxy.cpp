@@ -44,10 +44,10 @@ void CXSysProxy::MakeFontName(CHYFontCodec& FnCdc)
 	nmRecord.platformID = 1;
 	nmRecord.encodingID = 0;
 	nmRecord.languageID = 0;
-	nmRecord.nameID = 0;
-	IDString.LoadString(IDS_NAME_ID_0_EN);
-	nmRecord.strContent = std::string(IDString);
-	FnCdc.m_HYName.vtNameRecord.push_back(nmRecord);
+	//nmRecord.nameID = 0;
+	//IDString.LoadString(IDS_NAME_ID_0_EN);
+	//nmRecord.strContent = std::string(IDString);
+	//FnCdc.m_HYName.vtNameRecord.push_back(nmRecord);
 
 	nmRecord.nameID = 1;
 	nmRecord.strContent = strFamilyEN;
@@ -58,7 +58,7 @@ void CXSysProxy::MakeFontName(CHYFontCodec& FnCdc)
 	FnCdc.m_HYName.vtNameRecord.push_back(nmRecord);
 
 	nmRecord.nameID = 3;
-	nmRecord.strContent = strFamilyEN + "-" + strSubFamileEN + " v9.00.00";
+	nmRecord.strContent = strFamilyEN + "-" + strSubFamileEN + " "+ m_tagOpeionPrm.Version;
 	FnCdc.m_HYName.vtNameRecord.push_back(nmRecord);
 
 	nmRecord.nameID = 4;
@@ -70,56 +70,50 @@ void CXSysProxy::MakeFontName(CHYFontCodec& FnCdc)
 	}
 	FnCdc.m_HYName.vtNameRecord.push_back(nmRecord);
 
-	nmRecord.nameID = 5;
-	nmRecord.strContent = strVersion;
-	FnCdc.m_HYName.vtNameRecord.push_back(nmRecord);
+	//nmRecord.nameID = 5;
+	//nmRecord.strContent = strVersion;
+	//FnCdc.m_HYName.vtNameRecord.push_back(nmRecord);
 
 	nmRecord.nameID = 6;
 	nmRecord.strContent = strFamilyEN + "-" + strSubFamileEN;
 	FnCdc.m_HYName.vtNameRecord.push_back(nmRecord);
 
-	nmRecord.nameID = 7;
-	IDString.LoadString(IDS_NAME_ID_7_EN);
-	nmRecord.strContent = strFamilyEN + " " + std::string(IDString);
-	FnCdc.m_HYName.vtNameRecord.push_back(nmRecord);
+	//nmRecord.nameID = 7;
+	//IDString.LoadString(IDS_NAME_ID_7_EN);
+	//nmRecord.strContent = strFamilyEN + " " + std::string(IDString);
+	//FnCdc.m_HYName.vtNameRecord.push_back(nmRecord);
+	//nmRecord.nameID = 8;
+	//IDString.LoadString(IDS_NAME_ID_8_EN);
+	//nmRecord.strContent = std::string(IDString);
+	//FnCdc.m_HYName.vtNameRecord.push_back(nmRecord);
+	///nmRecord.nameID = 11;
+	//IDString.LoadString(IDS_NAME_ID_11);
+	//nmRecord.strContent = std::string(IDString);
+	//FnCdc.m_HYName.vtNameRecord.push_back(nmRecord);
+	//nmRecord.nameID = 13;
+	//IDString.LoadString(IDS_NAME_ID_13_EN);
+	//nmRecord.strContent = std::string(IDString);
+	//FnCdc.m_HYName.vtNameRecord.push_back(nmRecord);
+	//nmRecord.nameID = 14;
+	//IDString.LoadString(IDS_NAME_ID_14);
+	//nmRecord.strContent = std::string(IDString);
+	//FnCdc.m_HYName.vtNameRecord.push_back(nmRecord);
 
-	nmRecord.nameID = 8;
-	IDString.LoadString(IDS_NAME_ID_8_EN);
-	nmRecord.strContent = std::string(IDString);
-	FnCdc.m_HYName.vtNameRecord.push_back(nmRecord);
-
-	nmRecord.nameID = 11;
-	IDString.LoadString(IDS_NAME_ID_11);
-	nmRecord.strContent = std::string(IDString);
-	FnCdc.m_HYName.vtNameRecord.push_back(nmRecord);
-
-	nmRecord.nameID = 13;
-	IDString.LoadString(IDS_NAME_ID_13_EN);
-	nmRecord.strContent = std::string(IDString);
-	FnCdc.m_HYName.vtNameRecord.push_back(nmRecord);
-
-	nmRecord.nameID = 14;
-	IDString.LoadString(IDS_NAME_ID_14);
-	nmRecord.strContent = std::string(IDString);
-	FnCdc.m_HYName.vtNameRecord.push_back(nmRecord);
-
+	
 	//1.25.33
 	nmRecord.platformID = 1;
 	nmRecord.encodingID = 25;
 	nmRecord.languageID = 33;
-	nmRecord.nameID = 0;
-	IDString.LoadString(IDS_NAME_ID_0_CHS);
-	nmRecord.strContent = std::string(IDString);
-	FnCdc.m_HYName.vtNameRecord.push_back(nmRecord);
-
+	//nmRecord.nameID = 0;
+	//IDString.LoadString(IDS_NAME_ID_0_CHS);
+	//nmRecord.strContent = std::string(IDString);
+	//FnCdc.m_HYName.vtNameRecord.push_back(nmRecord);
 	nmRecord.nameID = 1;
 	nmRecord.strContent = strFamilyCN;
 	FnCdc.m_HYName.vtNameRecord.push_back(nmRecord);
-
 	nmRecord.nameID = 2;
 	nmRecord.strContent = strSubFamileCN;
 	FnCdc.m_HYName.vtNameRecord.push_back(nmRecord);
-
 	nmRecord.nameID = 4;
 	if (strSubFamileCN == _T("Regular")) {
 		nmRecord.strContent = strFamilyCN;
@@ -128,28 +122,27 @@ void CXSysProxy::MakeFontName(CHYFontCodec& FnCdc)
 		nmRecord.strContent = strFamilyCN + " " + strSubFamileCN;
 	}
 	FnCdc.m_HYName.vtNameRecord.push_back(nmRecord);
-
-	nmRecord.nameID = 7;
-	IDString.LoadString(IDS_NAME_ID_7_CHS);
-	nmRecord.strContent = strFamilyEN + std::string(IDString);
-	FnCdc.m_HYName.vtNameRecord.push_back(nmRecord);
-	nmRecord.nameID = 8;
-	IDString.LoadString(IDS_NAME_ID_8_CHS);
-	nmRecord.strContent = std::string(IDString);
-	FnCdc.m_HYName.vtNameRecord.push_back(nmRecord);
-	nmRecord.nameID = 11;
-	IDString.LoadString(IDS_NAME_ID_11);
-	nmRecord.strContent = std::string(IDString);
-	FnCdc.m_HYName.vtNameRecord.push_back(nmRecord);
-	nmRecord.nameID = 13;
-	IDString.LoadString(IDS_NAME_ID_13_CHS);
-	nmRecord.strContent = std::string(IDString);
-	FnCdc.m_HYName.vtNameRecord.push_back(nmRecord);
-	nmRecord.nameID = 14;
-	IDString.LoadString(IDS_NAME_ID_14);
-	nmRecord.strContent = std::string(IDString);
-	FnCdc.m_HYName.vtNameRecord.push_back(nmRecord);
-
+	//nmRecord.nameID = 7;
+	//IDString.LoadString(IDS_NAME_ID_7_CHS);
+	//nmRecord.strContent = strFamilyEN + std::string(IDString);
+	//FnCdc.m_HYName.vtNameRecord.push_back(nmRecord);
+	//nmRecord.nameID = 8;
+	//IDString.LoadString(IDS_NAME_ID_8_CHS);
+	//nmRecord.strContent = std::string(IDString);
+	//FnCdc.m_HYName.vtNameRecord.push_back(nmRecord);
+	//nmRecord.nameID = 11;
+	//IDString.LoadString(IDS_NAME_ID_11);
+	//nmRecord.strContent = std::string(IDString);
+	//FnCdc.m_HYName.vtNameRecord.push_back(nmRecord);
+	//nmRecord.nameID = 13;
+	//IDString.LoadString(IDS_NAME_ID_13_CHS);
+	//nmRecord.strContent = std::string(IDString);
+	//FnCdc.m_HYName.vtNameRecord.push_back(nmRecord);
+	//nmRecord.nameID = 14;
+	//IDString.LoadString(IDS_NAME_ID_14);
+	//nmRecord.strContent = std::string(IDString);
+	//FnCdc.m_HYName.vtNameRecord.push_back(nmRecord);
+	
 	//3.1.1033
 	nmRecord.platformID = 3;
 	nmRecord.encodingID = 1;
@@ -180,7 +173,7 @@ void CXSysProxy::MakeFontName(CHYFontCodec& FnCdc)
 	}
 
 	nmRecord.nameID = 3;
-	nmRecord.strContent = strFamilyEN + "-" + strSubFamileEN + " v9.00.00";
+	nmRecord.strContent = strFamilyEN + "-" + strSubFamileEN + " " + m_tagOpeionPrm.Version;
 	FnCdc.m_HYName.vtNameRecord.push_back(nmRecord);
 	nmRecord.nameID = 4;
 	if (strSubFamileEN == _T("Regular")) {
@@ -220,7 +213,7 @@ void CXSysProxy::MakeFontName(CHYFontCodec& FnCdc)
 	if (strSubFamileEN != _T("Regular")
 		&& strSubFamileEN != _T("Bold")
 		&& strSubFamileEN != _T("Italic")
-		&& strSubFamileEN == _T("Bold Italic")) {
+		&& strSubFamileEN != _T("Bold Italic")) {
 
 		nmRecord.nameID = 16;
 		nmRecord.strContent = strFamilyEN;
@@ -239,7 +232,6 @@ void CXSysProxy::MakeFontName(CHYFontCodec& FnCdc)
 	IDString.LoadString(IDS_NAME_ID_0_CHS);
 	nmRecord.strContent = std::string(IDString);
 	FnCdc.m_HYName.vtNameRecord.push_back(nmRecord);
-
 	if (strSubFamileCN == _T("Regular")
 		|| strSubFamileCN == _T("Bold")
 		|| strSubFamileCN == _T("Italic")
@@ -253,7 +245,7 @@ void CXSysProxy::MakeFontName(CHYFontCodec& FnCdc)
 	}
 	else {
 		nmRecord.nameID = 1;
-		nmRecord.strContent = strFamilyEN + " " + strSubFamileEN;
+		nmRecord.strContent = strFamilyCN + " " + strSubFamileCN;
 		FnCdc.m_HYName.vtNameRecord.push_back(nmRecord);
 		nmRecord.nameID = 2;
 		nmRecord.strContent = _T("Regular");
@@ -270,7 +262,7 @@ void CXSysProxy::MakeFontName(CHYFontCodec& FnCdc)
 
 	nmRecord.nameID = 7;
 	IDString.LoadString(IDS_NAME_ID_7_CHS);
-	nmRecord.strContent = strFamilyEN + std::string(IDString);
+	nmRecord.strContent = strFamilyCN + std::string(IDString);
 	FnCdc.m_HYName.vtNameRecord.push_back(nmRecord);
 	nmRecord.nameID = 8;
 	IDString.LoadString(IDS_NAME_ID_8_CHS);
@@ -291,7 +283,7 @@ void CXSysProxy::MakeFontName(CHYFontCodec& FnCdc)
 	if (strSubFamileCN != _T("Regular")
 		&& strSubFamileCN != _T("Bold")
 		&& strSubFamileCN != _T("Italic")
-		&& strSubFamileCN == _T("Bold Italic")) {
+		&& strSubFamileCN != _T("Bold Italic")) {
 
 		nmRecord.nameID = 16;
 		nmRecord.strContent = strFamilyCN;
@@ -566,21 +558,77 @@ bool GlyphSortPredicate(CHYGlyph& d1, CHYGlyph& d2)
 
 }	// end of BOOL GlyphSortPredicate()
 
-void CXSysProxy::InitEncodeOption(CHYFontCodec& Encode)
+void CXSysProxy::InitHheaTb(CHYFontCodec& Encode)
 {
-	Encode.CountFontBound();
+	Encode.m_HYHhea.version.value = 1;
+	Encode.m_HYHhea.version.fract = 0;
+	Encode.m_HYHhea.Ascender = Encode.m_HYhead.yMax;
+	Encode.m_HYHhea.Descender = Encode.m_HYhead.yMin;
+	Encode.m_HYHhea.LineGap = 0;
+	Encode.m_HYHhea.advanceWidthMax = Encode.GetAdvancMaxWidth();
+	Encode.m_HYHhea.minLeftSideBearing = Encode.m_HYhead.xMin;
+	Encode.m_HYHhea.minRightSideBearing = Encode.FindMinRightSideBearing();
+	Encode.m_HYHhea.xMaxExtent = Encode.m_HYHhea.minLeftSideBearing + (Encode.m_HYhead.xMax - Encode.m_HYhead.xMin);
+	int szGlyphNum = Encode.m_vtHYGlyphs.size();
+	Encode.m_HYHhea.numberOfHMetrics = 0;
+	if (szGlyphNum > 0) {
+		int iBaseadvanceWidth = Encode.m_vtHYGlyphs[--szGlyphNum].advanceWidth;
+		while (--szGlyphNum >= 0) {
+			if (Encode.m_vtHYGlyphs[szGlyphNum].advanceWidth == iBaseadvanceWidth)
+				Encode.m_HYHhea.numberOfHMetrics++;
+			else
+				break;
+		}
+		Encode.m_HYHhea.numberOfHMetrics = (unsigned short)Encode.m_vtHYGlyphs.size() - Encode.m_HYHhea.numberOfHMetrics;
+	}
 
-	if (::XSysproxy().m_tagOpeionPrm.bCmplCMAP) {
-		//Encode.AddControlChar();
-		Encode.MakeCmap();
+}	// end of void CXSysProxy::InitHheaTb()
+
+void CXSysProxy::InitHmtxTb(CHYFontCodec& Encode)
+{
+	Encode.m_HYHmtx.SetDefault();
+	for (size_t i = 0; i < Encode.m_HYMaxp.numGlyphs; i++)
+	{
+		HMTX_LONGHORMERTRIC  h_Mertric;
+		h_Mertric.advanceWidth = Encode.m_vtHYGlyphs[i].advanceWidth;
+		h_Mertric.lsb = Encode.m_vtHYGlyphs[i].minX;
+		Encode.m_HYHmtx.vtLonghormetric.push_back(h_Mertric);
 	}
-	if (::XSysproxy().m_tagOpeionPrm.bRePsName) {
-		// 只重命名中文名称
-		Encode.RestPsName();
+
+}	// end of void CXSysProxy::InitHmtxTb()
+
+void CXSysProxy::InitHeadTb(CHYFontCodec& Encode)
+{
+	Encode.m_HYhead.version.value = 1;
+	Encode.m_HYhead.version.fract = 0;
+	Encode.m_HYhead.fontRevision.value = 1;
+	Encode.m_HYhead.fontRevision.fract = 0;
+	Encode.m_HYhead.magicNumber = 0x5F0F3CF5;
+	Encode.m_HYhead.unitsPerEm = ::XSysproxy().m_tagOpeionPrm.usUnitsPerEM;
+	// Bit 0: Baseline for font at y=0. 
+	//Bit 1: Left sidebearing point at x=0 (relevant only for TrueType rasterizers) — see the note below regarding variable fonts.
+	Encode.m_HYhead.flags = 3;
+	__time64_t	 tspace = 2082844799;
+	CTime tCurTime = CTime::GetCurrentTime();
+	__time64_t  t64CurTime = tCurTime.GetTime();
+	t64CurTime += tspace;
+	char p[8] = { 0 };
+	CopyMemory((PBYTE)p, &t64CurTime, sizeof(__time64_t));
+	for (int i = 0; i < 8; i++) {
+		Encode.m_HYhead.created[i] = p[7 - i];
+		Encode.m_HYhead.modified[i] = p[7 - i];
 	}
-	if (::XSysproxy().m_tagOpeionPrm.bReSortUni) {
-		std::sort(Encode.m_vtHYGlyphs.begin(), Encode.m_vtHYGlyphs.end(), GlyphSortPredicate);
-	}
+	Encode.m_HYhead.lowestRecPPEM = 9;
+	Encode.m_HYhead.fontDirectionHint = 2;
+	Encode.m_HYhead.indexToLocFormat = 1;
+	Encode.m_HYhead.glyphDataFormat = 0;
+	if (::XSysproxy().m_tagOpeionPrm.usWeight > 700)
+		Encode.m_HYhead.macStyle = 0x001;		 
+
+}	// end of void CXSysProxy::InitHeadTb()
+
+void CXSysProxy::InitMaxpTb(CHYFontCodec& Encode)
+{
 	//Maxp
 	Encode.m_HYMaxp.numGlyphs = Encode.m_vtHYGlyphs.size();
 	if (Encode.m_iFontType == FONTTYPE_OTF) {
@@ -632,63 +680,13 @@ void CXSysProxy::InitEncodeOption(CHYFontCodec& Encode)
 		Encode.m_HYMaxp.maxSizeOfInstructions = 8;
 		Encode.m_HYMaxp.maxComponentDepth = 1;
 	}
-	// Head
-	Encode.m_HYhead.version.value = 1;
-	Encode.m_HYhead.version.fract = 0;
-	Encode.m_HYhead.fontRevision.value = 1;
-	Encode.m_HYhead.fontRevision.fract = 0;
-	Encode.m_HYhead.magicNumber = 0x5F0F3CF5;
-	//Encode.m_HYhead.unitsPerEm = ::XSysproxy().m_tagOpeionPrm.usUnitsPerEM;
-	// Bit 0: Baseline for font at y=0. 
-	//Bit 1: Left sidebearing point at x=0 (relevant only for TrueType rasterizers) — see the note below regarding variable fonts.
-	Encode.m_HYhead.flags = 3;
-	__time64_t	 tspace = 2082844799;
-	CTime tCurTime = CTime::GetCurrentTime();
-	__time64_t  t64CurTime = tCurTime.GetTime();
-	t64CurTime += tspace;
-	char p[8] = { 0 };
-	CopyMemory((PBYTE)p, &t64CurTime, sizeof(__time64_t));
-	for (int i = 0; i < 8; i++) {
-		Encode.m_HYhead.created[i] = p[7 - i];
-		Encode.m_HYhead.modified[i] = p[7 - i];
-	}
-	Encode.m_HYhead.lowestRecPPEM = 9;
-	Encode.m_HYhead.fontDirectionHint = 2;
-	Encode.m_HYhead.indexToLocFormat = 1;
-	Encode.m_HYhead.glyphDataFormat = 0;
 
-	// Hhea
-	Encode.m_HYHhea.version.value = 1;
-	Encode.m_HYHhea.version.fract = 0;
-	Encode.m_HYHhea.Ascender = Encode.m_HYhead.yMax;
-	Encode.m_HYHhea.Descender = Encode.m_HYhead.yMin;
-	Encode.m_HYHhea.LineGap = 0;
-	Encode.m_HYHhea.advanceWidthMax = Encode.GetAdvancMaxWidth();
-	Encode.m_HYHhea.minLeftSideBearing = Encode.m_HYhead.xMin;
-	Encode.m_HYHhea.minRightSideBearing = Encode.FindMinRightSideBearing();
-	Encode.m_HYHhea.xMaxExtent = Encode.m_HYHhea.minLeftSideBearing + (Encode.m_HYhead.xMax - Encode.m_HYhead.xMin);
-	int szGlyphNum = Encode.m_vtHYGlyphs.size();
-	Encode.m_HYHhea.numberOfHMetrics = 0;
-	if (szGlyphNum > 0) {
-		int iBaseadvanceWidth = Encode.m_vtHYGlyphs[--szGlyphNum].advanceWidth;
-		while (--szGlyphNum >= 0) {
-			if (Encode.m_vtHYGlyphs[szGlyphNum].advanceWidth == iBaseadvanceWidth)
-				Encode.m_HYHhea.numberOfHMetrics++;
-			else
-				break;
-		}
-		Encode.m_HYHhea.numberOfHMetrics = (unsigned short)Encode.m_vtHYGlyphs.size() - Encode.m_HYHhea.numberOfHMetrics;
-	}
-	//HMTX
-	Encode.m_HYHmtx.SetDefault();
-	for (size_t i = 0; i < Encode.m_HYMaxp.numGlyphs; i++)
-	{
-		HMTX_LONGHORMERTRIC  h_Mertric;
-		h_Mertric.advanceWidth = Encode.m_vtHYGlyphs[i].advanceWidth;
-		h_Mertric.lsb = Encode.m_vtHYGlyphs[i].minX;
-		Encode.m_HYHmtx.vtLonghormetric.push_back(h_Mertric);
-	}
+}	// end of void CXSysProxy::InitMaxpTb()
+
+void CXSysProxy::InitOS2Tb(CHYFontCodec& Encode)
+{
 	//OS2
+	Encode.m_HYOS2.version = 4;
 	Encode.m_HYOS2.usWeightClass = ::XSysproxy().m_tagOpeionPrm.usWeight;
 	Encode.m_HYOS2.usWidthClass = ::XSysproxy().m_tagOpeionPrm.usWidth;
 	Encode.m_HYOS2.sTypoAscender = ::XSysproxy().m_tagOpeionPrm.sTypo_Ascender;
@@ -702,6 +700,18 @@ void CXSysProxy::InitEncodeOption(CHYFontCodec& Encode)
 	Encode.m_HYOS2.vtachVendID.push_back('N');
 	Encode.m_HYOS2.vtachVendID.push_back('Y');
 	Encode.m_HYOS2.vtachVendID.push_back('I');
+
+	if (Encode.m_HYOS2.usWeightClass == 400)
+	{
+		Encode.m_HYOS2.fsSelection = 0x140;
+	}
+	else if (Encode.m_HYOS2.usWeightClass >= 700)
+	{
+		Encode.m_HYOS2.fsSelection = 0x120;		
+	}
+	else {
+		Encode.m_HYOS2.fsSelection = 0x100;
+	}
 	int iAvg = 0, iCount = 0;
 	for (size_t i = 0; i < Encode.m_vtHYGlyphs.size(); i++) {
 		if (Encode.m_vtHYGlyphs[i].advanceWidth != 0) {
@@ -756,6 +766,10 @@ void CXSysProxy::InitEncodeOption(CHYFontCodec& Encode)
 	Encode.CountUnicodeRange(Encode.m_HYOS2.ulUnicodeRange1, Encode.m_HYOS2.ulUnicodeRange2, Encode.m_HYOS2.ulUnicodeRange3, Encode.m_HYOS2.ulUnicodeRange4);
 	Encode.m_HYOS2.usFirstCharIndex = 0x0020;
 	Encode.m_HYOS2.usLastCharIndex = Encode.FindLastCharIndex(Encode.m_vtHYGlyphs);
+
+	Encode.m_HYOS2.ulCodePageRange1 = 0x0004009f;
+	Encode.m_HYOS2.ulCodePageRange2 = 0x00000000;
+
 	iGID = Encode.FindGlyph(0x0078, Encode.m_vtHYGlyphs);
 	if (iGID != -1) {
 		Encode.m_HYOS2.sxHeight = Encode.m_vtHYGlyphs[iGID].maxY;
@@ -767,6 +781,11 @@ void CXSysProxy::InitEncodeOption(CHYFontCodec& Encode)
 	Encode.m_HYOS2.usDefaultChar = 0;
 	Encode.m_HYOS2.usBreakChar = 0x0020;
 	Encode.m_HYOS2.usMaxContext = 3;
+
+}	//end of void CXSysProxy::InitOS2Tb(CHYFontCodec& Encode)
+
+void CXSysProxy::InitPostTb(CHYFontCodec& Encode)
+{
 	//POST
 	Encode.m_HYPost.Format.value = 2;
 	Encode.m_HYPost.Format.fract = 0;
@@ -776,6 +795,15 @@ void CXSysProxy::InitEncodeOption(CHYFontCodec& Encode)
 	Encode.m_HYPost.underlinePosition = Encode.m_HYOS2.yStrikeoutPosition;
 	Encode.m_HYPost.isFixedPitch = 0;
 
+	for (size_t i = 0; i < Encode.m_HYMaxp.numGlyphs; i++) {
+		const CHYGlyph& glyph = Encode.m_vtHYGlyphs[i];
+		Encode.m_HYPost.InsertName(glyph.strPostName);
+	}
+
+}	// end of void CXSysProxy::InitPostTb()
+
+void CXSysProxy::InitCFFTb(CHYFontCodec& Encode)
+{
 	Encode.m_HYCFFInfo.TopDICT.IsCIDFont = ::XSysproxy().m_tagOpeionPrm.bCIDFnt;
 	Encode.m_HYCFFInfo.TopDICT.Ros.strRegistry = ::XSysproxy().m_tagOpeionPrm.Registry;
 	Encode.m_HYCFFInfo.TopDICT.Ros.strOrdering = ::XSysproxy().m_tagOpeionPrm.Ordering;
@@ -787,16 +815,59 @@ void CXSysProxy::InitEncodeOption(CHYFontCodec& Encode)
 			Encode.m_HYCFFInfo.stnStrings.InsertString(glyph.strPostName);
 		}
 	}
-	if (::XSysproxy().m_tagOpeionPrm.bFontname) {
-		MakeFontName(Encode);
+
+}	// end of void CXSysProxy::InitCFFTb()
+
+void CXSysProxy::InitEncodeOption(CHYFontCodec& Encode)
+{
+	Encode.CountFontBound();
+	
+	Encode.MakeCmap();
+	MakeFontName(Encode);
+	
+	// 重新命名中文字形名称
+	if (::XSysproxy().m_tagOpeionPrm.bRePsName) {		
+		Encode.RestPsName();
+	}
+
+	// 对字形进行unicode排序
+	if (::XSysproxy().m_tagOpeionPrm.bReSortUni) {
+		std::sort(Encode.m_vtHYGlyphs.begin(), Encode.m_vtHYGlyphs.end(), GlyphSortPredicate);
+	}
+
+	InitMaxpTb(Encode);	
+	// Head
+	InitHeadTb(Encode);	
+	// Hhea
+	InitHheaTb(Encode);
+	//HMTX
+	InitHmtxTb(Encode);
+	//OS2
+	InitOS2Tb(Encode);
+	//Post
+	InitPostTb(Encode);
+	//CFF
+	InitCFFTb(Encode);
+
+	if (::XSysproxy().m_tagOpeionPrm.bCmplVert) {
+		Encode.CountVerticalMetrics();
+		Encode.MakeVerticalMetrics();
+	}
+
+	Encode.MakeHYCodeMap();
+
+	if (::XSysproxy().m_tagOpeionPrm.bCmplLayout)
+	{
+		::XSysproxy().LoadAdvancedTypographicTables(&Encode);
 	}
 
 }	// end of void CXSysProxy::InitEncodeOption()
 
 void CXSysProxy::SetEncodeOption(CHYFontCodec& Encode, CHYFontCodec& Original)
 {
-	Encode.m_tagOption = ::XSysproxy().m_tagOpeionPrm;
+	InitEncodeOption(Encode);
 
+	Encode.m_tagOption = ::XSysproxy().m_tagOpeionPrm;
 	// Head
 	Encode.m_HYhead.unitsPerEm = Original.m_HYhead.unitsPerEm;
 	Encode.m_HYhead.lowestRecPPEM = Original.m_HYhead.lowestRecPPEM;
@@ -814,7 +885,22 @@ void CXSysProxy::SetEncodeOption(CHYFontCodec& Encode, CHYFontCodec& Original)
 	//OS2
 	Encode.m_HYOS2.usWeightClass = Original.m_HYOS2.usWeightClass;
 	Encode.m_HYOS2.usWidthClass = Original.m_HYOS2.usWidthClass;
-	if (!m_tagOpeionPrm.bHanyi) {
+	if (m_tagOpeionPrm.bHanyi) {
+		if (Encode.m_HYOS2.usWeightClass == 400)
+		{
+			Encode.m_HYOS2.fsSelection = 0x140;
+		}
+		else if (Encode.m_HYOS2.usWeightClass >=700)
+		{
+			Encode.m_HYOS2.fsSelection = 0x120;
+			Encode.m_HYhead.macStyle = 0x1;
+		}
+		else {
+			Encode.m_HYOS2.fsSelection = 0x100;
+		}
+	}
+	else
+	{
 		Encode.m_HYOS2.sTypoAscender = Original.m_HYOS2.sTypoAscender;
 		Encode.m_HYOS2.sTypoDescender = Original.m_HYOS2.sTypoDescender;
 		Encode.m_HYOS2.sTypoLineGap = Original.m_HYOS2.sTypoLineGap;
@@ -827,6 +913,7 @@ void CXSysProxy::SetEncodeOption(CHYFontCodec& Encode, CHYFontCodec& Original)
 		}
 		Encode.m_HYOS2.ulCodePageRange1 = Original.m_HYOS2.ulCodePageRange1;
 		Encode.m_HYOS2.ulCodePageRange2 = Original.m_HYOS2.ulCodePageRange2;
+		Encode.m_HYOS2.fsSelection = Original.m_HYOS2.fsSelection;
 	}
 
 	Encode.m_HYOS2.ySubscriptXSize = Original.m_HYOS2.ySubscriptXSize;
@@ -850,7 +937,6 @@ void CXSysProxy::SetEncodeOption(CHYFontCodec& Encode, CHYFontCodec& Original)
 	Encode.m_HYOS2.usDefaultChar = Original.m_HYOS2.usDefaultChar;
 	Encode.m_HYOS2.usBreakChar = Original.m_HYOS2.usBreakChar;
 	Encode.m_HYOS2.usMaxContext = Original.m_HYOS2.usMaxContext;
-	Encode.m_HYOS2.fsSelection = Original.m_HYOS2.fsSelection;
 
 	Encode.m_HYPost.italicAngle.value = Original.m_HYPost.italicAngle.value;
 	Encode.m_HYPost.italicAngle.fract = Original.m_HYPost.italicAngle.fract;
@@ -859,17 +945,13 @@ void CXSysProxy::SetEncodeOption(CHYFontCodec& Encode, CHYFontCodec& Original)
 	Encode.m_HYPost.isFixedPitch = Original.m_HYPost.isFixedPitch;
 
 	if (!::XSysproxy().m_tagOpeionPrm.bCmplCMAP) {
+		Encode.m_HYCmap.SetDefault();
 		Encode.m_HYCmap = Original.m_HYCmap;
 		Encode.SetCmapEntry(Original.m_HYCmap.vtCamp_tb_entry);
 	}
 
 	if (!::XSysproxy().m_tagOpeionPrm.bFontname) {
 		Encode.m_HYName = Original.m_HYName;
-	}
-
-	if (::XSysproxy().m_tagOpeionPrm.bCmplVert) {		
-		Encode.CountVerticalMetrics();
-		Encode.MakeVerticalMetrics();
 	}
 
 }	// end of void CXSysProxy::SetEncodeOption()

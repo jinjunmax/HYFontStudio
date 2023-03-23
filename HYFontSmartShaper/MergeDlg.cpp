@@ -144,7 +144,7 @@ void CMergeDlg::OnBnClickedMgr1MergeBtn()
 		strError = "×Ö¿â " + ::HY_GetFileNameFromPath(string(m_strSrc2)) + "¸ñÊ½²»·û¡£";
 		AfxMessageBox(strError.c_str());
 		return;
-	}	
+	}
 	if (m_strTxt != "") {
 		std::vector<CHYGlyph> outHYGlyphs;
 		GetSubset(SRC2.m_vtHYGlyphs, outHYGlyphs, string(m_strTxt));
