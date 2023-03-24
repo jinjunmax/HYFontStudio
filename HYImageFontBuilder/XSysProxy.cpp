@@ -517,37 +517,35 @@ BOOL CXSysProxy::SplitImage(char* SrcImg,char* SaveDir,int& code, int TopEdge, i
 
 }	// end of BOOL CXSysProxy::SplitImage()
 
-BOOL CXSysProxy::SquareImage(const char* SrcImg, int TopEdge, int LeftEdge, int RightEdge, int BottomEdge, int Colum, int Row, int BinaryThre, int iDirect, const char* MonoImg, int iMonoWidth)
+BOOL CXSysProxy::SquareImage(const char* SrcImg, int BinaryThre,  const char* MonoImg, int iMonoWidth, int SmthPrm/*=9*/)
 {
+	CString strFile;
+	strFile.Format("%s.jpg", MonoImg);
+	DeleteFile(strFile);
+
 	IplImage* clrImage = cvLoadImage(SrcImg, CV_LOAD_IMAGE_GRAYSCALE);
 	if (NULL == clrImage)	FALSE;
 
-	IplImage* BinaryImage = cvCreateImage(cvGetSize(clrImage), IPL_DEPTH_8U, 1);
-	cvThreshold(clrImage, BinaryImage, BinaryThre, 255, CV_THRESH_BINARY);
+	// 缩放到合适的大小
+	float fScale = clrImage->width > clrImage->height ? (float)iMonoWidth / clrImage->width : (float)iMonoWidth / clrImage->height;
+	CvSize Scalesize;
+	Scalesize.width = clrImage->width * fScale;
+	Scalesize.height = clrImage->height * fScale;
+	IplImage* ScaleImg = cvCreateImage(Scalesize, IPL_DEPTH_8U, 1);
+	cvResize(clrImage, ScaleImg);
 
-	IplImage* bwImg = cvCreateImage(cvGetSize(BinaryImage), IPL_DEPTH_8U, 1);
-	uchar* BinaryData = (uchar*)BinaryImage->imageData;
-	uchar* bwData = (uchar*)bwImg->imageData;
-	uchar srcpix = 0;
-	CString strFile;
+	IplImage* BinaryImage = cvCreateImage(cvGetSize(ScaleImg), IPL_DEPTH_8U, 1);
+	IplImage* medianSmoothImg = cvCreateImage(cvGetSize(ScaleImg), IPL_DEPTH_8U, 1);
 
-	// 生成等宽图像
+	cvSmooth(ScaleImg, medianSmoothImg, CV_MEDIAN, SmthPrm, SmthPrm);
+	cvThreshold(medianSmoothImg, BinaryImage, BinaryThre, 255, CV_THRESH_BINARY);
+	
 	int DataSize = iMonoWidth * iMonoWidth;
 	char* pMonoData = new char[DataSize];
 	::memset(pMonoData, 0xff, DataSize);
 
-	// 缩放到合适的大小
-	float fScale = BinaryImage->width > BinaryImage->height ? (float)iMonoWidth / BinaryImage->width : (float)iMonoWidth / BinaryImage->height;
-	CvSize Scalesize;
-	Scalesize.width = BinaryImage->width* fScale;
-	Scalesize.height = BinaryImage->height* fScale;
-	IplImage* ScaleImg = cvCreateImage(Scalesize, IPL_DEPTH_8U, 1);
-	cvResize(BinaryImage, ScaleImg);
-
-	ImageDataBorder(ScaleImg->imageData, ScaleImg->widthStep, ScaleImg->height, pMonoData, iMonoWidth);
-	strFile.Format("%s.jpg", MonoImg);
-
-	DeleteFile(strFile);
+	ImageDataBorder(BinaryImage->imageData, BinaryImage->widthStep, BinaryImage->height, pMonoData, iMonoWidth);
+	
 	CvSize sizeTmp;
 	sizeTmp.height = iMonoWidth;
 	sizeTmp.width = iMonoWidth;
@@ -556,14 +554,12 @@ BOOL CXSysProxy::SquareImage(const char* SrcImg, int TopEdge, int LeftEdge, int 
 	cvSaveImage((LPSTR)(LPCSTR)strFile, RctImgBorder);
 
 	cvReleaseImage(&RctImgBorder);
-	cvReleaseImage(&ScaleImg);
-	
+	cvReleaseImage(&BinaryImage);
+	cvReleaseImage(&ScaleImg);	
+	cvReleaseImage(&clrImage);
+
 	if (pMonoData) delete[] pMonoData;
 	pMonoData = NULL;
-
-	cvReleaseImage(&bwImg);
-	cvReleaseImage(&BinaryImage);
-	cvReleaseImage(&clrImage);
 
 	return true;
 

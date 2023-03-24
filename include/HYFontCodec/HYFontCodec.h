@@ -186,8 +186,7 @@ namespace HYFONTCODEC
 		void	InitCompatChar();
 		//兼容JF转换中JF字库缺失的繁体字符（将简体字形赋入繁体和简体编码）
 		void	InitJFChar();
-		
-		
+
 		void	SetDefault();
 
 		int		OpenFile(const char* pFontFile);

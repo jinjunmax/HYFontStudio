@@ -38,4 +38,5 @@ public:
 	int m_iGridLenThres;
 	CString m_strGridImgNumber;
 	CString m_strGridImgDir;
+	int m_ismthPrm;	// Í¼ÏñÆ½»¬²ÎÊı
 };

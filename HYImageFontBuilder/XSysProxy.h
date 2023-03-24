@@ -24,11 +24,7 @@ public:
 	BOOL	SplitImage(char* SrcImg, char* SaveDir, int& code, int TopEdge, int LeftEdge, int RightEdge, int BottomEdge, int Colum, int Row, int BinaryThre, int iDirect);
 	void	SaveGridImg(IplImage* bWImg, std::vector<Rect2d>& vtGrid, CString strDir, int& code);
 
-	BOOL	SquareImage(const char* SrcImg, int TopEdge, int LeftEdge,
-							int RightEdge, int BottomEdge, 
-							int Colum, int Row,
-							int BinaryThre, int iDirect, 
-							const char* MonoImg, int iMonoWidth);
+	BOOL	SquareImage(const char* SrcImg, int BinaryThre, const char* MonoImg, int iMonoWidth, int SmthPrm=9);
 	void	UnifyRectSize(std::vector<Rect2d>& vtGrid);
 	
 	void	MakeGlyph(IplImage* BinaryImg, std::vector<Rect2d>& vtGlyphBound, int iBaseLine);

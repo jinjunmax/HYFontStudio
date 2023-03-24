@@ -185,6 +185,10 @@ void CXSysBaseProxy::LoadLocalProfile()
 	GetPrivateProfileString("ImageToFont", "GridThresLen", _T("1"), szInfo, MAX_PATH, strProfileName);
 	m_tagScanPrm.iGridLenThres = atoi(szInfo);
 
+	ZeroMemory(szInfo, MAX_PATH);
+	GetPrivateProfileString("ImageToFont", "Smooth", _T("9"), szInfo, MAX_PATH, strProfileName);
+	m_tagScanPrm.iSmoothParam = atoi(szInfo);
+
 	// Split Image
 	ZeroMemory(szInfo, MAX_PATH);
 	GetPrivateProfileString("SplitImage", "ImgCode", _T("0x20000"), szInfo, MAX_PATH, strProfileName);
@@ -281,7 +285,8 @@ void CXSysBaseProxy::StoreLocalProfile()
 	WritePrivateProfileString("ImageToFont", "GridThres", strTmp, strProfileName);
 	strTmp.Format(_T("%d"), m_tagScanPrm.iGridLenThres);
 	WritePrivateProfileString("ImageToFont", "GridThresLen", strTmp, strProfileName);
-
+	strTmp.Format(_T("%d"), m_tagScanPrm.iSmoothParam);
+	WritePrivateProfileString("ImageToFont", "Smooth", strTmp, strProfileName);
 	// Split Image
 	strTmp.Format(_T("0x%X"), m_tagScanPrm.iGridImgNumber);
 	WritePrivateProfileString("SplitImage", "ImgCode", strTmp, strProfileName);

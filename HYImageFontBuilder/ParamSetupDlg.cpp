@@ -27,6 +27,7 @@ CParamSetupDlg::CParamSetupDlg(CWnd* pParent /*=NULL*/)
 	, m_iGridLenThres(0)
 	, m_strGridImgNumber(_T("0x20000"))
 	, m_strGridImgDir(_T("D:\\"))
+	, m_ismthPrm(9)
 {
 
 }
@@ -52,6 +53,7 @@ void CParamSetupDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_PMST_GRIDLENTHRES_EDT, m_iGridLenThres);
 	DDX_Text(pDX, IDC_SPLT_IMGNO, m_strGridImgNumber);
 	DDX_Text(pDX, IDC_SPLT_SAVEDIR, m_strGridImgDir);
+	DDX_Text(pDX, IDC_PMST_SMOOTH_EDT, m_ismthPrm);
 }
 
 BEGIN_MESSAGE_MAP(CParamSetupDlg, CDialog)
@@ -79,7 +81,7 @@ void CParamSetupDlg::OnBnClickedOk()
 	XSysproxy().m_tagScanPrm.iSingleBorder = m_iSingleBorder;
 	XSysproxy().m_tagScanPrm.iGridLenThres = m_iGridLenThres;
 	XSysproxy().m_tagScanPrm.iGridImgNumber = strtol(m_strGridImgNumber,NULL,16);
-
+	XSysproxy().m_tagScanPrm.iSmoothParam = m_ismthPrm;
 	ZeroMemory(XSysproxy().m_tagScanPrm.szGridImgDir,MAX_PATH);
 	strcpy_s(XSysproxy().m_tagScanPrm.szGridImgDir,MAX_PATH, (LPSTR)(LPCSTR)m_strGridImgDir);
 	CDialog::OnOK();
@@ -113,7 +115,7 @@ BOOL CParamSetupDlg::OnInitDialog()
 	m_iGridLenThres = XSysproxy().m_tagScanPrm.iGridLenThres;
 	m_strGridImgNumber.Format("0x%X", XSysproxy().m_tagScanPrm.iGridImgNumber);
 	m_strGridImgDir.Format("%s", XSysproxy().m_tagScanPrm.szGridImgDir);
-
+	m_ismthPrm = XSysproxy().m_tagScanPrm.iSmoothParam;
 	UpdateData(FALSE);
 
 	return TRUE;  // return TRUE unless you set the focus to a control

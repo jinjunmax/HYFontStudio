@@ -128,14 +128,8 @@ void CMonoImgDlg::OnBnClickedCvntBtn()
 	}
 	m_prgsConvert.SetPos(0);
 
-	int iTopEdge = ::XSysproxy().m_tagScanPrm.iTopEdge;
-	int iLefeEdge = ::XSysproxy().m_tagScanPrm.iLeftEdge;
-	int iBottomEdge = ::XSysproxy().m_tagScanPrm.iBottomEdge;
-	int iRightEdge = ::XSysproxy().m_tagScanPrm.iRightEdge;
-	int iColmn = ::XSysproxy().m_tagScanPrm.iColmns;
-	int iRow = ::XSysproxy().m_tagScanPrm.iRows;
 	int iThres = ::XSysproxy().m_tagScanPrm.iGrayThre;
-	int iDirect = ::XSysproxy().m_tagScanPrm.iScanDirection;
+	int iSmoothParam = ::XSysproxy().m_tagScanPrm.iSmoothParam;
 
 	size_t st = vtSrcFile.size();
 	for (size_t i = 0; i < st; i++)
@@ -144,7 +138,7 @@ void CMonoImgDlg::OnBnClickedCvntBtn()
 		std::string strSrcName = HY_GetFileNameFromPath(strSrcFile);
 		std::string DstName = HY_StringFormat("%s\\%s", m_strDstPath, strSrcName.c_str());
 
-		bool b = ::XSysproxy().SquareImage(strSrcFile.c_str(), iTopEdge, iLefeEdge, iRightEdge, iBottomEdge, iColmn, iRow, iThres, iDirect, DstName.c_str(), m_unMonoWidth);
+		bool b = ::XSysproxy().SquareImage(strSrcFile.c_str(), iThres, DstName.c_str(), m_unMonoWidth, iSmoothParam);
 
 		m_prgsConvert.SetPos((float)i/(st-1) * 100);
 	}

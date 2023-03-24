@@ -127,6 +127,7 @@ typedef struct _HY_SCAN_PRM
 	int iGridThres;			// 在直方图中做网格判定阈值
 	int iGridLenThres;		// 判断在阈值之下的数值的连续长度阈值
 	int iGridImgNumber;
+	int	iSmoothParam;		// 平滑参数设定
 	char szGridImgDir[MAX_PATH];
 } HY_SCAN_PRM;
 #endif
