@@ -215,7 +215,6 @@ void CMergeDlg::OnBnClickedMgr1MergeBtn()
 	::XSysproxy().InitEncodeOption(Dst);
 	::XSysproxy().SetEncodeOption(Dst, SRC1);
 
-	Dst.MakeHYCodeMap();
 	if (Dst.Encode((LPSTR)(LPCSTR)m_strDst, ulTableFlag, ::XSysproxy().m_tagOpeionPrm) == HY_NOERROR)
 		AfxMessageBox(_T("字库生成完成"));
 	else

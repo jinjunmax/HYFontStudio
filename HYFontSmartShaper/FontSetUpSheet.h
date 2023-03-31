@@ -15,7 +15,7 @@ public:
 	CFontSetUpSheet(LPCTSTR pszCaption, CWnd* pParentWnd = NULL, UINT iSelectPage = 0);
 	virtual ~CFontSetUpSheet();
 public:	
-	void			SaveInfo();
+	BOOL			SaveInfo();
 	virtual BOOL	OnInitDialog();
 	void			Init();
 	void			Uninit();

@@ -847,14 +847,14 @@ void CXSysProxy::InitEncodeOption(CHYFontCodec& Encode)
 	//Post
 	InitPostTb(Encode);
 	//CFF
-	InitCFFTb(Encode);
-
-	if (::XSysproxy().m_tagOpeionPrm.bCmplVert) {
-		Encode.CountVerticalMetrics();
-		Encode.MakeVerticalMetrics();
-	}
+	InitCFFTb(Encode);	
 
 	Encode.MakeHYCodeMap();
+
+	if (::XSysproxy().m_tagOpeionPrm.bDelOld)
+	{
+		::XSysproxy().DelCode(Encode, ::XSysproxy().m_vtOvrrdUni);
+	}
 
 	if (::XSysproxy().m_tagOpeionPrm.bCmplLayout)
 	{
@@ -952,6 +952,11 @@ void CXSysProxy::SetEncodeOption(CHYFontCodec& Encode, CHYFontCodec& Original)
 
 	if (!::XSysproxy().m_tagOpeionPrm.bFontname) {
 		Encode.m_HYName = Original.m_HYName;
+	}	
+
+	if (::XSysproxy().m_tagOpeionPrm.bCmplVert) {
+		Encode.CountVerticalMetrics();
+		Encode.MakeVerticalMetrics();
 	}
 
 }	// end of void CXSysProxy::SetEncodeOption()
@@ -1018,42 +1023,7 @@ void CXSysProxy::MakeConturPath(CHYContour& hyCntur, std::vector<CHYPoint>& outH
 	size_t  sPtNum = hyCntur.vtHYPoints.size();
 	CHYPoint f1, f2;
 	size_t i = 0;
-#if 0	
-	while (i < sPtNum)
-	{
-		if (i == 0)
-		{
-			outHYPoints.push_back(hyCntur.vtHYPoints[i++]);
-		}
-		else
-		{
-			if (hyCntur.vtHYPoints[i].flag == POINT_FLG_ANCHOR)
-			{	
-				outHYPoints.push_back(hyCntur.vtHYPoints[i++]);
-				
-			}
-			else if (hyCntur.vtHYPoints[i].flag == POINT_FLG_CONTROL)
-			{
-				outHYPoints.push_back(hyCntur.vtHYPoints[i++]);
-				if (i < sPtNum)
-				{
-					if (hyCntur.vtHYPoints[i].flag == POINT_FLG_ANCHOR)
-					{	
-						outHYPoints.push_back(hyCntur.vtHYPoints[i++]);
-						
-					}					
-					else if (hyCntur.vtHYPoints[i].flag == POINT_FLG_CONTROL)
-					{						
-						f2.x = hyCntur.vtHYPoints[i-1].x + (hyCntur.vtHYPoints[i].x - hyCntur.vtHYPoints[i-1].x) / 2.0f;
-						f2.y = hyCntur.vtHYPoints[i-1].y + (hyCntur.vtHYPoints[i].y - hyCntur.vtHYPoints[i-1].y) / 2.0f;
-						f2.flag = POINT_FLG_ANCHOR;
-						outHYPoints.push_back(f2);
-					}					
-				}
-			}
-		}
-	}
-#else 
+
 	while (i < sPtNum)
 	{		
 		if (hyCntur.vtHYPoints[i++].flag == POINT_FLG_ANCHOR)
@@ -1083,7 +1053,68 @@ void CXSysProxy::MakeConturPath(CHYContour& hyCntur, std::vector<CHYPoint>& outH
 		}
 	}
 
-#endif 
-
 }	// end of void CFontShowWnd::MakeConturPath();
 
+void CXSysProxy::RebuildFont4DelCode(CString strInFntFile, CString strOutFntFile, std::vector<unsigned long> vtUni)
+{
+	CHYFontCodec Decode;
+
+	if (Decode.OpenFile(strInFntFile)==HY_NOERROR)
+	{
+		// »ñÈ¡×ÖµäÄ¿Â¼
+		Decode.DecodeTableDirectory();
+		Decode.Decodemaxp();
+		Decode.Decodecmap();
+
+		// clearup
+		Decode.m_HYCodeMap.vtHYCodeMap.clear();
+
+		CHYCodeMapItem  mapItm;
+		int	iGlyphNum = Decode.m_HYMaxp.numGlyphs;
+		for (int i = 0; i < iGlyphNum; i++) {
+			if (i == 0)	{
+				mapItm.ulGlyphNo = 0xffff;
+				mapItm.iGlyphIndex = 0;
+				Decode.m_HYCodeMap.vtHYCodeMap.push_back(mapItm);
+			}
+			else{
+
+				std::vector<unsigned long> szUnicode;
+				Decode.FindGryphUncidoByIndex(i,szUnicode);
+				size_t stUnicodeNum = szUnicode.size();
+				for (size_t j = 0; j < stUnicodeNum; j++) {					
+					mapItm.ulGlyphNo = szUnicode[j];
+					mapItm.iGlyphIndex = i;
+					Decode.m_HYCodeMap.vtHYCodeMap.push_back(mapItm);
+				}
+			}
+		}
+
+		DelCode(Decode, vtUni);
+
+	}
+
+
+
+}	// end of void CXSysProxy::ClearCode()
+
+void CXSysProxy::DelCode(CHYFontCodec& Codec, std::vector<unsigned long> vtUni)
+{
+	CHYCodeMap& CodeMap = Codec.m_HYCodeMap;
+	CHYPost& Post = Codec.m_HYPost;
+	size_t i = 0;	
+	while (i < CodeMap.vtHYCodeMap.size()) {
+		CHYCodeMapItem& itm = CodeMap.vtHYCodeMap[i];
+		if (::CheckUniRepeat(itm.ulGlyphNo, vtUni)) {
+			CodeMap.vtHYCodeMap.erase(CodeMap.vtHYCodeMap.begin()+i);
+			continue;
+		}		
+		i++;
+	}
+
+}	// end of void DelCode()
+
+void CXSysProxy::ExchangeCode(CHYCodeMap& CodeMap, std::vector<unsigned long> vtUni)
+{
+
+}	// end of void ExchangeCode()

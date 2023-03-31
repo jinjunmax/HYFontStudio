@@ -95,11 +95,11 @@ BOOL CFontSetUpSheet::OnInitDialog()
 
 }	// end of BOOL CFontSetUpSheet::OnInitDialog()
 
-void CFontSetUpSheet::SaveInfo()
+BOOL CFontSetUpSheet::SaveInfo()
 {
 	m_EMProPage.SaveInfo();	
 	m_CFFProPage.Save();
-	m_OptionPage.Save();
+	return m_OptionPage.Save();
 
 }	// end of void CFontSetUpSheet::SaveInfo()
 

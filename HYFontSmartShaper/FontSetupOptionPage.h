@@ -37,14 +37,16 @@ protected:
 	BOOL		m_bHanyi;
 	BOOL		m_bKangxi;
 	BOOL		m_bOldStandard;
+	BOOL		m_bDelOldStnd;
 	CString		m_strCHSFaimlyName;
 	CString		m_strCHSSubName;
 	CString		m_strENGFamilyName;
 	CString		m_strENGSubName;
 	CString		m_strVersion;
-	int			m_cmtADH;	
+	int			m_iSetAdh;
+	
 public:
-	void			Save();
+	BOOL			Save();
 	CHYFontCodec*	m_pHYFoncCodec;
 public:
 	virtual BOOL OnInitDialog();
@@ -52,4 +54,6 @@ public:
 	afx_msg void OnBnClickedPtnRenameChk();	
 	afx_msg void OnBnClickedPtnSetadhChk();
 	afx_msg void OnBnClickedPtnOldstndChk();	
+	
+
 };

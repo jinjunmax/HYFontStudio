@@ -101,6 +101,7 @@ BEGIN_MESSAGE_MAP(CHYFontSmartShaperView, CFormView)
 	ON_COMMAND(ID_MN_CHKEROTF, &CHYFontSmartShaperView::OnMnChkerotf)
 	ON_COMMAND(ID_EMOJI_MK, &CHYFontSmartShaperView::OnEmojiMk)
 	ON_COMMAND(ID_MN_CODEMAP, &CHYFontSmartShaperView::OnMnCodemap)
+	ON_COMMAND(ID_FNT_CLEARCODE, &CHYFontSmartShaperView::OnFntClearcode)
 END_MESSAGE_MAP()
 
 // CHYFontSmartShaperView 构造/析构
@@ -252,7 +253,7 @@ void CHYFontSmartShaperView::OnFileSave()
 	::XSysproxy().SetEncodeOption(m_FontEnCodec, m_FontDeCodec);
 	m_FontEnCodec.m_mulpTableData.setDefault();
 	m_FontEnCodec.m_mulpTableData = m_FontDeCodec.m_mulpTableData;
-	
+
 	std::vector<unsigned long> ulTableFlag;
 	ulTableFlag.push_back(CMAP_TAG);
 	ulTableFlag.push_back(DSIG_TAG);
@@ -269,13 +270,21 @@ void CHYFontSmartShaperView::OnFileSave()
 		ulTableFlag.push_back(VHEA_TAG);
 		ulTableFlag.push_back(VMTX_TAG);
 	}
+	if (m_FontDeCodec.FindFlag(GPOS_TAG))
+	{
+		ulTableFlag.push_back(GPOS_TAG);
+	}
+
 	if (::XSysproxy().m_tagOpeionPrm.bCmplLayout)
 	{
 		ulTableFlag.push_back(GSUB_TAG);
 	}
-	else if (m_FontDeCodec.FindFlag(GSUB_TAG))
+	else 
 	{
-		ulTableFlag.push_back(GSUB_TAG);
+		if (m_FontDeCodec.FindFlag(GSUB_TAG))
+		{
+			ulTableFlag.push_back(GSUB_TAG);
+		}
 	}
 	
 	if (iCheckNo == IDC_MN_CVT_TTF_RD) {		
@@ -3368,3 +3377,15 @@ void CHYFontSmartShaperView::OnMnCodemap()
 	AfxMessageBox("处理完成");
 	
 }	// end of void CHYFontSmartShaperView::OnMnCodemap()
+
+void CHYFontSmartShaperView::OnFntClearcode()
+{
+	// TODO: 在此添加命令处理程序代码
+	TCHAR	szFilters[] = _T("TrueType File(*.ttf)|*.ttf|OpenType File(*.otf)|*.otf||");
+	CFileDialog  openFileDlg(TRUE, _T(""), _T(""), OFN_LONGNAMES | OFN_FILEMUSTEXIST, szFilters);
+	if (openFileDlg.DoModal() != IDOK)	return;
+
+
+
+
+}	// end of void CHYFontSmartShaperView::OnFntClearcode()

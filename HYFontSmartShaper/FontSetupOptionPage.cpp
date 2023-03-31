@@ -24,9 +24,10 @@ CFontSetupOptionPage::CFontSetupOptionPage()
 	, m_bSetAdh(FALSE)
 	, m_bLayout(FALSE)
 	, m_bCorrect(FALSE)
-	, m_bHanyi(TRUE)
-	, m_cmtADH(0)
+	, m_bHanyi(TRUE)	
 	, m_bOldStandard(FALSE)
+	, m_bDelOldStnd(FALSE)
+	, m_iSetAdh(0)
 {
 	m_bReVert = TRUE;
 	m_bRePsName = FALSE;
@@ -50,7 +51,7 @@ void CFontSetupOptionPage::DoDataExchange(CDataExchange* pDX)
 	DDX_Check(pDX, IDC_PTN_PSNM_CHK, m_bRePsName);
 	DDX_Check(pDX, IDC_PTN_SRTUNI_CHK, m_bReSortUni);
 	DDX_Check(pDX, IDC_PTN_YITIZI_CHK, m_bYiTiZi);
-	DDX_Check(pDX, IDC_PTN_RMRPPNT_CHK, m_brmPoint);	
+	DDX_Check(pDX, IDC_PTN_RMRPPNT_CHK, m_brmPoint);
 	DDX_Check(pDX, IDC_PTN_RENAME_CHK, m_bRename);
 	DDX_Check(pDX, IDC_PTN_CMP_CHK, m_bCustomCmap);
 	DDX_Check(pDX, IDC_PTN_SETADW_CHK, m_bSetAdw);
@@ -64,8 +65,9 @@ void CFontSetupOptionPage::DoDataExchange(CDataExchange* pDX)
 	DDX_Check(pDX, IDC_PTN_CORRECT_CHK, m_bCorrect);
 	DDX_Check(pDX, IDC_PTN_HYSND_CHK, m_bHanyi);
 	DDX_Check(pDX, IDC_PTN_KANGXI_CHK, m_bKangxi);
-	DDX_Text(pDX, IDC_PTN_SETADH_EDT, m_cmtADH);
 	DDX_Check(pDX, IDC_PTN_OLDSTND_CHK, m_bOldStandard);
+	DDX_Check(pDX, IDC_PTN_DELOLD_CHK, m_bDelOldStnd);
+	DDX_Text(pDX, IDC_PTN_ADH_EDT, m_iSetAdh);
 }	// end of void CFontSetupOptionPage::DoDataExchange()
 
 BEGIN_MESSAGE_MAP(CFontSetupOptionPage, CPropertyPage)
@@ -86,16 +88,17 @@ void	CFontSetupOptionPage::Init()
 	m_bSetAdw	= ::XSysproxy().m_tagOpeionPrm.bsetADW;
 	m_bSetAdh	= ::XSysproxy().m_tagOpeionPrm.bsetADH;
 	m_bOldStandard = ::XSysproxy().m_tagOpeionPrm.bOldStandard;
-	if (m_bSetAdh)
-	{
-		GetDlgItem(IDC_PTN_SETADH_EDT)->EnableWindow();
-	}
-	else
-	{
-		GetDlgItem(IDC_PTN_SETADH_EDT)->CloseWindow();
-	}
-	m_cmtADH = ::XSysproxy().m_tagOpeionPrm.usSetADH;
+	m_bDelOldStnd = ::XSysproxy().m_tagOpeionPrm.bDelOld;
 
+	
+	if (m_bSetAdh){
+		((CEdit*)GetDlgItem(IDC_PTN_ADH_EDT))->SetReadOnly(FALSE);
+	}
+	else{
+		((CEdit*)GetDlgItem(IDC_PTN_ADH_EDT))->SetReadOnly(TRUE);
+	}	
+
+	m_iSetAdh = ::XSysproxy().m_tagOpeionPrm.usSetADH;	
 	m_bLayout = ::XSysproxy().m_tagOpeionPrm.bCmplLayout;
 	m_bCorrect = ::XSysproxy().m_tagOpeionPrm.bCnturCorrect;
 	m_bHanyi = ::XSysproxy().m_tagOpeionPrm.bHanyi;
@@ -128,10 +131,17 @@ void	CFontSetupOptionPage::Uninit()
 
 }	// end of void	CFontSetupOptionPage::Uninit()
 
-void	CFontSetupOptionPage::Save()
+BOOL	CFontSetupOptionPage::Save()
 {	
 	if (m_hWnd) {
 		UpdateData();
+
+		if (m_bOldStandard) {
+			if(m_bDelOldStnd){
+				AfxMessageBox(_T("兼容旧标准与删除旧标准不可同时选中"));
+				return FALSE;
+			}
+		}	
 
 		::XSysproxy().m_tagOpeionPrm.bCmplVert = m_bReVert;
 		::XSysproxy().m_tagOpeionPrm.bRePsName = m_bRePsName;
@@ -145,8 +155,10 @@ void	CFontSetupOptionPage::Save()
 		::XSysproxy().m_tagOpeionPrm.bCnturCorrect = m_bCorrect;	
 		::XSysproxy().m_tagOpeionPrm.bHanyi = m_bHanyi;
 		::XSysproxy().m_tagOpeionPrm.bKangXi = m_bKangxi;
-		::XSysproxy().m_tagOpeionPrm.usSetADH = m_cmtADH;
+		::XSysproxy().m_tagOpeionPrm.usSetADH = m_iSetAdh;
 		::XSysproxy().m_tagOpeionPrm.bOldStandard = m_bOldStandard;
+		::XSysproxy().m_tagOpeionPrm.bDelOld = m_bDelOldStnd;
+
 		if (m_bRename) {
 			ZeroMemory(::XSysproxy().m_tagOpeionPrm.CHSFaimlyName,MAX_PATH);
 			strcpy(::XSysproxy().m_tagOpeionPrm.CHSFaimlyName, (LPCSTR)(LPCTSTR)m_strCHSFaimlyName);
@@ -160,6 +172,8 @@ void	CFontSetupOptionPage::Save()
 			strcpy(::XSysproxy().m_tagOpeionPrm.Version, (LPCSTR)(LPCTSTR)m_strVersion);			
 		}
 	}	
+
+	return TRUE;
 
 }	// end of void	CFontSetupOptionPage::Save()
 
@@ -208,15 +222,15 @@ void CFontSetupOptionPage::OnBnClickedPtnRenameChk()
 
 void CFontSetupOptionPage::OnBnClickedPtnSetadhChk()
 {
-	// TODO: 在此添加控件通知处理程序代码
-	if (m_bSetAdh)
-	{
-		GetDlgItem(IDC_PTN_SETADH_EDT)->EnableWindow();
+	UpdateData(TRUE);
+
+	if (m_bSetAdh) {
+		((CEdit*)GetDlgItem(IDC_PTN_ADH_EDT))->SetReadOnly(FALSE);
 	}
-	else
-	{
-		GetDlgItem(IDC_PTN_SETADH_EDT)->CloseWindow();
+	else {
+		((CEdit*)GetDlgItem(IDC_PTN_ADH_EDT))->SetReadOnly(TRUE);
 	}
+	
 }	// end of void CFontSetupOptionPage::OnBnClickedPtnSetadhChk()
 
 void CFontSetupOptionPage::OnBnClickedPtnOldstndChk()

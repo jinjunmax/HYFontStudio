@@ -31,6 +31,9 @@ BOOL CXSysBaseProxy::Init(CString strHelpFile)
 	GetSystemDirectory(szBuffer, MAX_PATH); 
 	m_strSysDir.Format(_T("%s\\"), szBuffer);
 
+	string strcode = m_strAppDir + _T("data\\OverrideCode.txt");
+	::HY_LoadCodeFile((char*)strcode.c_str(), m_vtOvrrdUni);
+
 	LoadLocalProfile();
 
 	return TRUE;
@@ -80,7 +83,7 @@ LRESULT	CXSysBaseProxy::UpdateAllViews(UINT nMsg, LPARAM lParam)
 
 void CXSysBaseProxy::LoadLocalProfile()
 {	
-	CString strProfileName = m_strAppDir + _T("data\\SmartSharperSetUp.ini");
+	CString strProfileName = m_strAppDir + _T("data\\Setup.ini");
 	TCHAR	szInfo[MAX_PATH] = {0};
 
 	/////////////////////////////////////////////////////////////////////////////////////////////
@@ -119,7 +122,8 @@ void CXSysBaseProxy::LoadLocalProfile()
 	ZeroMemory(szInfo, MAX_PATH);
 	GetPrivateProfileString("Option", "OLDSTANDARD", _T("1"), szInfo, MAX_PATH, strProfileName);
 	m_tagOpeionPrm.bOldStandard = atoi(szInfo) == 0 ? FALSE : TRUE;
-
+	GetPrivateProfileString("Option", "DElOLD", _T("0"), szInfo, MAX_PATH, strProfileName);
+	m_tagOpeionPrm.bDelOld = atoi(szInfo) == 0 ? FALSE : TRUE;
 	ZeroMemory(szInfo, MAX_PATH);
 	GetPrivateProfileString("Option", "KANGXI", _T("0"), szInfo, MAX_PATH, strProfileName);
 	m_tagOpeionPrm.bKangXi = atoi(szInfo) == 0 ? FALSE : TRUE;
@@ -197,7 +201,7 @@ void CXSysBaseProxy::LoadLocalProfile()
 
 void CXSysBaseProxy::StoreLocalProfile()
 {
-	CString strProfileName = m_strAppDir + _T("data\\SmartSharperSetUp.ini");
+	CString strProfileName = m_strAppDir + _T("data\\Setup.ini");
 	CString strTmp = _T("");
 	
 	/////////////////////////////////////////////////////////////////////////////////////////////	
@@ -225,6 +229,8 @@ void CXSysBaseProxy::StoreLocalProfile()
 	WritePrivateProfileString("Option", "YITIZI", strTmp, strProfileName);
 	strTmp.Format(_T("%d"), m_tagOpeionPrm.bOldStandard);
 	WritePrivateProfileString("Option", "OLDSTANDARD", strTmp, strProfileName);
+	strTmp.Format(_T("%d"), m_tagOpeionPrm.bDelOld);
+	WritePrivateProfileString("Option", "DElOLD", strTmp, strProfileName);
 	strTmp.Format(_T("%d"), m_tagOpeionPrm.bKangXi);
 	WritePrivateProfileString("Option", "KANGXI", strTmp, strProfileName);
 	strTmp.Format(_T("%d"), m_tagOpeionPrm.bCnturCorrect);

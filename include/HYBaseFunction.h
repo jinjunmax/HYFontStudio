@@ -79,6 +79,7 @@ int					HY_DLL_API  CheckUniRepeat(unsigned long ulUnicod, std::vector<unsigned 
 void				HY_DLL_API  RemoveUniRepeat(std::vector<unsigned long>& vtInUni);
 
 
+
 // 读取字表文件
 int					HY_DLL_API  HY_LoadCharTableFile(char* strTxtFile, std::vector<unsigned long>& vtUnicode);
 // 读取字表文件

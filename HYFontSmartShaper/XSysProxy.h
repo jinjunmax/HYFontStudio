@@ -27,7 +27,6 @@ public:
 	void SumVrGlyphs(std::vector<CVrGlyphs>& invtVrGlyphs, CVrGlyphs& outVrGlyph);
 	void SubVrGlyphs(CVrGlyphs& inVrGlyph1, CVrGlyphs& inVrGlyph2, CVrGlyphs& outVrGlyph);
 
-
 	void InitHheaTb(CHYFontCodec& Encode);
 	void InitHmtxTb(CHYFontCodec& Encode);
 	void InitHeadTb(CHYFontCodec& Encode);
@@ -41,11 +40,17 @@ public:
 	BOOL GetBugChar(CHYGlyph& InGlyph, std::vector<int>& cntrIndx,std::vector<CHYContour>& vtResult);
 	void MakeConturPath(CHYContour& hyCntur, std::vector<CHYPoint>& vtHYPoints);
 
+	void RebuildFont4DelCode(CString strInFntFile, CString strOutFntFile, std::vector<unsigned long> vtUni);
+	void DelCode(CHYFontCodec& Codec, std::vector<unsigned long> vtUni);
+	void ExchangeCode(CHYCodeMap& CodeMap,std::vector<unsigned long> vtUni);
+
+
 public:
 	CVrAxisRecords		AxisRecords;
 	CVrMasters			Masters;
 	CVrInstances		Instances;
 	CVrFontName			VrFntName;
+	
 };
 
 CXSysProxy&	XSysproxy(); 

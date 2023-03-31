@@ -251,14 +251,12 @@
 #define IDC_TCMPNB_RD                   1204
 #define IDC_TCMPDST_BTN                 1205
 #define IDC_TCMPFL1_RD                  1206
-#define IDC_PTN_OLDSTND_CHK             1207
 #define IDC_EMJ_CNGFILE_BTN             1208
 #define IDC_EMJ_CNGFILE_EDIT            1209
 #define IDC_EMJ_CDEFILE_EDIT            1210
 #define IDC_EMJ_CDEFILE_BTN             1211
 #define IDC_EMJ_MK_BTN                  1212
 #define IDC_EMJ_HMFILE_EDIT             1213
-#define IDC_EMJ_CDEFILE_BTN2            1214
 #define IDC_EMJ_HMEFILE_BTN             1214
 #define IDC_TSC_ISCIDY_RAD              1235
 #define IDC_TSC_ISCIDN_RAD              1236
@@ -300,13 +298,15 @@
 #define IDC_PTN_LYT_CHK                 2610
 #define IDC_PTN_HYSND_CHK               2611
 #define IDC_PTN_KANGXI_CHK              2612
-#define IDC_PTN_SETADH_EDT              2613
+#define IDC_PTN_ADH_EDT                 2613
 #define IDC_PTN_RENAME_CHK              2614
 #define IDC_PTN_CHS_EDT                 2615
 #define IDC_PTN_ENG_EDT                 2616
 #define IDC_PTN_CHSSUB_EDT              2617
 #define IDC_PTN_ENGSUB_EDT              2618
 #define IDC_PTN_VER_EDT                 2619
+#define IDC_PTN_OLDSTND_CHK             2620
+#define IDC_PTN_DELOLD_CHK              2621
 #define IDC_MRG_SRC1_EDT                3101
 #define IDC_MRG_SRC2_EDT                3102
 #define IDC_MRG_DST_EDT                 3103
@@ -372,14 +372,16 @@
 #define ID_MN_CHKEROTF                  32907
 #define ID_EMOJI_MK                     32910
 #define ID_MN_CODEMAP                   32912
+#define ID_32914                        32914
+#define ID_FNT_CLEARCODE                32915
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        381
-#define _APS_NEXT_COMMAND_VALUE         32914
-#define _APS_NEXT_CONTROL_VALUE         1210
+#define _APS_NEXT_COMMAND_VALUE         32916
+#define _APS_NEXT_CONTROL_VALUE         1212
 #define _APS_NEXT_SYMED_VALUE           310
 #endif
 #endif

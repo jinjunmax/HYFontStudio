@@ -58,7 +58,8 @@ BOOL CFontSetupDlg::OnInitDialog()
 
 void CFontSetupDlg::OnBnClickedOk()
 {
-	m_sheet.SaveInfo();
+	if (!m_sheet.SaveInfo())
+		return;;
 
 	OnOK();
 

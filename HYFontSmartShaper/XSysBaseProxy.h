@@ -35,4 +35,5 @@ public:
 	double						m_fBaseLine;
 	std::vector<float>			m_vtNormalizedVariation;
 	std::string					m_strLogFile;
+	std::vector<unsigned long>	m_vtOvrrdUni; //旧标准中的编码
 };

@@ -109,13 +109,11 @@ protected:
 	afx_msg void		OnMnChkerttf();
 	afx_msg void		OnMnChkerotf();
 	// 导出Emoji字库
-	afx_msg void OnEmojiExport();
+	afx_msg void		OnEmojiExport();
 	// 生成Emoji字库	
-	afx_msg void OnEmojiMk();
+	afx_msg void		OnEmojiMk();
 	// 导入码表
-	afx_msg void OnMnCodemap();
-
-
+	afx_msg void		OnMnCodemap();
 	virtual BOOL		PreTranslateMessage(MSG* pMsg);
 
 	// 实现
@@ -220,4 +218,5 @@ public:
 	}
 #endif
 	
+	afx_msg void OnFntClearcode();
 };

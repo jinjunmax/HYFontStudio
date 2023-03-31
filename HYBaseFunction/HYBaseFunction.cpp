@@ -612,8 +612,7 @@ void HY_LoadCodeFile(char* strcodeFile, std::vector<unsigned long>& vtUni)
 	}
 	RemoveUniRepeat(vtUni);	
 
-	return;
-	
+	return;	
 
 }	// end of int HY_LoadCodeFile()
 

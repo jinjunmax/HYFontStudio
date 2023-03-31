@@ -60,25 +60,24 @@ typedef struct _HY_OPTION_PRM
 	BOOL			bsetADH;		// 调整中文竖排高度
 	unsigned short	usSetADH;		// 高度值	
 	BOOL			bsetADW;		// 调整中文竖排宽度
-	BOOL			bRePsName;
-	BOOL			bReSortUni;
+	BOOL			bRePsName;		// 重新命名中文字形的name
+	BOOL			bReSortUni;		// 字库按unicode升序排序
 	BOOL			bCmplCMAP;		// 是否重新编译CMAP
 	BOOL			bYitizi;		// 是否兼容CJK兼容字符
 	BOOL			bOldStandard;	// 是否兼容旧标准
+	BOOL			bDelOld;		// 是否删除旧标准与bOldStandard互斥
 	BOOL			bKangXi;		// 是否兼容康熙部首
 	BOOL			bCnturCorrect;	// 是否做轮廓纠错	
 	BOOL			bFontname;		// 是否需要重新命名字库名称	
 	BOOL			bCmplLayout;	// 是否需要重新编译layout类表（目前编译功能暂未实现）
 	BOOL			bHanyi;			// 是否执行Hanyi内部参数标准
-	unsigned short	usUnitsPerEM;
-	short			sTypo_Ascender;
+	unsigned short	usUnitsPerEM;	// 设定字库的EM
+	short			sTypo_Ascender;	
 	short			sTypo_Descender;
-
 	unsigned short	usWeight;
 	unsigned short	usWidth;
 	unsigned long	ulCodePageRang1;
 	unsigned long	ulCodePageRang2;
-
 	BOOL			bCIDFnt;
 	char			Registry[MAX_PATH];
 	char			Ordering[MAX_PATH];
