@@ -2426,7 +2426,7 @@ namespace HYFONTCODEC
 			Encodehhea();
 		}			
 		if (FindFlag(vtFlag, MAXP_TAG)){
-			Encodemaxp();	
+			Encodemaxp();
 		}		
 		if (FindFlag(vtFlag, OS2_TAG)){
 			EncodeOS2();
@@ -9713,7 +9713,7 @@ namespace HYFONTCODEC
 			fwrite(&usTmp,2,1,m_pFontFile);
 			//Name Records
 			unsigned short usStringSize = 0;
-			char* pString = new char[260*4*m_HYName.vtNameRecord.size()];
+			char* pString = new char[HY_CHARARRY_MAX*m_HYName.vtNameRecord.size()];
 			
 			for(size_t i=0; i<m_HYName.vtNameRecord.size();i++)
 			{	
@@ -9726,8 +9726,8 @@ namespace HYFONTCODEC
 					(tagNameRecord.platformID==0&&tagNameRecord.encodingID ==6)						
 					)
 				{						
-					char strRecord[1040] = {0};
-					int strLen = 1040;
+					char strRecord[HY_CHARARRY_MAX] = {0};
+					int strLen = HY_CHARARRY_MAX;
 
 					MulToWCharBL(strRecord, strLen, tagNameRecord.strContent.c_str(), strlen(tagNameRecord.strContent.c_str()));
 					tagNameRecord.length = strLen;

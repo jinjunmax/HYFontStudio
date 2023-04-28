@@ -157,8 +157,9 @@ BEGIN
                 MENUITEM "nodef替换所有字符",                 ID_FNT_RP_NODEF
                 MENUITEM "两个字库间替换字符",                   ID_FNT_RP_TWFNT
             END
-            MENUITEM "重置name",                      ID_FNT_RSETNAME
-            MENUITEM "清理编码",                        ID_FNT_CLEARCODE
+            MENUITEM "重建name",                      ID_FNT_RSETNAME
+            MENUITEM "重建编码",                        ID_FNT_CLEARCODE
+            MENUITEM "重建CIDOTF",                    ID_FNT_BUDCIDOTF
         END
         POPUP "格式转换"
         BEGIN
@@ -858,6 +859,23 @@ BEGIN
     PUSHBUTTON      "导入",IDC_EMJ_HMEFILE_BTN,261,77,50,14,WS_DISABLED
 END
 
+IDD_EXCHGCDE_DLG DIALOGEX 0, 0, 285, 149
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "更新编码"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    CONTROL         "完整码表",IDC_EXCHGCDE_FUL_RD,"Button",BS_AUTORADIOBUTTON,19,17,48,10
+    CONTROL         "删除码表",IDC_EXCHGCDE_DEL_RD,"Button",BS_AUTORADIOBUTTON,81,17,48,10
+    CONTROL         "替换码表",IDC_EXCHGCDE_EXCHG_RD,"Button",BS_AUTORADIOBUTTON,148,17,48,10
+    PUSHBUTTON      "浏览",IDC_EXCHGCDE_FNT_BTN,209,45,50,14
+    EDITTEXT        IDC_EXCHGCDE_FNT_EDT,18,43,178,14,ES_AUTOHSCROLL
+    PUSHBUTTON      "浏览",IDC_EXCHGCDE_CDE_BTN,211,72,50,14
+    EDITTEXT        IDC_EXCHGCDE_CDE_EDT,18,70,178,14,ES_AUTOHSCROLL
+    PUSHBUTTON      "浏览",IDC_EXCHGCDE_SVFNT_BTN,211,101,50,14
+    EDITTEXT        IDC_EXCHGCDE_SVFNT_EDT,18,99,178,14,ES_AUTOHSCROLL
+    PUSHBUTTON      "处理",IDC_EXCHGCDE_RUN_BTN,211,123,50,14
+END
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -1136,6 +1154,14 @@ BEGIN
         TOPMARGIN, 7
         BOTTOMMARGIN, 136
     END
+
+    IDD_EXCHGCDE_DLG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 278
+        TOPMARGIN, 6
+        BOTTOMMARGIN, 142
+    END
 END
 #endif    // APSTUDIO_INVOKED
 
@@ -1296,6 +1322,11 @@ BEGIN
     0
 END
 
+IDD_EXCHGCDE_DLG AFX_DIALOG_LAYOUT
+BEGIN
+    0
+END
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -1434,6 +1465,11 @@ END
 STRINGTABLE
 BEGIN
     ID_MN_EXPTNAME          "将字形名称导出为txt文件"
+END
+
+STRINGTABLE
+BEGIN
+    ID_FNT_CLEARCODE        "对字库的编码进行重建、删除和调换工作"
 END
 
 #endif    // 中文(简体，中国) resources

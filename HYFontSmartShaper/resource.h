@@ -37,6 +37,7 @@
 #define IDD_RSTNM_DLG                   374
 #define IDD_TXTCMP_DLG                  377
 #define IDD_EMJ_DLG                     379
+#define IDD_EXCHGCDE_DLG                381
 #define IDC_MN_CNVTR_STC                1001
 #define IDC_MN_CNTRL_STC                1002
 #define IDC_MN_CVTS_BTN                 1003
@@ -318,6 +319,16 @@
 #define IDC_MRG_SRC2TXT_BTN             3110
 #define IDC_MMRG_SRC2TXT_BTN            3111
 #define IDC_MMRG_SRC2TXT_EDT            3112
+#define IDC_EXCHGCDE_FUL_RD             3200
+#define IDC_EXCHGCDE_DEL_RD             3201
+#define IDC_EXCHGCDE_EXCHG_RD           3202
+#define IDC_EXCHGCDE_FNT_EDT            3203
+#define IDC_EXCHGCDE_FNT_BTN            3204
+#define IDC_EXCHGCDE_CDE_EDT            3205
+#define IDC_EXCHGCDE_CDE_BTN            3206
+#define IDC_EXCHGCDE_SVFNT_EDT          3207
+#define IDC_EXCHGCDE_SVFNT_BTN          3208
+#define IDC_EXCHGCDE_RUN_BTN            3209
 #define IDS_NAME_ID_0_EN                10000
 #define IDS_NAME_ID_0_CHS               10001
 #define IDS_NAME_ID_8_EN                10002
@@ -372,16 +383,17 @@
 #define ID_MN_CHKEROTF                  32907
 #define ID_EMOJI_MK                     32910
 #define ID_MN_CODEMAP                   32912
-#define ID_32914                        32914
 #define ID_FNT_CLEARCODE                32915
+#define ID_32916                        32916
+#define ID_FNT_BUDCIDOTF                32917
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        381
-#define _APS_NEXT_COMMAND_VALUE         32916
-#define _APS_NEXT_CONTROL_VALUE         1212
+#define _APS_NEXT_RESOURCE_VALUE        383
+#define _APS_NEXT_COMMAND_VALUE         32918
+#define _APS_NEXT_CONTROL_VALUE         1220
 #define _APS_NEXT_SYMED_VALUE           310
 #endif
 #endif

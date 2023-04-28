@@ -128,6 +128,7 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CExchgCodeDlg.cpp" />
     <ClCompile Include="CharsCompareDlg.cpp" />
     <ClCompile Include="CHYEmjioDlg.cpp" />
     <ClCompile Include="CVrMasters.cpp" />
@@ -179,6 +180,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\HYFontSmartCore\HY_Global.h" />
+    <ClInclude Include="CExchgCodeDlg.h" />
     <ClInclude Include="CharsCompareDlg.h" />
     <ClInclude Include="CHYEmjioDlg.h" />
     <ClInclude Include="CVrMasters.h" />

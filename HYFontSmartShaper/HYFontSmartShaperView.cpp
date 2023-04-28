@@ -26,6 +26,7 @@
 #include "ResetPsNameDlg.h"
 #include "TXTCmpDlg.h"
 #include "CHYEmjioDlg.h"
+#include "CExchgCodeDlg.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -101,7 +102,8 @@ BEGIN_MESSAGE_MAP(CHYFontSmartShaperView, CFormView)
 	ON_COMMAND(ID_MN_CHKEROTF, &CHYFontSmartShaperView::OnMnChkerotf)
 	ON_COMMAND(ID_EMOJI_MK, &CHYFontSmartShaperView::OnEmojiMk)
 	ON_COMMAND(ID_MN_CODEMAP, &CHYFontSmartShaperView::OnMnCodemap)
-	ON_COMMAND(ID_FNT_CLEARCODE, &CHYFontSmartShaperView::OnFntClearcode)
+	ON_COMMAND(ID_FNT_CLEARCODE, &CHYFontSmartShaperView::OnFntResetcode)
+	ON_COMMAND(ID_FNT_BUDCIDOTF, &CHYFontSmartShaperView::OnFntBudcidotf)
 END_MESSAGE_MAP()
 
 // CHYFontSmartShaperView 构造/析构
@@ -670,7 +672,65 @@ void CHYFontSmartShaperView::SetAdHeight(UINT adh, CHYGlyph& Glyphs)
 void CHYFontSmartShaperView::OnBnClickedMnCutmBtn()
 {
 	CWaitCursor wc;
+	TCHAR		szFilters[] = "Truetype File(*.ttf)|*.ttf|Opentype File(*.otf)|*.otf||";
+	CFileDialog  OpenFileDlg(TRUE, NULL, NULL, OFN_EXPLORER, szFilters);
+	if (OpenFileDlg.DoModal() != IDOK)	return;
+
+	CString szPathName = OpenFileDlg.GetPathName();
+	CHYFontCodec decode;
+	CString strError;
+
+	int iRtn = decode.Decode((LPSTR)(LPCSTR)szPathName);
+	if (iRtn != HY_NOERROR) {
+		strError.Format("解码错误 %s", HY_GetFileNameFromPath(string(szPathName)));
+		AfxMessageBox(strError);
+		return;
+	}
+
+	std::vector<unsigned long> ulTableFlag;
+	ulTableFlag.push_back(CMAP_TAG);
+	ulTableFlag.push_back(DSIG_TAG);
+	ulTableFlag.push_back(HEAD_TAG);
+	ulTableFlag.push_back(HHEA_TAG);
+	ulTableFlag.push_back(HMTX_TAG);
+	ulTableFlag.push_back(MAXP_TAG);
+	ulTableFlag.push_back(NAME_TAG);
+	ulTableFlag.push_back(OS2_TAG);
+	ulTableFlag.push_back(POST_TAG);
+	//ulTableFlag.push_back(VHEA_TAG);
+	//ulTableFlag.push_back(VMTX_TAG);
+	ulTableFlag.push_back(GASP_TAG);
+	ulTableFlag.push_back(GLYF_TAG);
+	ulTableFlag.push_back(LOCA_TAG);
+	ulTableFlag.push_back(PREP_TAG);
+
 	
+
+	for (int i = 0; i < decode.m_vtHYGlyphs.size(); i++)
+	{
+		CHYGlyph& glyph = decode.m_vtHYGlyphs[i];
+		for (int j = 0; j < glyph.vtContour.size(); j++)
+		{
+			CHYContour& cntur = glyph.vtContour[j];
+			for (int x = 0; x < cntur.vtHYPoints.size(); x++)
+			{
+				CHYPoint& pt = cntur.vtHYPoints[x];
+				pt.y += 30;
+			}
+		}
+	}
+
+	::XSysproxy().InitEncodeOption(decode);
+
+	CString strSaveFileName;
+	strSaveFileName.Format("%s%s-01.ttf", HY_GetDirFromPath(string(szPathName)), HY_GetFileNameFromPath(string(szPathName)));
+
+	if (decode.Encode((LPTSTR)(LPCTSTR)strSaveFileName, ulTableFlag, ::XSysproxy().m_tagOpeionPrm) == HY_NOERROR)
+		AfxMessageBox(_T("字库生成完成"));
+	else
+		AfxMessageBox(_T("字库生成失败"));
+
+	/*
 	CString strTxtName = "";
 	TCHAR	TxtFilters[] = "Text File(*.txt)|*.txt||";
 	CFileDialog  txtOpenFileDlg(TRUE, NULL, NULL, OFN_EXPLORER, TxtFilters);
@@ -799,7 +859,7 @@ void CHYFontSmartShaperView::OnBnClickedMnCutmBtn()
 		AfxMessageBox(_T("字库生成完成"));
 	else
 		AfxMessageBox(_T("字库生成失败"));
-
+	*/
 	/*
 	CHYFontCodec	Fnt1;
 	Fnt1.Decode("F:\\中华字库\\2020中华字库\\黑仿\\ZHZKHeiTi-ExtBCDEF.otf");
@@ -3135,8 +3195,6 @@ void	CHYFontSmartShaperView::GetFntSubset(char* strSrcFnt, std::vector<unsigned 
 	ulTableFlag.push_back(NAME_TAG);
 	ulTableFlag.push_back(OS2_TAG);
 	ulTableFlag.push_back(POST_TAG);
-	ulTableFlag.push_back(VHEA_TAG);
-	ulTableFlag.push_back(VMTX_TAG);
 	ulTableFlag.push_back(GASP_TAG);
 
 	if (Encode.m_iFontType == FONTTYPE_TTF) {
@@ -3378,14 +3436,84 @@ void CHYFontSmartShaperView::OnMnCodemap()
 	
 }	// end of void CHYFontSmartShaperView::OnMnCodemap()
 
-void CHYFontSmartShaperView::OnFntClearcode()
+void CHYFontSmartShaperView::OnFntResetcode()
 {
-	// TODO: 在此添加命令处理程序代码
-	TCHAR	szFilters[] = _T("TrueType File(*.ttf)|*.ttf|OpenType File(*.otf)|*.otf||");
-	CFileDialog  openFileDlg(TRUE, _T(""), _T(""), OFN_LONGNAMES | OFN_FILEMUSTEXIST, szFilters);
+	CExchgCodeDlg dlg;
+	dlg.DoModal();
+
+}	// end of void CHYFontSmartShaperView::OnFntResetcode()
+
+void CHYFontSmartShaperView::OnFntBudcidotf()
+{
+	TCHAR		szFilters[] = "Opentype File(*.otf)|*.otf||";
+	DWORD	MAXFILE = 20480;
+	TCHAR* pc = new TCHAR[MAXFILE * (MAX_PATH + 1)];
+	ZeroMemory(pc, MAXFILE * (MAX_PATH + 1));
+
+	std::vector<CString>		szSelFiles;
+	CFileDialog  openFileDlg(TRUE, NULL, NULL, OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT | OFN_ALLOWMULTISELECT | OFN_EXPLORER, szFilters);
+	openFileDlg.m_ofn.lpstrFile = pc;
+	openFileDlg.m_ofn.nMaxFile = MAXFILE;
 	if (openFileDlg.DoModal() != IDOK)	return;
 
+	POSITION pos = openFileDlg.GetStartPosition();
+	CWaitCursor wc;
+	while (pos != NULL)
+	{
+		std::vector<unsigned long> ulTableFlag;
+		CHYFontCodec decode;
+		CHYFontCodec encode;
 
+		CString szPathName = openFileDlg.GetNextPathName(pos);
+		int iRtn = decode.Decode((LPSTR)(LPCSTR)szPathName);
+		if (iRtn != HY_NOERROR) {
+			continue;
+		}
 
+		ulTableFlag.push_back(CMAP_TAG);
+		ulTableFlag.push_back(DSIG_TAG);
+		ulTableFlag.push_back(HEAD_TAG);
+		ulTableFlag.push_back(HHEA_TAG);
+		ulTableFlag.push_back(HMTX_TAG);
+		ulTableFlag.push_back(MAXP_TAG);
+		ulTableFlag.push_back(NAME_TAG);
+		ulTableFlag.push_back(OS2_TAG);
+		ulTableFlag.push_back(POST_TAG);
+		ulTableFlag.push_back(VHEA_TAG);
+		ulTableFlag.push_back(VMTX_TAG);
+		ulTableFlag.push_back(GASP_TAG);
+		ulTableFlag.push_back(CFF_TAG);
+		if (decode.m_HYTbDirectory.FindTableEntry(GSUB_TAG) != -1)
+		{
+			::XSysproxy().m_tagOpeionPrm.bCmplLayout = FALSE;			
+		}
+		else {
+			::XSysproxy().m_tagOpeionPrm.bCmplLayout = TRUE;			
+		}
+		ulTableFlag.push_back(GSUB_TAG);
 
-}	// end of void CHYFontSmartShaperView::OnFntClearcode()
+		if (decode.m_HYTbDirectory.FindTableEntry(GPOS_TAG) != -1)
+		{
+			ulTableFlag.push_back(GPOS_TAG);
+		}
+#if 0
+		encode.m_iFontType = decode.m_iFontType;
+		encode.m_HYhead = decode.m_HYhead;
+		encode.m_HYHhea = decode.m_HYHhea;
+		encode.m_HYName = decode.m_HYName;
+		encode.m_HYOS2 = decode.m_HYOS2;
+		encode.m_HYMaxp = decode.m_HYMaxp;
+		encode.MakeCmap();
+#endif 
+		encode.m_HYCodeMap = decode.m_HYCodeMap;
+		encode.m_vtHYGlyphs = decode.m_vtHYGlyphs;
+		encode.m_mulpTableData = decode.m_mulpTableData;
+		
+		CString  strNewName;		
+		strNewName.Format("%s%s-01.otf", HY_GetDirFromPath(string(szPathName)).c_str(), HY_GetFileNameFromPath(string(szPathName)).c_str());
+
+		::XSysproxy().SetEncodeOption(encode, decode);
+		encode.Encode((LPTSTR)(LPCTSTR)strNewName, ulTableFlag, ::XSysproxy().m_tagOpeionPrm);
+	}
+
+}	//end of void CHYFontSmartShaperView::OnFntBudcidotf()

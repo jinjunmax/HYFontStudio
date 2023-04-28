@@ -39,10 +39,9 @@ public:
 
 	BOOL GetBugChar(CHYGlyph& InGlyph, std::vector<int>& cntrIndx,std::vector<CHYContour>& vtResult);
 	void MakeConturPath(CHYContour& hyCntur, std::vector<CHYPoint>& vtHYPoints);
-
-	void RebuildFont4DelCode(CString strInFntFile, CString strOutFntFile, std::vector<unsigned long> vtUni);
+	
 	void DelCode(CHYFontCodec& Codec, std::vector<unsigned long> vtUni);
-	void ExchangeCode(CHYCodeMap& CodeMap,std::vector<unsigned long> vtUni);
+	void ExchangeCode(CHYFontCodec& Codec, std::vector<unsigned long> vtUni1, std::vector<unsigned long> vtUni2);
 
 
 public:

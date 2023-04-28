@@ -114,6 +114,8 @@ protected:
 	afx_msg void		OnEmojiMk();
 	// 导入码表
 	afx_msg void		OnMnCodemap();
+	// 重置编码
+	afx_msg void		OnFntResetcode();
 	virtual BOOL		PreTranslateMessage(MSG* pMsg);
 
 	// 实现
@@ -217,6 +219,7 @@ public:
 		return reinterpret_cast<CHYFontSmartShaperDoc*>(m_pDocument);
 	}
 #endif
-	
-	afx_msg void OnFntClearcode();
+
+	// 批处理otf -> CIDOTF
+	afx_msg void OnFntBudcidotf();
 };

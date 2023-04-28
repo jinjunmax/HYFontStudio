@@ -14,12 +14,13 @@ CHYFontFunc::~CHYFontFunc()
 
 void CHYFontFunc::MergeGlyphs(std::vector<CHYGlyph>& src1Glyphs, std::vector<CHYGlyph>& src2Glyphs)
 {
-	size_t st = src2Glyphs.size();	
-	for (size_t i = 0; i < st; i++) {
+	size_t st = src2Glyphs.size();
+	// size_t i=1 Ä¬ÈÏ¹ýÂËµô.notdef×Ö·û
+	for (size_t i = 1; i < st; i++) {
 		CHYGlyph src2Gly = src2Glyphs[i];
 
-		if (src2Gly.strPostName == ".notdef")		
-			continue;
+		//if (src2Gly.strPostName == ".notdef")		
+			//continue;
 
 		if (src2Gly.vtUnicode.size() > 0)
 		{ 

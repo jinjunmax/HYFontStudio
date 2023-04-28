@@ -332,14 +332,29 @@ void CMergeDlg::MergeFont(string strDst, std::vector<string> vtFntName)
 			else {
 				Dst.m_HYName = SRCTmp.m_HYName;
 			}
-		}
-		else {
-			if (SRCTmp.m_iFontType != Dst.m_iFontType) {
-				strError = "字库 " + ::HY_GetFileNameFromPath(vtFntName[i]) + "格式不符。";
-				AfxMessageBox(strError.c_str());
-				return;
+
+			//.notdef
+			Dst.m_vtHYGlyphs.push_back(SRCTmp.m_vtHYGlyphs[0]);
+			// space
+			int iGID = SRCTmp.FindGlyph(0x0020, SRCTmp.m_vtHYGlyphs);
+			if (iGID != -1)
+			{
+				Dst.m_vtHYGlyphs.push_back(SRCTmp.m_vtHYGlyphs[iGID]);
 			}
-		}
+			else {
+				CHYGlyph glyph;
+				glyph.advanceHeight = SRCTmp.m_HYhead.unitsPerEm;
+				glyph.advanceWidth = SRCTmp.m_HYhead.unitsPerEm >> 1;
+				glyph.strPostName = "space";
+				Dst.m_vtHYGlyphs.push_back(glyph);
+			}
+		}		
+
+		if (SRCTmp.m_iFontType != Dst.m_iFontType) {
+			strError = "字库 " + ::HY_GetFileNameFromPath(vtFntName[i]) + "格式不符。";
+			AfxMessageBox(strError.c_str());
+			return;
+		}		
 
 		if (SRCTmp.m_HYhead.unitsPerEm != Dst.m_HYhead.unitsPerEm) {
 			strError = "字库 " + ::HY_GetFileNameFromPath(vtFntName[i]) + "EM与设置不符";

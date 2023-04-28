@@ -820,9 +820,9 @@ void CXSysProxy::InitCFFTb(CHYFontCodec& Encode)
 
 void CXSysProxy::InitEncodeOption(CHYFontCodec& Encode)
 {
-	Encode.CountFontBound();
-	
-	Encode.MakeCmap();
+	Encode.m_tagOption = ::XSysproxy().m_tagOpeionPrm;
+
+	Encode.CountFontBound();	
 	MakeFontName(Encode);
 	
 	// 重新命名中文字形名称
@@ -849,6 +849,7 @@ void CXSysProxy::InitEncodeOption(CHYFontCodec& Encode)
 	//CFF
 	InitCFFTb(Encode);	
 
+	Encode.MakeCmap();
 	Encode.MakeHYCodeMap();
 
 	if (::XSysproxy().m_tagOpeionPrm.bDelOld)
@@ -865,9 +866,7 @@ void CXSysProxy::InitEncodeOption(CHYFontCodec& Encode)
 
 void CXSysProxy::SetEncodeOption(CHYFontCodec& Encode, CHYFontCodec& Original)
 {
-	InitEncodeOption(Encode);
-
-	Encode.m_tagOption = ::XSysproxy().m_tagOpeionPrm;
+	InitEncodeOption(Encode);	
 	// Head
 	Encode.m_HYhead.unitsPerEm = Original.m_HYhead.unitsPerEm;
 	Encode.m_HYhead.lowestRecPPEM = Original.m_HYhead.lowestRecPPEM;
@@ -952,7 +951,7 @@ void CXSysProxy::SetEncodeOption(CHYFontCodec& Encode, CHYFontCodec& Original)
 
 	if (!::XSysproxy().m_tagOpeionPrm.bFontname) {
 		Encode.m_HYName = Original.m_HYName;
-	}	
+	}
 
 	if (::XSysproxy().m_tagOpeionPrm.bCmplVert) {
 		Encode.CountVerticalMetrics();
@@ -1055,66 +1054,38 @@ void CXSysProxy::MakeConturPath(CHYContour& hyCntur, std::vector<CHYPoint>& outH
 
 }	// end of void CFontShowWnd::MakeConturPath();
 
-void CXSysProxy::RebuildFont4DelCode(CString strInFntFile, CString strOutFntFile, std::vector<unsigned long> vtUni)
-{
-	CHYFontCodec Decode;
-
-	if (Decode.OpenFile(strInFntFile)==HY_NOERROR)
-	{
-		// 获取字典目录
-		Decode.DecodeTableDirectory();
-		Decode.Decodemaxp();
-		Decode.Decodecmap();
-
-		// clearup
-		Decode.m_HYCodeMap.vtHYCodeMap.clear();
-
-		CHYCodeMapItem  mapItm;
-		int	iGlyphNum = Decode.m_HYMaxp.numGlyphs;
-		for (int i = 0; i < iGlyphNum; i++) {
-			if (i == 0)	{
-				mapItm.ulGlyphNo = 0xffff;
-				mapItm.iGlyphIndex = 0;
-				Decode.m_HYCodeMap.vtHYCodeMap.push_back(mapItm);
-			}
-			else{
-
-				std::vector<unsigned long> szUnicode;
-				Decode.FindGryphUncidoByIndex(i,szUnicode);
-				size_t stUnicodeNum = szUnicode.size();
-				for (size_t j = 0; j < stUnicodeNum; j++) {					
-					mapItm.ulGlyphNo = szUnicode[j];
-					mapItm.iGlyphIndex = i;
-					Decode.m_HYCodeMap.vtHYCodeMap.push_back(mapItm);
-				}
-			}
-		}
-
-		DelCode(Decode, vtUni);
-
-	}
-
-
-
-}	// end of void CXSysProxy::ClearCode()
-
 void CXSysProxy::DelCode(CHYFontCodec& Codec, std::vector<unsigned long> vtUni)
 {
 	CHYCodeMap& CodeMap = Codec.m_HYCodeMap;
-	CHYPost& Post = Codec.m_HYPost;
+
 	size_t i = 0;	
 	while (i < CodeMap.vtHYCodeMap.size()) {
 		CHYCodeMapItem& itm = CodeMap.vtHYCodeMap[i];
 		if (::CheckUniRepeat(itm.ulGlyphNo, vtUni)) {
 			CodeMap.vtHYCodeMap.erase(CodeMap.vtHYCodeMap.begin()+i);
 			continue;
-		}		
+		}
 		i++;
 	}
 
+	Codec.m_HYCodeMap.QuickSortbyUnicode();
+
 }	// end of void DelCode()
 
-void CXSysProxy::ExchangeCode(CHYCodeMap& CodeMap, std::vector<unsigned long> vtUni)
+void CXSysProxy::ExchangeCode(CHYFontCodec& Codec, std::vector<unsigned long> vtUni1, std::vector<unsigned long> vtUni2)
 {
+	CHYCodeMap& CodeMap = Codec.m_HYCodeMap;	
+	size_t i = 0;
+	for (int i = 0; i < CodeMap.vtHYCodeMap.size();i++) {
+		CHYCodeMapItem& itm = CodeMap.vtHYCodeMap[i];
+
+		for (int j = 0; j < vtUni1.size(); j++)	{
+			if (itm.ulGlyphNo == vtUni1[j])	{
+				itm.ulGlyphNo = vtUni2[j];
+			}
+		}		
+	}
+
+	Codec.m_HYCodeMap.QuickSortbyUnicode();
 
 }	// end of void ExchangeCode()
