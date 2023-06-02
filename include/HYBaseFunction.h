@@ -98,7 +98,9 @@ unsigned long		HY_DLL_API	HY_AnsiStringToUnicode(char* pAnsiString);
 bool				HY_DLL_API  HY_WCharTOMultiChar(char* pDest, int& iDestlen, unsigned short Unicode);
 bool				HY_DLL_API	HY_WCharTOMultiCharEx(std::string  strOut, char* pSrc, int iSrclen);
 
-std::string			HY_DLL_API	HY_trim(std::string const& str);
+std::string			HY_DLL_API	HY_rtrim(std::string& s);
+std::string			HY_DLL_API	HY_ltrim(std::string& s);
+std::string			HY_DLL_API	HY_trim(std::string& str);
 int					HY_DLL_API  HY_ReadTextLine(char* filename, std::vector<std::string>& szlineText);
 void				HY_DLL_API  HY_WriteLog(std::string SavePath, std::string& Text, bool bNew=false);
 void				HY_DLL_API	HY_4ByteAlign(FILE* pF, unsigned long length);

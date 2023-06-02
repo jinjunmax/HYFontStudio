@@ -83,7 +83,7 @@ void CExchgCodeDlg::OnBnClickedExchgcdeCdeBtn()
 void CExchgCodeDlg::OnBnClickedExchgcdeSvfntBtn()
 {
 	TCHAR	szFilters[] = _T("TrueType File(*.ttf)|*.ttf|OpenType File(*.otf)|*.otf||");
-	CFileDialog  openFileDlg(TRUE, _T(""), _T(""), OFN_LONGNAMES | OFN_FILEMUSTEXIST, szFilters);
+	CFileDialog  openFileDlg(FALSE, _T(""), _T(""), OFN_LONGNAMES | OFN_FILEMUSTEXIST, szFilters);
 	if (openFileDlg.DoModal() != IDOK)	return;
 
 	m_strDstFontFile = openFileDlg.GetPathName();

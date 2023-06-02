@@ -27,6 +27,7 @@
 #include "TXTCmpDlg.h"
 #include "CHYEmjioDlg.h"
 #include "CExchgCodeDlg.h"
+#include <atltime.h>
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -88,9 +89,7 @@ BEGIN_MESSAGE_MAP(CHYFontSmartShaperView, CFormView)
 	ON_COMMAND(ID_TTC_FONTTOTTC, &CHYFontSmartShaperView::OnTtcFonttottc)	
 	ON_COMMAND(ID_FNT_EXTRCHR, &CHYFontSmartShaperView::OnFntExtrchr)
 	ON_COMMAND(ID_FNT_EXTRCD, &CHYFontSmartShaperView::OnFntExtrcd)
-	ON_COMMAND(ID_FNT_EXTRNAME, &CHYFontSmartShaperView::OnFntExtrname)
-	ON_COMMAND(ID_FNT_RP_NODEF, &CHYFontSmartShaperView::OnFntRpNodef)
-	ON_COMMAND(ID_FNT_RP_TWFNT, &CHYFontSmartShaperView::OnFntRpTwfnt)
+	ON_COMMAND(ID_FNT_EXTRNAME, &CHYFontSmartShaperView::OnFntExtrname)	
 	ON_COMMAND(ID_NOBOX_MNU, &CHYFontSmartShaperView::OnNoboxMnu)	
 	ON_COMMAND(ID_FNT_RSETNAME, &CHYFontSmartShaperView::OnFntRsetname)
 	ON_COMMAND(ID_MN_EXPTNAME, &CHYFontSmartShaperView::OnMnExptname)
@@ -103,7 +102,7 @@ BEGIN_MESSAGE_MAP(CHYFontSmartShaperView, CFormView)
 	ON_COMMAND(ID_EMOJI_MK, &CHYFontSmartShaperView::OnEmojiMk)
 	ON_COMMAND(ID_MN_CODEMAP, &CHYFontSmartShaperView::OnMnCodemap)
 	ON_COMMAND(ID_FNT_CLEARCODE, &CHYFontSmartShaperView::OnFntResetcode)
-	ON_COMMAND(ID_FNT_BUDCIDOTF, &CHYFontSmartShaperView::OnFntBudcidotf)
+	ON_COMMAND(ID_FNT_BUDCIDOTF, &CHYFontSmartShaperView::OnFntBudcidotf)	
 END_MESSAGE_MAP()
 
 // CHYFontSmartShaperView 构造/析构
@@ -704,8 +703,6 @@ void CHYFontSmartShaperView::OnBnClickedMnCutmBtn()
 	ulTableFlag.push_back(LOCA_TAG);
 	ulTableFlag.push_back(PREP_TAG);
 
-	
-
 	for (int i = 0; i < decode.m_vtHYGlyphs.size(); i++)
 	{
 		CHYGlyph& glyph = decode.m_vtHYGlyphs[i];
@@ -728,171 +725,7 @@ void CHYFontSmartShaperView::OnBnClickedMnCutmBtn()
 	if (decode.Encode((LPTSTR)(LPCTSTR)strSaveFileName, ulTableFlag, ::XSysproxy().m_tagOpeionPrm) == HY_NOERROR)
 		AfxMessageBox(_T("字库生成完成"));
 	else
-		AfxMessageBox(_T("字库生成失败"));
-
-	/*
-	CString strTxtName = "";
-	TCHAR	TxtFilters[] = "Text File(*.txt)|*.txt||";
-	CFileDialog  txtOpenFileDlg(TRUE, NULL, NULL, OFN_EXPLORER, TxtFilters);
-	if (txtOpenFileDlg.DoModal() != IDOK)	return;
-	strTxtName = txtOpenFileDlg.GetPathName();
-	// 读取码表
-	std::vector<unsigned long> vtUni;
-	::HY_LoadCodeFile((LPSTR)(LPCTSTR)strTxtName, vtUni);
-
-	// 读取待提取字库
-	std::vector<CString>		szSelFiles;
-	CString strFileName = "";
-	TCHAR		szFilters[] = "Truetype File(*.ttf)|*.ttf|Opentype File(*.otf)|*.otf||";
-	DWORD	MAXFILE = 20480;
-	TCHAR* pc = new TCHAR[MAXFILE * (MAX_PATH + 1)];
-	ZeroMemory(pc, MAXFILE * (MAX_PATH + 1));
-
-	CFileDialog  openFileDlg(TRUE, NULL, NULL, OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT | OFN_ALLOWMULTISELECT | OFN_EXPLORER, szFilters);
-	openFileDlg.m_ofn.lpstrFile = pc;
-	openFileDlg.m_ofn.nMaxFile = MAXFILE;
-	if (openFileDlg.DoModal() != IDOK)	return;
-	
-	CHYFontCodec encodec;
-	int nCount = 0;
-	POSITION pos = openFileDlg.GetStartPosition();	
-	bool b = true;
-	std::vector<unsigned long> ulTableFlag;
-	while (pos != NULL)
-	{
-		CString szPathName = openFileDlg.GetNextPathName(pos);
-		CHYFontCodec decode;
-		CString strError;
-
-		int iRtn = decode.Decode((LPSTR)(LPCSTR)szPathName);
-		if (iRtn != HY_NOERROR){
-			strError.Format("解码错误 %s", HY_GetFileNameFromPath(string(szPathName)));			
-			AfxMessageBox(strError);
-			continue;
-		}	
-
-		if (b) {
-			
-			ulTableFlag.push_back(CMAP_TAG);
-			ulTableFlag.push_back(DSIG_TAG);
-			ulTableFlag.push_back(HEAD_TAG);
-			ulTableFlag.push_back(HHEA_TAG);
-			ulTableFlag.push_back(HMTX_TAG);
-			ulTableFlag.push_back(MAXP_TAG);
-			ulTableFlag.push_back(NAME_TAG);
-			ulTableFlag.push_back(OS2_TAG);
-			ulTableFlag.push_back(POST_TAG);
-			ulTableFlag.push_back(VHEA_TAG);
-			ulTableFlag.push_back(VMTX_TAG);
-			ulTableFlag.push_back(GASP_TAG);
-
-			if (decode.m_iFontType == FONTTYPE_TTF){
-				ulTableFlag.push_back(GLYF_TAG);
-				ulTableFlag.push_back(LOCA_TAG);
-				ulTableFlag.push_back(PREP_TAG);
-			}
-			else
-			{
-				ulTableFlag.push_back(CFF_TAG);
-			}
-
-			// 赋值misschar
-			encodec.m_vtHYGlyphs.push_back(decode.m_vtHYGlyphs[0]);
-			encodec.m_iFontType = decode.m_iFontType;
-			encodec.m_HYhead = decode.m_HYhead;
-			encodec.m_HYHhea = decode.m_HYHhea;
-			encodec.m_HYName = decode.m_HYName;
-			encodec.m_HYOS2 = decode.m_HYOS2;
-			encodec.m_HYMaxp = decode.m_HYMaxp;
-		
-			b = false;
-		}
-		else
-		{
-			if(encodec.m_iFontType != decode.m_iFontType)
-			{
-				if (iRtn != HY_NOERROR) {
-					strError.Format("格式不匹配 %s", HY_GetFileNameFromPath(string(szPathName)));
-					AfxMessageBox(strError);
-					continue;
-				}
-			}
-		}
-		CHYFontFunc::GetSubsetbyUni(decode.m_vtHYGlyphs, vtUni, encodec.m_vtHYGlyphs);
-	}
-
-	if (encodec.m_iFontType == FONTTYPE_TTF) {
-		for (size_t i = 0; i < encodec.m_vtHYGlyphs.size(); i++) {
-			const CHYGlyph& glyph = encodec.m_vtHYGlyphs[i];
-			encodec.m_HYPost.InsertName(glyph.strPostName);
-		}
-	}
-
-	encodec.CountFontBound();
-	encodec.MakeCmap();
-	encodec.m_HYMaxp.numGlyphs = encodec.m_vtHYGlyphs.size();
-	if (encodec.m_iFontType == FONTTYPE_OTF) {
-		encodec.m_HYMaxp.version.value = 0;
-		encodec.m_HYMaxp.version.fract = 0x5000;
-	}
-	if (encodec.m_iFontType == FONTTYPE_TTF) {
-		encodec.m_HYMaxp.version.value = 1;
-		encodec.m_HYMaxp.version.fract = 0;
-	}
-
-	// 保存结果字库
-	CString strSaveFilters;
-	if (encodec.m_iFontType == FONTTYPE_TTF) {
-		strSaveFilters = _T("Truetype 文件(*.ttf)|*.ttf||");
-	}
-	else
-	{
-		strSaveFilters = _T("OpenType 文件(*.otf)|*.otf||");
-	}
-	
-	CFileDialog  saveFileDlg(FALSE, _T(""), _T(""), OFN_LONGNAMES | OFN_FILEMUSTEXIST, (LPCTSTR)strSaveFilters);
-	if (saveFileDlg.DoModal() != IDOK)		return;
-	CString strSaveFileName = saveFileDlg.GetPathName();
-
-	encodec.MakeHYCodeMap();
-	if (encodec.Encode((LPTSTR)(LPCTSTR)strSaveFileName, ulTableFlag, ::XSysproxy().m_tagOpeionPrm) == HY_NOERROR)
-		AfxMessageBox(_T("字库生成完成"));
-	else
-		AfxMessageBox(_T("字库生成失败"));
-	*/
-	/*
-	CHYFontCodec	Fnt1;
-	Fnt1.Decode("F:\\中华字库\\2020中华字库\\黑仿\\ZHZKHeiTi-ExtBCDEF.otf");
-	CHYFontCodec	Fnt2;
-	Fnt2.Decode("F:\\中华字库\\2020中华字库\\黑仿\\ZHZKHei-G.otf");
-
-
-	for (int i = 1; i < 4940; i++)
-	{
-		Fnt1.m_vtHYGlyphs.push_back(Fnt2.m_vtHYGlyphs[i]);
-	}	
-
-	size_t stGlyphNum = Fnt1.m_vtHYGlyphs.size();
-	std::vector<unsigned long> ulTableFlag;
-	ulTableFlag.push_back(CMAP_TAG);	
-	ulTableFlag.push_back(HEAD_TAG);
-	ulTableFlag.push_back(HHEA_TAG);
-	ulTableFlag.push_back(HMTX_TAG);
-	ulTableFlag.push_back(MAXP_TAG);
-	ulTableFlag.push_back(NAME_TAG);
-	ulTableFlag.push_back(OS2_TAG);
-	ulTableFlag.push_back(POST_TAG);
-	ulTableFlag.push_back(GASP_TAG);
-	ulTableFlag.push_back(CFF_TAG);
-	
-	strFileName = "F:\\中华字库\\2020中华字库\\黑仿\\ZHZKHei-test-01.otf";
-	::XSysproxy().InitEncodeOption(Fnt1);
-
-	if (Fnt1.Encode((LPTSTR)(LPCTSTR)strFileName, ulTableFlag, ::XSysproxy().m_tagOpeionPrm) == HY_NOERROR)
-		AfxMessageBox(_T("字库生成完成"));
-	else
-		AfxMessageBox(_T("字库生成失败"));
-	*/
+		AfxMessageBox(_T("字库生成失败"));	
 
 }	// end of void CHYFontSmartShaperView::OnBnClickedMnCutmBtn()
 
@@ -2054,7 +1887,7 @@ BOOL CHYFontSmartShaperView::OTFConvert(CHYGlyph& SrcGryph, CHYGlyph& DstGryph, 
 	switch (iChecked)
 	{
 		case IDC_MN_CVT_OTF_RD:{
-#if 0
+#if 1
 			DstGryph = SrcGryph;
 #else 
 			Smooth(SrcGryph, DstGryph);
@@ -2063,499 +1896,51 @@ BOOL CHYFontSmartShaperView::OTFConvert(CHYGlyph& SrcGryph, CHYGlyph& DstGryph, 
 		}
 			break;
 		case IDC_MN_CVT_TTF_RD:{
-			AfxMessageBox("暂不支持曲线格式转换");		
+			OTF2TTF(SrcGryph, DstGryph);
 		}					
 			break;
 		default:
 			break;
 	}
 
-	return FALSE;
+	return TRUE;
 
 }	// end of int CHYFontSmartShaperView::OTFConvert()
 
 void CHYFontSmartShaperView::OTF2TTF(CHYGlyph& otfGryph,CHYGlyph& ttfGryph)
 {	
+	size_t stCntur =  otfGryph.vtContour.size();
+	for (size_t i = 0; i < stCntur; i++)
+	{
+		CHYContour& otfCntur = otfGryph.vtContour[i];
+		size_t j = 0;
+		size_t stpts = otfCntur.vtHYPoints.size();
 
+		CHYContour ttfCntur;
 
+		while (j < stpts)
+		{			
+			if (otfCntur.vtHYPoints[j].flag == POINT_FLG_CONTROL)
+			{
+				CHYPoint ptCntl = CHYFontFunc::cubicToQuadratic(otfCntur.vtHYPoints[j - 1], otfCntur.vtHYPoints[j], otfCntur.vtHYPoints[j + 1], otfCntur.vtHYPoints[j + 2]);
+				ttfCntur.vtHYPoints.push_back(ptCntl);				
+				ttfCntur.vtHYPoints.push_back(otfCntur.vtHYPoints[j + 2]);
+				j += 2;
+			}
+			else
+			{
+				ttfCntur.vtHYPoints.push_back(otfCntur.vtHYPoints[j]);
+			}
+			j++;
+		}
+		ttfGryph.vtContour.push_back(ttfCntur);
+		
+	}
+
+	ttfGryph.glyfType = GLYF_TYPE_SIMPLE;
+	ttfGryph.fontFlag = FONTTYPE_TTF;
 
 }	// end of BOOL CHYFontSmartShaperView::OTF2TTF()
-
-void CHYFontSmartShaperView::cu2qu(std::vector<CHYPoint>& vtotfPT,std::vector<CHYBezierCurver>& vtTTFCurvers)
-{
-
-
-
-
-}	// end of BOOL CHYFontSmartShaperView::cu2qu()
-
-/* form cu2qu.py
-Approximate a cubic Bezier curve with a spline of n quadratics.
-
-Args:
-cubic (sequence): Four complex numbers representing control points of
-the cubic Bezier curve.
-n (int): Number of quadratic Bezier curves in the spline.
-tolerance (double): Permitted deviation from the original curve.
-
-Returns:
-A list of ``n+2`` complex numbers, representing control points of the
-quadratic spline if it fits within the given tolerance, or ``None`` if
-no suitable spline could be calculated.
-*/
-// we define 2 / 3 as a keyword argument so that it will be evaluated only
-// once but still in the scope of this function
-bool CHYFontSmartShaperView::cubic_approx_spline(std::vector<CHYPoint>& vtotfPT, std::vector<CHYPoint>& vtttfPT,int n, double tolerance, double _2_3 /*= 0.666666666666666666666666667*/)
-{
-	std::vector<CHYBezierCurver> vtOTFCurvers;
-	if (n == 1) {
-		CHYBezierCurver OTFCurver;
-		OTFCurver.iCurverType = 0;
-		if (!cubic_approx_quadratic(vtotfPT, OTFCurver.vtCurverPt, tolerance, _2_3))
-			return false;
-
-		vtOTFCurvers.push_back(OTFCurver);
-	}
-
-	split_cubic_into_n_iter(vtotfPT[0], vtotfPT[1], vtotfPT[2],vtotfPT[3],n, vtOTFCurvers);
-
-	//calculate the spline of quadratics and check errors at the same time.
-	if (vtOTFCurvers.size() > 0){
-		CHYBezierCurver& next_cubic = vtOTFCurvers[0];
-
-		std::complex<double> next_q1;
-		cubic_approx_control(0, 
-			std::complex<double>(next_cubic.vtCurverPt[0].x, next_cubic.vtCurverPt[0].y),
-			std::complex<double>(next_cubic.vtCurverPt[1].x, next_cubic.vtCurverPt[1].y),
-			std::complex<double>(next_cubic.vtCurverPt[2].x, next_cubic.vtCurverPt[2].y),
-			std::complex<double>(next_cubic.vtCurverPt[3].x, next_cubic.vtCurverPt[4].y),
-							next_q1);
-
-		std::complex<double> q2 = complex<double>(vtotfPT[0].x, vtotfPT[0].y);
-		std::complex<double> d1 = 0;
-
-		std::vector<std::complex<double>> spline;
-		spline.push_back(std::complex<double>(vtotfPT[0].x, vtotfPT[0].y));
-		spline.push_back(next_q1);
-
-		for (int i = 1; i < n + 1; i++) {
-			std::complex<double>c0(next_cubic.vtCurverPt[0].x, next_cubic.vtCurverPt[0].y);
-			std::complex<double>c1(next_cubic.vtCurverPt[1].x, next_cubic.vtCurverPt[1].y);
-			std::complex<double>c2(next_cubic.vtCurverPt[2].x, next_cubic.vtCurverPt[2].y);
-			std::complex<double>c3(next_cubic.vtCurverPt[3].x, next_cubic.vtCurverPt[3].y);
-
-			std::complex<double> q0 = q2;
-			std::complex<double> q1 = next_q1;
-			if (i < n) {
-				next_cubic = vtOTFCurvers[i];
-				std::complex<double> t0(next_cubic.vtCurverPt[0].x, next_cubic.vtCurverPt[0].y);
-				std::complex<double> t1(next_cubic.vtCurverPt[1].x, next_cubic.vtCurverPt[1].y);
-				std::complex<double> t2(next_cubic.vtCurverPt[2].x, next_cubic.vtCurverPt[2].y);
-				std::complex<double> t3(next_cubic.vtCurverPt[3].x, next_cubic.vtCurverPt[3].y);
-
-				cubic_approx_control(i / (n - 1), t0, t1, t2, t3, next_q1);
-				spline.push_back(next_q1);
-				q2 = (q1 + next_q1) * 0.5;
-			}
-			else {
-				q2 = c3;
-			}
-
-			// End - point deltas
-			complex<double> d0 = d1;
-			d1 = q2 - c3;
-
-			if ((abs(d1) > tolerance)) {
-				vtOTFCurvers.clear();
-				return false;
-			}
-
-			if (!cubic_farthest_fit_inside(d0,
-				q0 + (q1 - q0) * _2_3 - c1,
-				q2 + (q1 - q2) * _2_3 - c2,
-				d1,
-				tolerance))	{
-				vtOTFCurvers.clear();
-				return false;
-			}
-		}
-		spline.push_back(std::complex<double>(vtotfPT[3].x, vtotfPT[3].y));
-
-		for (size_t z = 0; z < spline.size(); z++)	{
-			CHYPoint pt;
-			pt.x = ::HY_RealRount(spline[z].real());
-			pt.y = ::HY_RealRount(spline[z].imag());
-			vtttfPT.push_back(pt);
-		}
-	}
-
-	return true;
-
-}	// end of void CHYFontSmartShaperView::cubic_approx_spline()
-
-void CHYFontSmartShaperView::cubic_approx_control(double t, std::complex<double>&p0, complex<double>&p1, complex<double>&p2, std::complex<double>& p3, std::complex<double>& outControl)
-{
-	std::complex<double> _p1 = p0 + (p1 - p0) * 1.5;
-	std::complex<double>	_p2 = p3 + (p2 - p3) * 1.5;
-	outControl = _p1 + (_p2 - _p1) * t;
-
-}	// end of void CHYFontSmartShaperView::cubic_approx_control()
-
-/*
-Approximate a cubic Bezier with a single quadratic within a given tolerance.
-
-Args:
-cubic(sequence) : Four complex numbers representing control points of
-the cubic Bezier curve.
-tolerance(double) : Permitted deviation from the original curve.
-
-Returns :
-	Three complex numbers representing control points of the quadratic
-	curve if it fits within the given tolerance, or ``None`` if no suitable
-	curve could be calculated.
-	"""
-	# we define 2 / 3 as a keyword argument so that it will be evaluated only
-	# once but still in the scope of this function	
-*/
-
-bool CHYFontSmartShaperView::cubic_farthest_fit_inside(std::complex<double>& p0, complex<double>& p1, complex<double>& p2, complex<double>& p3,double tolerance,double _2_3 /*= 0.6666*/)
-{	
-	if (abs(p2) <= _2_3 && abs(p1) <= _2_3)
-		return true;	
-
-	std::complex<double> tmp = p1 + p2;
-	tmp *= 3.0;
-	std::complex<double> mid = p0 + tmp + p3;
-	mid *= 0.125;
-
-	if (abs(mid) > tolerance)
-		return false;
-
-	std::complex<double> deriv3 = (p3 + p2 - p1 - p0) * 0.125;
-
-	bool b1 = cubic_farthest_fit_inside(p0, (p0 + p1)*.5, mid - deriv3, mid, tolerance);
-	bool b2 = cubic_farthest_fit_inside(mid, mid + deriv3, (p2 + p3)*.5, p3, tolerance);
-
-	return b1&&b2;
-
-}	// end of bool CHYFontSmartShaperView::cubic_farthest_fit_inside()
-
-bool CHYFontSmartShaperView::cubic_approx_quadratic(std::vector<CHYPoint>& vtotfPT, std::vector<CHYPoint>& vtttfPT, double tolerance, double _2_3 /*= 0.6666*/)
-{
-	complex<double> q1;
-	bool b = calc_intersect(std::complex<double>(vtotfPT[0].x, vtotfPT[0].y),
-		std::complex<double>(vtotfPT[1].x, vtotfPT[1].y),
-		std::complex<double>(vtotfPT[2].x, vtotfPT[2].y),
-		std::complex<double>(vtotfPT[3].x, vtotfPT[3].y), q1);
-	if (!b) return false;
-	
-	std::complex<double> c0 = std::complex<double>(vtotfPT[0].x, vtotfPT[0].y);
-	std::complex<double> c3 = std::complex<double>(vtotfPT[3].x, vtotfPT[3].y);
-	std::complex<double> c1 = c0 + (q1 - c0) * _2_3;
-	std::complex<double> c2 = c3 + (q1 - c3) * _2_3;
-
-	b = cubic_farthest_fit_inside(std::complex<double>(0,0), c1 - std::complex<double>(vtotfPT[1].x, vtotfPT[1].y), c2 - complex<double>(vtotfPT[2].x, vtotfPT[2].y), complex<double>(0, 0), _2_3);
-	if (!b) return false;
-
-	vtttfPT.clear();
-	CHYPoint pt;
-	pt.x = ::HY_RealRount(c0.real());
-	pt.y = ::HY_RealRount(c0.imag());
-	vtttfPT.push_back(pt);	
-	pt.x = ::HY_RealRount(q1.real());
-	pt.y = ::HY_RealRount(q1.imag());
-	vtttfPT.push_back(pt);	
-	pt.x = ::HY_RealRount(c3.real());
-	pt.y = ::HY_RealRount(c3.imag());
-	vtttfPT.push_back(pt);	
-
-	return true;
-
-}	// end of void CHYFontSmartShaperView::cubic_approx_quadratic()
-
-/*
-Calculate the intersection of two lines.
-
-Args:
-a(complex) : Start point of first line.
-b(complex) : End point of first line.
-c(complex) : Start point of second line.
-d(complex) : End point of second line.
-intr :Location of intersection if one present, ``complex(NaN, NaN)``
-*/
-bool CHYFontSmartShaperView::calc_intersect(std::complex<double>& a, std::complex<double>& b, std::complex<double>& c, std::complex<double>& d, std::complex<double>& intr)
-{
-	std::complex<double> ab = b - a;
-	std::complex<double> cd = d - c;
-	std::complex<double> p = ab * std::complex<double>(0,1);
-
-	std::complex<double> h;
-	try	{
-		h = dot(p, a - c) / dot(p, cd);
-	}
-	catch (const std::exception&){
-		return false;
-	}
-
-	intr = c + cd * h;
-	return true;
-
-}	// end of void CHYFontSmartShaperView::calc_intersect()
-
-float CHYFontSmartShaperView::dot(std::complex<double>& v1, std::complex<double>& v2)
-{
-	std::complex<double> rn = v1 * conj(v2);
-	return rn.real();
-
-}	//end of float CHYFontSmartShaperView::dot()
-
-
-/*
-Split a cubic Bezier into n equal parts.
-
-Splits the curve into `n` equal parts by curve time.
-(t = 0..1 / n, t = 1 / n..2 / n, ...)
-
-Args:
-p0(complex) : Start point of curve.
-p1(complex) : First handle of curve.
-p2(complex) : Second handle of curve.
-p3(complex) : End point of curve.
-
-Returns :
-	An iterator yielding the control points(four complex values) of the
-	subcurves.
-	"""
-*/
-void CHYFontSmartShaperView::split_cubic_into_n_iter(CHYPoint& a, CHYPoint& b, CHYPoint& c, CHYPoint& d, int n, std::vector<CHYBezierCurver>& vtOTFCurvers)
-{	
-	if (n == 2)	{
-		split_cubic_into_two(a,b,c,d, vtOTFCurvers);
-	}else if (n == 3)	{
-		split_cubic_into_three(a, b, c, d, vtOTFCurvers);
-	}else if (n == 6)	{
-		split_cubic_into_four(a, b, c, d, vtOTFCurvers);
-	}
-	else{
-		_split_cubic_into_n_gen(a, b, c, d,n, vtOTFCurvers);
-	}
-	
-}	// end of void CHYFontSmartShaperView::split_cubic_into_n_iter()
-
-void CHYFontSmartShaperView::makeCFFCurver(std::complex<double>& p0, std::complex<double>& p1, std::complex<double>& p2, std::complex<double>& p3,CHYBezierCurver&otfCurver)
-{
-	CHYPoint pt;
-
-	otfCurver.iCurverType = 1;
-	pt.x = ::HY_RealRount(p0.real());
-	pt.y = ::HY_RealRount(p0.imag());
-	otfCurver.vtCurverPt.push_back(pt);
-	pt.x = ::HY_RealRount(p1.real());
-	pt.y = ::HY_RealRount(p1.imag());
-	otfCurver.vtCurverPt.push_back(pt);
-	pt.x = ::HY_RealRount(p2.real());
-	pt.y = ::HY_RealRount(p2.imag());
-	otfCurver.vtCurverPt.push_back(pt);
-	pt.x = ::HY_RealRount(p3.real());
-	pt.y = ::HY_RealRount(p3.imag());
-	otfCurver.vtCurverPt.push_back(pt);	
-
-}	// end of void CHYFontSmartShaperView::makeCFFCurver()
-
-void CHYFontSmartShaperView::makeTTFCurver(std::complex<double>& p0, std::complex<double>& p1, std::complex<double>& p2,CHYBezierCurver& ttfCurver)
-{
-	CHYPoint pt;
-
-	ttfCurver.iCurverType = 0;
-	pt.x = ::HY_RealRount(p0.real());
-	pt.y = ::HY_RealRount(p0.imag());
-	ttfCurver.vtCurverPt.push_back(pt);
-	pt.x = ::HY_RealRount(p1.real());
-	pt.y = ::HY_RealRount(p1.imag());
-	ttfCurver.vtCurverPt.push_back(pt);
-	pt.x = ::HY_RealRount(p2.real());
-	pt.y = ::HY_RealRount(p2.imag());
-	ttfCurver.vtCurverPt.push_back(pt);
-
-}	// end of void CHYFontSmartShaperView::makeCFFCurver()
-
-/*
-Split a cubic Bezier into two equal parts.
-Splits the curve into two equal parts at t = 0.5
-
-Args:
-p0(complex) : Start point of curve.
-p1(complex) : First handle of curve.
-p2(complex) : Second handle of curve.
-p3(complex) : End point of curve.
-vtTTFCurvers :two cubic Beziers(each expressed as a tuple of four complex	values).
-	
-*/
-void  CHYFontSmartShaperView::split_cubic_into_two(CHYPoint& a, CHYPoint& b, CHYPoint& c, CHYPoint& d, std::vector<CHYBezierCurver>& vtOTFCurvers)
-{
-	std::complex<double>	p0(a.x, a.y);
-	std::complex<double>	p1(b.x, b.y);
-	std::complex<double>	p2(c.x, c.y);
-	std::complex<double>	p3(d.x, d.y);
-
-	complex<double> tmp = p1 + p2;
-	tmp *= 3.0;
-	complex<double> mid = p0 + tmp + p3;
-	mid *= 0.125;
-	complex<double> deriv3 = (p3 + p2 - p1 - p0) * 0.125;
-
-	complex<double> c1 = (p0 + p1) * 0.5;
-	complex<double> c2 = mid - deriv3;	
-
-	// 被分割的第一段曲线
-	CHYBezierCurver  otfCurver;
-	makeCFFCurver(p0, c1, c2, mid,otfCurver);
-	vtOTFCurvers.push_back(otfCurver);
-
-	// 被分割的第二代曲线
-	CHYBezierCurver  otfCurver1;
-	complex<double> c3 = mid + deriv3;
-	complex<double> c4 = (p2 + p3) * 0.5;	
-	makeCFFCurver(mid, c3, c4, p3, otfCurver1);
-	vtOTFCurvers.push_back(otfCurver1);
-
-}	// end of void  CHYFontSmartShaperView::split_cubic_into_two()
-
-/*
-Split a cubic Bezier into three equal parts.
-
-Splits the curve into three equal parts at t = 1 / 3 and t = 2 / 3
-
-Args:
-p0(complex) : Start point of curve.
-p1(complex) : First handle of curve.
-p2(complex) : Second handle of curve.
-p3(complex) : End point of curve.
-vtTTFCurvers :Three cubic Beziers(each expressed as a tuple of four complex	values).
-
-# we define 1 / 27 as a keyword argument so that it will be evaluated only
-# once but still in the scope of this function
-*/
-void  CHYFontSmartShaperView::split_cubic_into_three(CHYPoint& a, CHYPoint& b, CHYPoint& c, CHYPoint& d, std::vector<CHYBezierCurver>& vtOTFCurvers, float _27 /*= 0.03703703703703703703703703703704*/)
-{
-	complex<double>	p0(a.x, a.y);
-	complex<double>	p1(b.x, b.y);
-	complex<double>	p2(c.x, c.y);
-	complex<double>	p3(d.x, d.y);
-
-	// we define 1 / 27 as a keyword argument so that it will be evaluated only
-	// once but still in the scope of this function
-	complex<double> mid1 = 8.0 * p0 + 12.0 * p1 + 6.0 * p2 + p3;
-	mid1 *= _27;
-
-	complex<double> deriv1 = p3 + 3.0 * p2 - 4.0 * p0;
-	deriv1 *=_27;
-
-	complex<double> mid2 = p0 + 6.0 * p1 + 12.0 * p2 + 8.0 * p3;
-	mid2 *= _27;
-	
-	complex<double> deriv2 = 4.0 * p3 - 3.0 * p1 - p0;
-	deriv2 *= _27;
-
-	CHYBezierCurver  otfCurver;
-	//1
-	complex<double> c1 = (2.0 * p0 + p1) / 3.0;
-	complex<double> c2 = mid1 - deriv1;	
-	makeCFFCurver(p0, c1, c2, mid1, otfCurver);
-	vtOTFCurvers.push_back(otfCurver);
-
-	//2
-	otfCurver.vtCurverPt.clear();
-	complex<double> c3 = mid1 + deriv1;
-	complex<double> c4 = mid2 - deriv2;	
-	makeCFFCurver(mid1, c3, c4, mid2, otfCurver);
-	vtOTFCurvers.push_back(otfCurver);
-
-	//3
-	otfCurver.vtCurverPt.clear();
-	complex<double> c5 = mid2 + deriv2;
-	complex<double> c6 = (p2 + 2.0 * p3) / 3.0;
-	makeCFFCurver(mid2, c5, c6, p3, otfCurver);
-	vtOTFCurvers.push_back(otfCurver);
-
-
-}	// end of void  CHYFontSmartShaperView::split_cubic_into_three()
-
-void CHYFontSmartShaperView::split_cubic_into_four(CHYPoint& a, CHYPoint& b, CHYPoint& c, CHYPoint& d, std::vector<CHYBezierCurver>& vtOTFCurvers)
-{	
-	std::vector<CHYBezierCurver> vtTmp;
-	split_cubic_into_two(a,b,c,d,vtTmp);
-
-	for (size_t i = 0; i < vtTmp.size(); i++){
-		CHYBezierCurver& curver = vtTmp[i];
-		split_cubic_into_two(curver.vtCurverPt[0], curver.vtCurverPt[1], curver.vtCurverPt[2], curver.vtCurverPt[3], vtOTFCurvers);
-	}
-
-}	// end of void CHYFontSmartShaperView::split_cubic_into_four()
-
-void CHYFontSmartShaperView::split_cubic_into_six(CHYPoint& a, CHYPoint& b, CHYPoint& c, CHYPoint& d, std::vector<CHYBezierCurver>& vtOTFCurvers, float _27 /*= 0.03703703703703703703703703703704*/)
-{
-	std::vector<CHYBezierCurver> vtTmp;
-	split_cubic_into_three(a, b, c, d, vtTmp);
-
-	for (size_t i = 0; i < vtTmp.size(); i++) {
-		CHYBezierCurver& curver = vtTmp[i];
-		split_cubic_into_three(curver.vtCurverPt[0], curver.vtCurverPt[1], curver.vtCurverPt[2], curver.vtCurverPt[3], vtOTFCurvers);
-	}
-
-}	// end of void CHYFontSmartShaperView::split_cubic_into_six()
-
-void  CHYFontSmartShaperView::_split_cubic_into_n_gen(CHYPoint& a1, CHYPoint& b1, CHYPoint& c1, CHYPoint& d1, int n,std::vector<CHYBezierCurver>& vtOTFCurvers)
-{
-	complex<double>	p0(a1.x, a1.y);
-	complex<double>	p1(b1.x, b1.y);
-	complex<double>	p2(c1.x, c1.y);
-	complex<double>	p3(d1.x, d1.y);
-
-	complex<double>	a,b,c,d;
-
-	calc_cubic_parameters(p0, p1, p2, p3, a, b, c, d);
-
-	complex<double> dt = 1.0 / n;
-	complex<double> delta_2 = dt * dt;
-	complex<double>	delta_3 = dt * delta_2;
-
-	for (int i = 0; i < n; i++)	{
-		complex<double> t1 = (double)i * dt;
-		complex<double> t1_2 = t1 * t1;
-		// calc new a, b, c and d
-		complex<double> a1 = a * delta_3;
-		complex<double> b1 = (3.0 * a*t1 + b) * delta_2;
-		complex<double> c1 = (2.0 * b*t1 + c + 3.0 * a*t1_2) * dt;
-		complex<double> d1 = a * t1*t1_2 + b * t1_2 + c * t1 + d;
-
-		complex<double> n1, n2, n3, n4;
-		calc_cubic_points(a1, b1, c1, d1, n1,n2,n3,n4);
-
-		CHYBezierCurver  curver;
-		makeCFFCurver(n1,n2,n3,n4, curver);
-		vtOTFCurvers.push_back(curver);
-	}	
-
-}	// end of void  CHYFontSmartShaperView::_split_cubic_into_n_gen()
-
-void  CHYFontSmartShaperView::calc_cubic_parameters(complex<double>& p0, complex<double>& p1, complex<double>& p2, complex<double>& p3, complex<double>& a, complex<double>& b, complex<double>& c, complex<double>& d)
-{
-	c = (p1 - p0) * 3.0;
-	b = (p2 - p1) * 3.0 - c;
-	d = p0;
-	a = p3 - d - c - b;
-
-} // end of void  CHYFontSmartShaperView::calc_cubic_parameters()
-
-void  CHYFontSmartShaperView::calc_cubic_points(complex<double>& a, complex<double>& b, complex<double>& c, complex<double>& d, complex<double>& _1, complex<double>& _2, complex<double>& _3, complex<double>& _4)
-{
-	_1 = d;
-	_2 = (c / 3.0) + d;
-	_3 = (b + c) / 3.0 + _2;
-	_4 = a + d + c + b;
-
-}	// end of void  CHYFontSmartShaperView::calc_cubic_points()
 
 BOOL CHYFontSmartShaperView::NameTranscodeToWCHAR(CHYName& name)
 {		
@@ -3252,29 +2637,6 @@ void CHYFontSmartShaperView::OnFntExtrname()
 
 }	// end of void CHYFontSmartShaperView::OnFntExtrname()
 
-void CHYFontSmartShaperView::OnFntRpNodef()
-{
-	TCHAR	szFilters[] = _T("Truetype 文件(*.ttf)|*.ttf||");
-	CFileDialog  openFileDlg(TRUE, _T(""), _T(""), OFN_LONGNAMES | OFN_FILEMUSTEXIST, szFilters);
-	if (openFileDlg.DoModal() != IDOK)	return;
-	std::string strSrcTTF = std::string(openFileDlg.GetPathName());
-
-	CFontExtract	FontExtract;
-	/*
-	CHYFontCodec decode;
-	FontExtract.PrepareExtractFont(strSrcTTF.data(), decode);
-	*/
-
-}	// end  of void CHYFontSmartShaperView::OnFntRpNodef()
-
-// 合库主要用于中英文合库
-void CHYFontSmartShaperView::OnFntRpTwfnt()
-{	
-	CMergeDlg	dlg;
-	dlg.DoModal();
-
-}	// end of void CHYFontSmartShaperView::OnFntRpTwfnt()
-
 void CHYFontSmartShaperView::OnNoboxMnu()
 {
 	WinExec("HYImageFontBuilder.exe",SW_SHOW);
@@ -3336,18 +2698,34 @@ void CHYFontSmartShaperView::OnMnCmptxt()
 	dlg.DoModal();
 
 }	// end of void CHYFontSmartShaperView::OnMnCmptxt()
+#include <algorithm> 
+#include <functional> 
+#include <cctype>
+#include <locale>
+static std::string& ltrim(std::string& s) {
+	s.erase(s.begin(), std::find_if(s.begin(), s.end(),
+		std::not1(std::ptr_fun<int, int>(std::isspace))));
+	return s;
+}
+
 
 void CHYFontSmartShaperView::OnMnChkerttf()
 {
-	CTime tm;
+	CTime tm = CTime::GetCurrentTime();
 	string strlog = to_string(tm.GetYear()) + "-" + to_string(tm.GetMonth())
 		+ "-" + to_string(tm.GetDay()) + "  "
 		+ to_string(tm.GetHour()) + ":"
 		+ to_string(tm.GetMinute()) + ":"
-		+ to_string(tm.GetSecond());
+		+ to_string(tm.GetSecond()) + "\n";		
 
 	string strlogFile = ::XSysproxy().m_strLogFile;
+
+	::DeleteFile(strlogFile.c_str());
 	HY_WriteLog(strlogFile, strlog, true);
+
+	::DeleteFile("d:\\test.txt");
+	fstream file("d:\\test.txt", ios::out);
+
 	size_t stGlyhNum = m_FontDeCodec.m_vtHYGlyphs.size();
 	int iNum = 0;
 	for (size_t i = 0; i < stGlyhNum; i++) {
@@ -3357,6 +2735,15 @@ void CHYFontSmartShaperView::OnMnChkerttf()
 		if (::XSysproxy().GetBugChar(SrcGryph, cntrIndx, vtResult))
 		{
 			strlog = SrcGryph.strPostName + "\n";
+
+			stringstream ss;
+			if (SrcGryph.vtUnicode.size() > 0)
+			{
+				ss << hex << SrcGryph.vtUnicode[0];
+				string str = ss.str();
+				file << str << endl;
+			}
+			
 			for (int a = 0; a < cntrIndx.size(); a++)
 			{
 				strlog += "contourIndex=" + std::to_string(cntrIndx[a]) + "\n";
@@ -3366,7 +2753,7 @@ void CHYFontSmartShaperView::OnMnChkerttf()
 				{
 					strlog += std::to_string(cntur.vtHYPoints[b].x) + "," + std::to_string(cntur.vtHYPoints[b].y) + " ";
 				}
-				strlog += "\n";
+				strlog += "\n";				
 				HY_WriteLog(strlogFile, strlog);
 			}
 			iNum++;
@@ -3375,7 +2762,7 @@ void CHYFontSmartShaperView::OnMnChkerttf()
 
 	strlog = "Check number=" + std::to_string(iNum);
 	HY_WriteLog(strlogFile, strlog);
-
+	file.close();
 
 }	// end of void CHYFontSmartShaperView::OnMnChkerttf()
 
@@ -3422,13 +2809,14 @@ void CHYFontSmartShaperView::OnMnCodemap()
 	::HY_LoadCodeFile((char*)strSrcTXT.c_str(), vtUni);
 
 	size_t sz = m_FontEnCodec.m_vtHYGlyphs.size();
-	for (size_t i = 1; i < sz; i++)
+	int iUIndex = 0;
+	for (size_t i =	1; i < sz; i++)
 	{		
 		CHYGlyph& glyph =  m_FontEnCodec.m_vtHYGlyphs[i];
-		if (i < vtUni.size())
+		if (iUIndex < vtUni.size())
 		{
 			glyph.vtUnicode.clear();
-			glyph.vtUnicode.push_back(vtUni[i]);
+			glyph.vtUnicode.push_back(vtUni[iUIndex++]);
 		}
 	}
 

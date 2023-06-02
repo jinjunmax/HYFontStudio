@@ -992,7 +992,7 @@ BOOL CXSysProxy::GetBugChar(CHYGlyph& InGlyph, std::vector<int>& cntrIndx,std::v
 					dbAgnle = CHYFontFunc::AnglePoint(outHYPoints[j - 1], outHYPoints[j], outHYPoints[0]);
 					pt3 = outHYPoints[0];					
 				}
-				if (dbAgnle < 2.0f)
+				if (dbAgnle < 1.0f)
 				{	
 					if ((pt1.x != pt2.x) && (pt1.y != pt2.y))
 					{

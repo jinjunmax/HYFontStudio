@@ -15,15 +15,16 @@ CHYFontFunc::~CHYFontFunc()
 void CHYFontFunc::MergeGlyphs(std::vector<CHYGlyph>& src1Glyphs, std::vector<CHYGlyph>& src2Glyphs)
 {
 	size_t st = src2Glyphs.size();
-	// size_t i=1 默认过滤掉.notdef字符
-	for (size_t i = 1; i < st; i++) {
+	
+	for (size_t i = 0; i < st; i++) {
 		CHYGlyph src2Gly = src2Glyphs[i];
 
-		//if (src2Gly.strPostName == ".notdef")		
-			//continue;
+		if (src2Gly.strPostName == ".notdef")		
+			continue;
 
 		if (src2Gly.vtUnicode.size() > 0)
 		{ 
+			// 不去拷贝控制符
 			if (src2Gly.vtUnicode[0] == 0xffff)
 				continue;
 			if (src2Gly.vtUnicode[0] == 0x0020)
@@ -44,7 +45,6 @@ void CHYFontFunc::MergeGlyphs(std::vector<CHYGlyph>& src1Glyphs, std::vector<CHY
 			else {
 				src1Glyphs.push_back(src2Gly);
 			}
-
 		}
 		else if (src2Gly.vtUnicode.size() == 0) { // 如果没有unicode
 			if (src2Gly.strPostName == "") {	// 既没有unicode编码也没有name
@@ -1068,6 +1068,22 @@ double  CHYFontFunc::DispointToLine(CHYPoint& startpoint, CHYPoint& endpoint, CH
 	return dis;
 
 }	// end of double  CHYFontFunc::Dispointtoline()
+
+//计算点到直线的距离
+CHYPoint CHYFontFunc::cubicToQuadratic(CHYPoint p1, CHYPoint p2, CHYPoint p3, CHYPoint p4)
+{
+	CHYPoint q1, q2, q3;
+	q1.x = (p1.x + 3 * p2.x) / 4;
+	q1.y = (p1.y + 3 * p2.y) / 4;
+	q2.x = (3 * p3.x + p4.x) / 4;
+	q2.y = (3 * p3.y + p4.y) / 4;
+	q3.x = (q1.x + q2.x) / 2;
+	q3.y = (q1.y + q2.y) / 2;
+	q3.flag = POINT_FLG_CONTROL;
+	return q3;
+
+}	// end of CHYPoint cubicToQuadratic()
+
 
 int CHYFontFunc::Jiecheng(int n)
 {

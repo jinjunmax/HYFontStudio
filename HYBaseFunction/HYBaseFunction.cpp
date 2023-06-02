@@ -722,14 +722,26 @@ bool HY_WCharTOMultiCharEx(std::string  strOut, char* pSrc, int iSrclen)
 
 }	// end of bool HY_WCharTOMultiChar()
 
-std::string HY_trim(std::string const& str)   
-{  
-	if(str.empty())		return str;
+// trim from start
+std::string HY_ltrim(std::string& s)
+{
+	s.erase(s.begin(), std::find_if(s.begin(), s.end(),
+		std::not1(std::ptr_fun<int, int>(std::isspace))));
+	return s;
 
-	std::size_t firstScan = str.find_first_not_of(' ');
-	std::size_t first     = firstScan == std::string::npos ? str.length() : firstScan;
-	std::size_t last      = str.find_last_not_of(' ');
-	return str.substr(first, last-first+1);
+}	// end of std::string& HY_ltrim(std::string& s) {
+
+// trim from end
+std::string HY_rtrim(std::string& s) 
+{
+	s.erase(std::find_if(s.rbegin(), s.rend(),
+		std::not1(std::ptr_fun<int, int>(std::isspace))).base(), s.end());
+	return s;
+}	// end of std::string& HY_rtrim(std::string& s) {
+
+std::string HY_trim(std::string& str)   
+{  
+	return HY_ltrim(HY_rtrim(str));
 
 }  // end of std::string& HY_DLL_API trim(std::string &s)
 
@@ -774,7 +786,8 @@ void  HY_WriteLog(std::string SavePath,std::string& Text,bool bNew)
 		_set_errno(0);
 		return;
 	}
-	fwrite(Text.c_str(),1, Text.length()+1, pCreatFile);
+
+	fwrite(Text.c_str(),1, Text.length(), pCreatFile);
 	fflush(pCreatFile);
 	fclose(pCreatFile);
 

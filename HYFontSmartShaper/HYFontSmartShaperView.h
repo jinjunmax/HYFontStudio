@@ -117,7 +117,8 @@ protected:
 	// 重置编码
 	afx_msg void		OnFntResetcode();
 	virtual BOOL		PreTranslateMessage(MSG* pMsg);
-
+	// 批处理otf -> CIDOTF
+	afx_msg void		OnFntBudcidotf();
 	// 实现
 public:
 #ifdef _DEBUG
@@ -152,23 +153,6 @@ public:
 	BOOL				TTFConvert(CHYGlyph& SrcGryph, CHYGlyph& DstGryph, CHYHead& SrcHead);
 	BOOL				OTFConvert(CHYGlyph& SrcGryph, CHYGlyph& DstGryph, CHYHead& SrcHead);
 	void				OTF2TTF(CHYGlyph& otfGryph, CHYGlyph& ttfGryph);
-	void				cu2qu(std::vector<CHYPoint>& vtotfPT, std::vector<CHYBezierCurver>& vtTTFCurvers);
-	bool				cubic_approx_spline(std::vector<CHYPoint>& vtotfPT, std::vector<CHYPoint>& vtttfPT, int n, double tolerance, double _2_3 = 0.666666666666666666666666667);
-	void				cubic_approx_control(double t, std::complex<double>& p0, std::complex<double>& p1, std::complex<double>& p2, std::complex<double>& p3, std::complex<double>& outControl);
-	bool				cubic_farthest_fit_inside(std::complex<double>& p0, std::complex<double>& p1, std::complex<double>& p2, std::complex<double>& p3, double tolerance, double _2_3 = 0.666666666666666666666666667);
-	bool				cubic_approx_quadratic(std::vector<CHYPoint>& vtotfPT, std::vector<CHYPoint>& vtttfPT, double tolerance, double _2_3 = 0.666666666666666666666666667);
-	bool				calc_intersect(std::complex<double>& a, std::complex<double>& b, std::complex<double>& c, std::complex<double>& d, std::complex<double>& intr);
-	float				dot(std::complex<double>& v1, std::complex<double>& v2);
-	void				split_cubic_into_n_iter(CHYPoint& a, CHYPoint& b, CHYPoint& c, CHYPoint& d, int n, std::vector<CHYBezierCurver>& vtOTFCurvers);
-	void				makeCFFCurver(std::complex<double>& p1, std::complex<double>& p2, std::complex<double>& p3, std::complex<double>& p4, CHYBezierCurver& otfCurver);
-	void				makeTTFCurver(std::complex<double>& p1, std::complex<double>& p2, std::complex<double>& p3, CHYBezierCurver& ttfCurver);
-	void				split_cubic_into_two(CHYPoint& a, CHYPoint& b, CHYPoint& c, CHYPoint& d, std::vector<CHYBezierCurver>& vtOTFCurvers);
-	void				split_cubic_into_three(CHYPoint& a, CHYPoint& b, CHYPoint& c, CHYPoint& d, std::vector<CHYBezierCurver>& votfFCurvers, float _27 = 0.03703703703703703703703703703704);
-	void				split_cubic_into_four(CHYPoint& a, CHYPoint& b, CHYPoint& c, CHYPoint& d, std::vector<CHYBezierCurver>& vtOTFCurvers);
-	void				split_cubic_into_six(CHYPoint& a, CHYPoint& b, CHYPoint& c, CHYPoint& d, std::vector<CHYBezierCurver>& vtOTFCurvers, float _27 = 0.03703703703703703703703703703704);
-	void				_split_cubic_into_n_gen(CHYPoint& a1, CHYPoint& b1, CHYPoint& c1, CHYPoint& d1, int n, std::vector<CHYBezierCurver>& vtOTFCurvers);
-	void				calc_cubic_parameters(std::complex<double>& p0, std::complex<double>& p1, std::complex<double>& p2, std::complex<double>& p3, std::complex<double>& a, std::complex<double>& b, std::complex<double>& c, std::complex<double>& d);
-	void				calc_cubic_points(std::complex<double>& a, std::complex<double>& b, std::complex<double>& c, std::complex<double>& d, std::complex<double>& _1, std::complex<double>& _2, std::complex<double>& _3, std::complex<double>& _4);
 
 	BOOL				NameTranscodeToWCHAR(CHYName& name);
 	void				MakeFontSaveInfo();
@@ -218,8 +202,6 @@ public:
 	{
 		return reinterpret_cast<CHYFontSmartShaperDoc*>(m_pDocument);
 	}
-#endif
-
-	// 批处理otf -> CIDOTF
-	afx_msg void OnFntBudcidotf();
+#endif	
+	
 };

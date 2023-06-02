@@ -217,7 +217,6 @@ typedef struct _HY_IMG_OPTIM
 #define VMTX_TAG		0x766D7478
 #define VORG_TAG		0x564F5247
 #define VVAR_TAG		0x56564152
-
 #define FEAT_TAG		0x66656174
 #define MORX_TAG		0x6D6F7278
 

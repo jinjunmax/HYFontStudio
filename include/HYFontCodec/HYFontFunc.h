@@ -9,18 +9,22 @@ public:
 	CHYFontFunc();
 	~CHYFontFunc();
 
+	// 将两套字形数据合并为一套,如果编码或psname重复后边覆盖前边
 	static void MergeGlyphs(std::vector<CHYGlyph>& src1Glyphs, std::vector<CHYGlyph>& src2Glyphs);
+	// 通过字符name确定GID
 	static int FindGryphIndexByGlyName(std::vector<CHYGlyph>& InGlyphs, string strGName);
+	// 通过字符unicode编码确定GID
 	static int FindGryphIndexByUnciode(std::vector<CHYGlyph>& InGlyphs, unsigned long ulUnicode);
 	// 通过postcript文件提取子集，outHYGlyphs会先被清空，所以不需要考虑outHYGlyphs中是否会有重复字符
 	static void GetSubsetbyName(std::vector<CHYGlyph>& InGlyphs, std::vector<string>& names, std::vector<CHYGlyph>& outHYGlyphs);
 	// 通过unicode编码提取子集，outHYGlyphs不会被清空，bOverlap决定是否新字形覆盖旧字形
 	static void GetSubsetbyUni(std::vector<CHYGlyph>& InGlyphs, std::vector<unsigned long>& uni, std::vector<CHYGlyph>& outHYGlyphs, bool bOverlap=TRUE);
-
+	// 计算两点之间的直线距离整形
 	static double Distance(const CHYPoint& p1, const CHYPoint& p2);
+	// 计算两点之间的直线距离浮点型
 	static double DistanceF(const HYPOINTF& p1, const HYPOINTF& p2);
+	// 计算三点之间的夹角
 	static double AnglePoint(const CHYPoint& StartPt, const CHYPoint& MidPt, const CHYPoint& EndPt);
-
 	// 获取贝塞尔曲线中心点
 	static HYPOINTF GetBezierCenter(std::vector<CHYPoint> vtBPoints, int sPoints);
 	// 求贝塞尔曲线弧长（近似值), t采样频率，(最高支持到三次)。
@@ -58,5 +62,8 @@ public:
 	static int		bezierntest(std::vector<CHYPoint>& temp_PointList01, std::vector<CHYPoint>& toPointlist, int BN, int bflag, double m_value);
 	//计算点到直线的距离
 	static double	DispointToLine(CHYPoint& startpoint, CHYPoint& endpoint, CHYPoint& tagpoint);
+
+	// 两次贝塞尔to三次贝塞尔
+	static CHYPoint cubicToQuadratic(CHYPoint p1, CHYPoint p2, CHYPoint p3, CHYPoint p4);
 };
 

@@ -78,27 +78,123 @@ void CTXTCmpDlg::OnBnClickedTcmpdstBtn()
 	UpdateData();
 
 	int CtrlID = GetCheckedRadioButton(IDC_TCMPZB_RD, IDC_TCMPNB_RD);
+	string diffFile = HY_GetDirFromPath(string(m_strFile1))
+		+ HY_GetFileNameFromPath(string(m_strFile1))+"_diff.txt";
+
+	string sameFile = HY_GetDirFromPath(string(m_strFile1))
+		+ HY_GetFileNameFromPath(string(m_strFile1)) + "_same.txt";
+
+	if (m_strFile1 == "") return;
+	if (m_strFile2 == "") return;
+
+	std::vector<string> diff;
+	std::vector<string> same;
+
 	switch (CtrlID)
 	{
-	case IDC_TCMPZB_RD:
-		break;
-	case IDC_TCMPMB_RD:
-		break;
-	case IDC_TCMPNB_RD:
-		break;
-	default:
-		break;
+		case IDC_TCMPZB_RD:
+			CmprCharFile(m_strFile1, m_strFile2, diff, same);
+			break;
+		case IDC_TCMPMB_RD:
+			CmprCodeFile(m_strFile1, m_strFile2, diff, same);
+			break;
+		case IDC_TCMPNB_RD:
+			CmprCodeFile(m_strFile1, m_strFile2, diff, same);
+			break;
+		default:
+			break;
 	}
+
+	DeleteFile(diffFile.c_str());
+	DeleteFile(sameFile.c_str());
+
+	ofstream diffout(diffFile);
+	if (!diffout.bad())
+	{
+		for (size_t st = 0; st < diff.size(); st++)
+		{
+			diffout<<diff[st]<<endl;
+		}
+		diffout.close();
+	}
+
+	ofstream sameout(sameFile);
+	if (!sameout.bad())
+	{
+		for (size_t st = 0; st < diff.size(); st++)
+		{
+			sameout << same[st]<<endl;
+		}
+		sameout.close();
+	}
+	
+	AfxMessageBox("处理完成");
 
 }	// end of void CTXTCmpDlg::OnBnClickedTcmpdstBtn()
 
-void CTXTCmpDlg::CmprLine(CString strFL1, CString strFL2, std::vector<string>& vtDiff , std::vector<string>& vtSame)
+void CTXTCmpDlg::CmprCodeFile(CString strFL1, CString strFL2, std::vector<string>& vtDiff , std::vector<string>& vtSame)
 {
+	vtDiff.clear();
+	vtSame.clear();
 
+	ifstream in1(strFL1);
+	string line1;
+	vector<string> vtText1;	
+	if (in1) {
+		while (getline(in1, line1)) { // line中不包括每行的换行符
+			if (line1.length() == 0) continue;
+			line1 = HY_trim(line1);			
+			vtText1.push_back(line1);
+		}
+	}
 
-}	// end of void CTXTCmpDlg::CmprLine()
+	ifstream in2(strFL2);
+	string line2;
+	vector<string> vtText2;
+	if (in2) {
+		while (getline(in2, line2)) { // line中不包括每行的换行符
+			if (line2.length() == 0) continue;
+			line2 = HY_trim(line2);
+			vtText2.push_back(line2);
+		}
+	}	
+	
+	int iIndex1 = 0;
+	int iIndex2 = 0;
+	string strdiff="";
+	while (true) {
+		string str1, str2;
+		if (iIndex1 < vtText1.size()&& iIndex2 < vtText2.size()){
+			str1 = vtText1[iIndex1];
+			str2 = vtText2[iIndex2];
 
-void CTXTCmpDlg::CmprChar(CString strFL1, CString strFL2, std::vector<string>& vtDiff, std::vector<string>& vtSame)
+			if (str1 != str2){
+				strdiff = str1 + ";" + str2;
+				vtDiff.push_back(strdiff);
+			}
+			else{
+				vtSame.push_back(str1);
+			}
+		}
+		else if (iIndex1 >= vtText1.size() && iIndex2 < vtText2.size()){
+			strdiff = ";" + str2;
+			vtDiff.push_back(strdiff);
+		}
+		else if (iIndex1 < vtText1.size() && iIndex2 >= vtText2.size()){
+			strdiff =str1+";";
+			vtDiff.push_back(strdiff);
+		}
+		else if (iIndex1 >= vtText1.size() && iIndex2 >= vtText2.size()){
+			break;
+		}
+
+		iIndex1++;
+		iIndex2++;
+	}
+
+}	// end of void CTXTCmpDlg::CmprCodeFile()
+
+void CTXTCmpDlg::CmprCharFile(CString strFL1, CString strFL2, std::vector<string>& vtDiff, std::vector<string>& vtSame)
 {
 	
 	

@@ -386,13 +386,16 @@
 #define ID_FNT_CLEARCODE                32915
 #define ID_32916                        32916
 #define ID_FNT_BUDCIDOTF                32917
+#define ID_32918                        32918
+#define ID_MN_CHANGECODE                32919
+#define ID_MN_EXCNGCODE                 32920
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        383
-#define _APS_NEXT_COMMAND_VALUE         32918
+#define _APS_NEXT_RESOURCE_VALUE        385
+#define _APS_NEXT_COMMAND_VALUE         32921
 #define _APS_NEXT_CONTROL_VALUE         1220
 #define _APS_NEXT_SYMED_VALUE           310
 #endif

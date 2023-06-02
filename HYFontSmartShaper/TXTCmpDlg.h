@@ -26,8 +26,8 @@ public:
 	afx_msg void OnBnClickedTcmpfl2Btn();
 	afx_msg void OnBnClickedTcmpdstBtn();
 
-	void	CmprLine(CString strFL1, CString strFL2, std::vector<string>& vtDiff, std::vector<string>& vtSame);
-	void	CmprChar(CString strFL1, CString strFL2, std::vector<string>& vtDiff, std::vector<string>& vtSame);
+	void	CmprCodeFile(CString strFL1, CString strFL2, std::vector<string>& vtDiff, std::vector<string>& vtSame);
+	void	CmprCharFile(CString strFL1, CString strFL2, std::vector<string>& vtDiff, std::vector<string>& vtSame);
 
 public:
 	CString m_strFile1;

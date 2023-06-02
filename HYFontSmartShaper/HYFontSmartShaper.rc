@@ -152,11 +152,6 @@ BEGIN
                 MENUITEM "按name文件提取字库",                 ID_FNT_EXTRNAME, GRAYED
             END
             MENUITEM "变高字库",                        ID_FNT_VADH
-            POPUP "字符替换"
-            BEGIN
-                MENUITEM "nodef替换所有字符",                 ID_FNT_RP_NODEF
-                MENUITEM "两个字库间替换字符",                   ID_FNT_RP_TWFNT
-            END
             MENUITEM "重建name",                      ID_FNT_RSETNAME
             MENUITEM "重建编码",                        ID_FNT_CLEARCODE
             MENUITEM "重建CIDOTF",                    ID_FNT_BUDCIDOTF
@@ -185,10 +180,7 @@ BEGIN
             MENUITEM "码表去换行",                       ID_MN_CODEDOT
             MENUITEM "加入后缀为.Vert",                  ID_MN_CHA
             MENUITEM "码表加前缀uni",                    ID_MN_ADUNI
-            POPUP "近似字"
-            BEGIN
-                MENUITEM "码表转字表",                       ID_MN_JSZ_CODETCHAR
-            END
+            MENUITEM "码表转字表",                       ID_MN_JSZ_CODETCHAR
             MENUITEM "导出Name表",                     ID_MN_EXPTNAME
             MENUITEM "文本比较",                        ID_MN_CMPTXT
             MENUITEM "feature处理",                   ID_CHA_CONVERT
@@ -836,9 +828,9 @@ BEGIN
     PUSHBUTTON      "打开",IDC_TCMPFL1_BTN,300,34,50,14
     LTEXT           "文件1",IDC_STATIC,11,39,21,8
     LTEXT           "文件2",IDC_STATIC,11,68,21,8
-    CONTROL         "字表",IDC_TCMPZB_RD,"Button",BS_AUTORADIOBUTTON | WS_GROUP,14,12,32,10
-    CONTROL         "码表",IDC_TCMPMB_RD,"Button",BS_AUTORADIOBUTTON | WS_GROUP,65,12,32,10
-    CONTROL         "字名",IDC_TCMPNB_RD,"Button",BS_AUTORADIOBUTTON | WS_GROUP,116,12,32,10
+    CONTROL         "字表",IDC_TCMPZB_RD,"Button",BS_AUTORADIOBUTTON,14,12,32,10
+    CONTROL         "码表",IDC_TCMPMB_RD,"Button",BS_AUTORADIOBUTTON,65,12,32,10
+    CONTROL         "字名",IDC_TCMPNB_RD,"Button",BS_AUTORADIOBUTTON,116,12,32,10
     PUSHBUTTON      "比较",IDC_TCMPDST_BTN,300,89,50,14
 END
 
@@ -859,7 +851,7 @@ BEGIN
     PUSHBUTTON      "导入",IDC_EMJ_HMEFILE_BTN,261,77,50,14,WS_DISABLED
 END
 
-IDD_EXCHGCDE_DLG DIALOGEX 0, 0, 285, 149
+IDD_EXCHGCDE_DLG DIALOGEX 0, 0, 305, 154
 STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "更新编码"
 FONT 8, "MS Shell Dlg", 400, 0, 0x1
@@ -867,13 +859,16 @@ BEGIN
     CONTROL         "完整码表",IDC_EXCHGCDE_FUL_RD,"Button",BS_AUTORADIOBUTTON,19,17,48,10
     CONTROL         "删除码表",IDC_EXCHGCDE_DEL_RD,"Button",BS_AUTORADIOBUTTON,81,17,48,10
     CONTROL         "替换码表",IDC_EXCHGCDE_EXCHG_RD,"Button",BS_AUTORADIOBUTTON,148,17,48,10
-    PUSHBUTTON      "浏览",IDC_EXCHGCDE_FNT_BTN,209,45,50,14
-    EDITTEXT        IDC_EXCHGCDE_FNT_EDT,18,43,178,14,ES_AUTOHSCROLL
-    PUSHBUTTON      "浏览",IDC_EXCHGCDE_CDE_BTN,211,72,50,14
-    EDITTEXT        IDC_EXCHGCDE_CDE_EDT,18,70,178,14,ES_AUTOHSCROLL
-    PUSHBUTTON      "浏览",IDC_EXCHGCDE_SVFNT_BTN,211,101,50,14
-    EDITTEXT        IDC_EXCHGCDE_SVFNT_EDT,18,99,178,14,ES_AUTOHSCROLL
-    PUSHBUTTON      "处理",IDC_EXCHGCDE_RUN_BTN,211,123,50,14
+    PUSHBUTTON      "浏览",IDC_EXCHGCDE_FNT_BTN,240,45,50,14
+    EDITTEXT        IDC_EXCHGCDE_FNT_EDT,52,43,178,14,ES_AUTOHSCROLL
+    PUSHBUTTON      "浏览",IDC_EXCHGCDE_CDE_BTN,240,72,50,14
+    EDITTEXT        IDC_EXCHGCDE_CDE_EDT,52,70,178,14,ES_AUTOHSCROLL
+    PUSHBUTTON      "浏览",IDC_EXCHGCDE_SVFNT_BTN,240,101,50,14
+    EDITTEXT        IDC_EXCHGCDE_SVFNT_EDT,52,99,178,14,ES_AUTOHSCROLL
+    PUSHBUTTON      "处理",IDC_EXCHGCDE_RUN_BTN,240,123,50,14
+    LTEXT           "源字库",IDC_STATIC,14,46,25,8
+    LTEXT           "码表文件",IDC_STATIC,14,75,33,8
+    LTEXT           "目标字库",IDC_STATIC,14,103,33,8
 END
 
 
@@ -1158,9 +1153,9 @@ BEGIN
     IDD_EXCHGCDE_DLG, DIALOG
     BEGIN
         LEFTMARGIN, 7
-        RIGHTMARGIN, 278
+        RIGHTMARGIN, 298
         TOPMARGIN, 6
-        BOTTOMMARGIN, 142
+        BOTTOMMARGIN, 147
     END
 END
 #endif    // APSTUDIO_INVOKED
@@ -1470,6 +1465,11 @@ END
 STRINGTABLE
 BEGIN
     ID_FNT_CLEARCODE        "对字库的编码进行重建、删除和调换工作"
+END
+
+STRINGTABLE
+BEGIN
+    ID_CHA_CONVERT          "不是通用功能，临时功能"
 END
 
 #endif    // 中文(简体，中国) resources
