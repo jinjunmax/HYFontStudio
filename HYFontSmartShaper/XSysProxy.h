@@ -38,7 +38,7 @@ public:
 	void SetEncodeOption(CHYFontCodec& Encode, CHYFontCodec& Original);
 
 	BOOL GetBugChar(CHYGlyph& InGlyph, std::vector<int>& cntrIndx,std::vector<CHYContour>& vtResult);
-	void MakeConturPath(CHYContour& hyCntur, std::vector<CHYPoint>& vtHYPoints);
+	void FiterFeiDian(CHYContour& hyCntur, std::vector<CHYPoint>& vtHYPoints);
 	
 	void DelCode(CHYFontCodec& Codec, std::vector<unsigned long> vtUni);
 	void ExchangeCode(CHYFontCodec& Codec, std::vector<unsigned long> vtUni1, std::vector<unsigned long> vtUni2);

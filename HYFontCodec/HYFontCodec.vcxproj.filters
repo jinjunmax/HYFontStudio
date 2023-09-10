@@ -153,6 +153,9 @@
     <ClCompile Include="HYFontFunc.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="HYFontUpdate.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\HYFontCodec\FontExtract.h">
@@ -306,6 +309,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\include\HYFontCodec\HYFontFunc.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\HYFontCodec\HYFontUpdate.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

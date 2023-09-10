@@ -204,4 +204,5 @@ public:
 	}
 #endif	
 	
+	afx_msg void OnG3fxMn();
 };

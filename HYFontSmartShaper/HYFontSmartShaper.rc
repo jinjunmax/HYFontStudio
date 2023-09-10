@@ -172,6 +172,7 @@ BEGIN
         BEGIN
             MENUITEM "验证可变数据",                      ID_VERIFYVNT_MN
             MENUITEM "生成可变字库",                      ID_MKVNT_MN
+            MENUITEM "G3Fix",                       ID_G3FX_MN
         END
         MENUITEM SEPARATOR
         MENUITEM "字库信息",                        ID_MN_FNTINF

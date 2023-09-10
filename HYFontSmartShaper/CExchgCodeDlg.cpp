@@ -282,7 +282,7 @@ void CExchgCodeDlg::LoadExchgCodeFile(CString strSrcFontName, std::vector<unsign
 		while (getline(in, line)) { // line中不包括每行的换行符
 			if (line.length() == 0) continue;
 			std::vector<string> vtTmp;
-			::HY_SpliteString(line.c_str(),";", vtTmp);
+			::HY_SpliteString(line.c_str(),",", vtTmp);
 			if (vtTmp.size() != 2) continue;
 
 			unsigned long uluni1 = strtol(vtTmp[0].c_str(),NULL,16);

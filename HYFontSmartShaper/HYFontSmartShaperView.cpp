@@ -28,6 +28,7 @@
 #include "CHYEmjioDlg.h"
 #include "CExchgCodeDlg.h"
 #include <atltime.h>
+#include "HYFontUpdate.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -103,6 +104,7 @@ BEGIN_MESSAGE_MAP(CHYFontSmartShaperView, CFormView)
 	ON_COMMAND(ID_MN_CODEMAP, &CHYFontSmartShaperView::OnMnCodemap)
 	ON_COMMAND(ID_FNT_CLEARCODE, &CHYFontSmartShaperView::OnFntResetcode)
 	ON_COMMAND(ID_FNT_BUDCIDOTF, &CHYFontSmartShaperView::OnFntBudcidotf)	
+	ON_COMMAND(ID_G3FX_MN, &CHYFontSmartShaperView::OnG3fxMn)
 END_MESSAGE_MAP()
 
 // CHYFontSmartShaperView 构造/析构
@@ -2905,3 +2907,64 @@ void CHYFontSmartShaperView::OnFntBudcidotf()
 	}
 
 }	//end of void CHYFontSmartShaperView::OnFntBudcidotf()
+
+void CHYFontSmartShaperView::OnG3fxMn()
+{
+	TCHAR	szFilters[] = _T("字库文件(*.ttf)|*.ttf|TrueType 文件(*.ttf)|*.ttf||");
+	CFileDialog  openFileDlg(TRUE, _T(""), _T(""), OFN_LONGNAMES | OFN_FILEMUSTEXIST, szFilters);
+	if (openFileDlg.DoModal() != IDOK)	return;
+
+	CString strSrc = openFileDlg.GetPathName();
+
+	CHYFontUpdate fntCodec;
+	fntCodec.SetDefault();
+
+	int iRTN = fntCodec.OpenFile((LPSTR)(LPCSTR)strSrc);
+	if (iRTN != HY_NOERROR){
+		AfxMessageBox("原始文件解析失败!");
+		return;
+	}
+
+	// 获取字典目录
+	fntCodec.DecodeTableDirectory();
+	// 解析MAXP表
+	if (fntCodec.Decodemaxp() != HY_NOERROR){
+		AfxMessageBox("原始文件maxp解析失败!");
+		return;
+	}
+	// 解析local表
+	if (fntCodec.Decodeloca() != HY_NOERROR) {	
+		AfxMessageBox("原始文件local解析失败!");
+		return;
+	}
+	int iEntryIndex = fntCodec.m_HYTbDirectory.FindTableEntry(GLYF_TAG);
+	if (iEntryIndex == -1) {
+		AfxMessageBox("原始文件glyf解析失败!");
+		return;
+	}
+	fntCodec.m_vtHYGlyphs.clear();
+	fntCodec.m_vtHYGlyphs.resize(fntCodec.m_HYMaxp.numGlyphs);
+	CHYTableEntry& tbEntry = fntCodec.m_HYTbDirectory.vtTableEntry[iEntryIndex];
+	fseek(fntCodec.m_pFontFile, tbEntry.offset, SEEK_SET);
+	fntCodec.Decodeglyf();		
+	fntCodec.CloseFile();	
+
+	CString strDst;
+	strDst.Format("%s%s-g3fix%s",
+		HY_GetDirFromPath(string(strSrc)).c_str(),
+		HY_GetFileNameFromPath(string(strSrc)).c_str(),
+		HY_GetExtNameFromPath(string(strSrc)).c_str());
+
+	std::vector<unsigned long> vtFlag;
+	size_t stEntry = fntCodec.m_HYTbDirectory.vtTableEntry.size();
+	for (size_t i = 0; i < stEntry; i++){
+		unsigned long flag = fntCodec.m_HYTbDirectory.vtTableEntry[i].tag;
+		vtFlag.push_back(flag);
+	}
+
+	if (fntCodec.Update_glyf((LPSTR)(LPCSTR)strDst, vtFlag) == HY_NOERROR)
+		AfxMessageBox("处理完成");
+	else
+		AfxMessageBox("处理失败");
+
+}	// end of void CHYFontSmartShaperView::OnG3fxMn()

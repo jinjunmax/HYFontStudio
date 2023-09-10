@@ -970,7 +970,7 @@ BOOL CXSysProxy::GetBugChar(CHYGlyph& InGlyph, std::vector<int>& cntrIndx,std::v
 	{
 		CHYContour& hyCntur = InGlyph.vtContour[a];
 		std::vector<CHYPoint> outHYPoints;
-		MakeConturPath(hyCntur, outHYPoints);
+		FiterFeiDian(hyCntur, outHYPoints);
 
 		size_t stPoins = outHYPoints.size();
 		double dbAgnle = 0.0f;
@@ -1017,10 +1017,10 @@ BOOL CXSysProxy::GetBugChar(CHYGlyph& InGlyph, std::vector<int>& cntrIndx,std::v
 
 }	// end of BOOL CXSysProxy::GetBugChar()
 
-void CXSysProxy::MakeConturPath(CHYContour& hyCntur, std::vector<CHYPoint>& outHYPoints)
+void CXSysProxy::FiterFeiDian(CHYContour& hyCntur, std::vector<CHYPoint>& outHYPoints)
 {
 	size_t  sPtNum = hyCntur.vtHYPoints.size();
-	CHYPoint f1, f2;
+	CHYPoint f1, f2,f3,fAnchor;
 	size_t i = 0;
 
 	while (i < sPtNum)

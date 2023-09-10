@@ -389,13 +389,15 @@
 #define ID_32918                        32918
 #define ID_MN_CHANGECODE                32919
 #define ID_MN_EXCNGCODE                 32920
+#define ID_32921                        32921
+#define ID_G3FX_MN                      32922
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        385
-#define _APS_NEXT_COMMAND_VALUE         32921
+#define _APS_NEXT_COMMAND_VALUE         32923
 #define _APS_NEXT_CONTROL_VALUE         1220
 #define _APS_NEXT_SYMED_VALUE           310
 #endif

@@ -82,7 +82,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <Optimization>MaxSpeed</Optimization>
+      <Optimization>Disabled</Optimization>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <AdditionalIncludeDirectories>..\include\HYFontCodec;..\include;..\include\Zlib;..\boost_1_59_0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -112,6 +112,7 @@
   <ItemGroup>
     <ClCompile Include="..\include\HYFontCodec\HYGsub.cpp" />
     <ClCompile Include="HYFontFunc.cpp" />
+    <ClCompile Include="HYFontUpdate.cpp" />
     <ClCompile Include="HYTTC.cpp" />
     <ClCompile Include="dllmain.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -170,6 +171,7 @@
   <ItemGroup>
     <ClInclude Include="..\include\HYErrorDef.h" />
     <ClInclude Include="..\include\HYFontCodec\HYFontFunc.h" />
+    <ClInclude Include="..\include\HYFontCodec\HYFontUpdate.h" />
     <ClInclude Include="..\include\HYFontCodec\HYTTC.h" />
     <ClInclude Include="..\include\HYFontCodec\FontExtract.h" />
     <ClInclude Include="..\include\HYFontCodec\HYavar.h" />
