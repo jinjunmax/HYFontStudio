@@ -630,8 +630,7 @@ void CXSysProxy::MakeGlyph(IplImage* BinaryImg, std::vector<Rect2d>& vtGlyphBoun
 		int		ErrorItem = 1;
 		
 		CHYGlyph glyph;
-		glyph.fontFlag = FONTTYPE_TTF;
-		glyph.glyfType = GLYF_TYPE_SIMPLE;
+		glyph.fontFlag = FONTTYPE_TTF;		
 		glyph.advanceWidth = iMaxBorder;
 
 		CHYImageToFont				ImageToFont;
@@ -640,6 +639,7 @@ void CXSysProxy::MakeGlyph(IplImage* BinaryImg, std::vector<Rect2d>& vtGlyphBoun
 		float fEMScale = (float)m_hyFontCodec.m_HYhead.unitsPerEm / iMaxBorder;
 		ImageToFont.AdjustMetrics(iBaseLine, fEMScale, glyph);
 
+		glyph.sContourNums = glyph.vtContour.size();
 		glyph.advanceWidth = m_hyFontCodec.m_HYhead.unitsPerEm;
 		glyph.CountBoundBox();
 

@@ -2515,6 +2515,7 @@ namespace HYFONTCODEC
 
 	}	// end of int CHYFontCodec::Encode()
 
+	// 重置中文部分的名称
 	void CHYFontCodec::RestPsName()
 	{		
 		size_t GlyphsNum = m_vtHYGlyphs.size();
@@ -2526,46 +2527,11 @@ namespace HYFONTCODEC
 			char  buffer[200] = { 0 };
 			if (m_vtHYGlyphs[i].vtUnicode.size() > 0) {
 				unsigned long  unicode = m_vtHYGlyphs[i].vtUnicode[0];
-				if (unicode >= 0x2E80 && unicode <= 0x2EFF) {
+
+				if (::HY_Iszh(unicode)) {
 					_stprintf(buffer, _T("uni%X"), unicode);
 					m_vtHYGlyphs[i].strPostName = buffer;
-				}
-				else if (unicode >= 0x2F00 && unicode <= 0x2FDF) {
-					_stprintf(buffer, _T("uni%X"), unicode);
-					m_vtHYGlyphs[i].strPostName = buffer;
-				}
-				else if (unicode >= 0x3000 && unicode <= 0x303F) {
-					_stprintf(buffer, _T("uni%X"), unicode);
-					m_vtHYGlyphs[i].strPostName = buffer;
-				}
-				else if (unicode >= 0x31C0 && unicode <= 0x31EF) {
-					_stprintf(buffer, _T("uni%X"), unicode);
-					m_vtHYGlyphs[i].strPostName = buffer;
-				}
-				else if (unicode >= 0x3300 && unicode <= 0x33FF) {
-					_stprintf(buffer, _T("uni%X"), unicode);
-					m_vtHYGlyphs[i].strPostName = buffer;
-				}
-				else if (unicode >= 0x3400 && unicode <= 0x4DBF) {
-					_stprintf(buffer, _T("uni%X"), unicode);
-					m_vtHYGlyphs[i].strPostName = buffer;
-				}
-				else if (unicode >= 0x4E00 && unicode <= 0x9FFF) {
-					_stprintf(buffer, _T("uni%X"), unicode);
-					m_vtHYGlyphs[i].strPostName = buffer;
-				}
-				else if (unicode >= 0xF900 && unicode <= 0xFAFF) {
-					_stprintf(buffer, _T("uni%X"), unicode);
-					m_vtHYGlyphs[i].strPostName = buffer;
-				}
-				else if (unicode >= 0xE000 && unicode <= 0xF8FF) {
-					_stprintf(buffer, _T("uni%X"), unicode);
-					m_vtHYGlyphs[i].strPostName = buffer;
-				}
-				else if (unicode >= 0x20000){
-					_stprintf(buffer, _T("u%X"), unicode);
-					m_vtHYGlyphs[i].strPostName = buffer;
-				}
+				}	
 			}
 		}
 	
@@ -3907,30 +3873,25 @@ namespace HYFONTCODEC
 
 		CHYGlyph& TgGlyph = vtHYGlyphs[iGid];	
 
-		if (TgGlyph.glyfType == GLYF_TYPE_COMPOSITE)
-		{				
+		if (TgGlyph.sContourNums<0){				
 			// 针对组合轮廓转换
 			SHORT sValue = 0;
 			float fXScale = 1.0f, fYScale = 1.0f, fValue = 0.0f, fFraction = 0.0f;			
 			size_t szCmpnnts =TgGlyph.vtComponents.size();
 
-			for (size_t j=0; j<szCmpnnts; j++)
-			{				
+			for (size_t j=0; j<szCmpnnts; j++){				
 				fXScale = 1.0f; 
 				fYScale = 1.0f;				
 				CHYCmpst& hyCmpst = TgGlyph.vtComponents[j];
 
 				USHORT sGlyphIndex  = hyCmpst.glyphIndex;
-				if (hyCmpst.flags&GLYF_CMPST_ARGS_ARE_XY_VALUES)
-				{
-					if (hyCmpst.flags&GLYF_CMPST_WE_HAVE_A_SCALE)
-					{
+				if (hyCmpst.flags&GLYF_CMPST_ARGS_ARE_XY_VALUES){
+					if (hyCmpst.flags&GLYF_CMPST_WE_HAVE_A_SCALE){
 						fXScale = ::HY_F2DOT14_to_float(hyCmpst.scale);
 						fYScale = fXScale;
 					}
 
-					if (hyCmpst.flags&GLYF_CMPST_WE_HAVE_AN_X_AND_Y_SCALE)
-					{
+					if (hyCmpst.flags&GLYF_CMPST_WE_HAVE_AN_X_AND_Y_SCALE){
 						fXScale = ::HY_F2DOT14_to_float(hyCmpst.vctr.xscale);
 						fYScale = ::HY_F2DOT14_to_float(hyCmpst.vctr.yscale);
 					}
@@ -3959,15 +3920,13 @@ namespace HYFONTCODEC
 				YcmpMin = YminTmp + hyCmpst.args[1];
 				YcmpMax = YmaxTmp + hyCmpst.args[1];													
 					
-				if (j==0)
-				{
+				if (j==0){
 					TgGlyph.minX = HY_RealRount(xcmpMin);
 					TgGlyph.maxX = HY_RealRount(xcmpMax);
 					TgGlyph.minY = HY_RealRount(YcmpMin);
 					TgGlyph.maxY = HY_RealRount(YcmpMax);
 				}
-				else 
-				{
+				else {
 					if (TgGlyph.minX > HY_RealRount(xcmpMin)) TgGlyph.minX = HY_RealRount(xcmpMin);
 					if (TgGlyph.maxX < HY_RealRount(xcmpMax)) TgGlyph.maxX = HY_RealRount(xcmpMax);
 					if (TgGlyph.minY > HY_RealRount(YcmpMin)) TgGlyph.minY = HY_RealRount(YcmpMin);
@@ -3975,8 +3934,7 @@ namespace HYFONTCODEC
 				}								
 			}
 		}
-		else 
-		{			
+		else {			
 			TgGlyph.CountBoundBox();			
 		}
 
@@ -4244,21 +4202,17 @@ namespace HYFONTCODEC
 		if (FindFlag(vtFlag,STAT_TAG)){
 			HYEntry.tag	= STAT_TAG;
 			m_HYTbDirectory.vtTableEntry.push_back(HYEntry);
-		}
-
-		if (m_tagOption.bCmplVert)
-		{
-			//VHEA
-			if (FindFlag(vtFlag, VHEA_TAG)) {
+		}		
+		//VHEA
+		if (FindFlag(vtFlag, VHEA_TAG)) {
 				HYEntry.tag = VHEA_TAG;
 				m_HYTbDirectory.vtTableEntry.push_back(HYEntry);
-			}
-			//VMTX
-			if (FindFlag(vtFlag, VMTX_TAG)) {
+		}
+		//VMTX
+		if (FindFlag(vtFlag, VMTX_TAG)) {
 				HYEntry.tag = VMTX_TAG;
 				m_HYTbDirectory.vtTableEntry.push_back(HYEntry);
-			}
-		}
+		}		
 		
 		return HY_NOERROR;
 
@@ -4955,39 +4909,10 @@ namespace HYFONTCODEC
 			// 此种计算方式与蒙纳的计算方式一致。
 			short Tsb = m_HYOS2.sTypoAscender - m_vtHYGlyphs[i].maxY;
 			Gryph.topSB = Tsb;
-			Gryph.advanceHeight = usADH;
-
-			if (this->m_tagOption.bsetADH)
-			{
-				SetAdHeight(m_tagOption.usSetADH, Gryph);
-			}
+			Gryph.advanceHeight = usADH;			
 		}
 
 	}	// end of void CHYFontCodec::CountVerticalMetrics()
-
-	void CHYFontCodec::SetAdHeight(UINT adh, CHYGlyph& Glyphs)
-	{
-		// 增大或缩小中文竖排字间距
-		
-		BOOL B = FALSE;
-		if (Glyphs.vtUnicode.size() > 0) {
-			unsigned long  unicode = Glyphs.vtUnicode[0];
-			if (unicode >= 0x2E80 && unicode <= 0x2EFF) B = TRUE;
-			if (unicode >= 0x2F00 && unicode <= 0x2FDF) B = TRUE;
-			if (unicode >= 0x3000 && unicode <= 0x303F) B = TRUE;
-			if (unicode >= 0x31C0 && unicode <= 0x31EF) B = TRUE;
-			if (unicode >= 0x3300 && unicode <= 0x33FF) B = TRUE;
-			if (unicode >= 0x3400 && unicode <= 0x4DBF) B = TRUE;
-			if (unicode >= 0x4E00 && unicode <= 0x9FFF) B = TRUE;
-			if (unicode >= 0xF900 && unicode <= 0xFAFF) B = TRUE;
-			if (unicode >= 0x20000 && unicode <= 0x2FA1F) B = TRUE;
-		}
-		if (B) {
-			Glyphs.topSB = Glyphs.topSB - (Glyphs.advanceHeight - adh) / 2.0 + 0.5;
-			Glyphs.advanceHeight = adh;
-		}
-
-	}	// end of void CHYFontCodec::SetAdHeight()
 	
 	void	CHYFontCodec::CountUnicodeRange(unsigned long& uni1, unsigned long& uni2,unsigned long& uni3,unsigned long& uni4)
 	{
@@ -9137,13 +9062,7 @@ namespace HYFONTCODEC
 			fwrite(&usTmp,2,1,m_pFontFile);
 
 			tbEntry.length = ftell(m_pFontFile) - tbEntry.offset;
-			int iTail = 4-tbEntry.length%4;
-			if (tbEntry.length%4>0){
-				char c = 0;
-				for (int i=0; i<iTail; i++){
-					fwrite(&c,1,1,m_pFontFile);
-				}				
-			}
+			fourbytesAlign(tbEntry.length);
 		}
 		
 		return HY_NOERROR;
@@ -9284,13 +9203,7 @@ namespace HYFONTCODEC
 			fwrite(&usTmp,2,1,m_pFontFile);
 
 			tbEntry.length = ftell(m_pFontFile) - tbEntry.offset;
-			int iTail = 4-tbEntry.length%4;
-			if (tbEntry.length%4>0)	{
-				char c = 0;
-				for (int i=0; i<iTail; i++){
-					fwrite(&c,1,1,m_pFontFile);
-				}				
-			}
+			fourbytesAlign(tbEntry.length);
 		}
 
 		return FONT_ERR_HHEA_ENCODE;
@@ -9350,26 +9263,7 @@ namespace HYFONTCODEC
 			CHYTableEntry& tbEntry = m_HYTbDirectory.vtTableEntry[iEntryIndex];
 			tbEntry.offset = ftell(m_pFontFile);
 			
-			//size_t			szGlyphNum			= m_vtHYGlyphs.size();
-			unsigned short longhormetricNums	= m_HYHhea.numberOfHMetrics;	
-#if 0
-			for (size_t i=0; i< m_HYMaxp.numGlyphs; i++)
-			{					
-				if (i<longhormetricNums)
-				{
-					usTmp = hy_cdr_int16_to(m_vtHYGlyphs[i].advanceWidth);
-					fwrite(&usTmp,2,1,m_pFontFile);
-
-					usTmp = hy_cdr_int16_to(m_vtHYGlyphs[i].minX);
-					fwrite(&usTmp,2,1,m_pFontFile);				
-				}
-				else 
-				{
-					usTmp = hy_cdr_int16_to(m_vtHYGlyphs[i].minX);
-					fwrite(&usTmp,2,1,m_pFontFile);
-				}
-			}
-#else 
+			unsigned short longhormetricNums	= m_HYHhea.numberOfHMetrics;
 			for (size_t i = 0; i < m_HYMaxp.numGlyphs; i++)
 			{
 				if (i<longhormetricNums)
@@ -9385,17 +9279,8 @@ namespace HYFONTCODEC
 					fwrite(&usTmp, 2, 1, m_pFontFile);
 				}
 			}
-#endif
 			tbEntry.length = ftell(m_pFontFile) - tbEntry.offset;
-			int iTail = 4-tbEntry.length%4;
-			if (tbEntry.length%4>0)
-			{
-				char c = 0;
-				for (int i=0; i<iTail; i++)
-				{
-					fwrite(&c,1,1,m_pFontFile);
-				}				
-			}
+			fourbytesAlign(tbEntry.length);
 		}
 	
 		return HY_NOERROR;
@@ -9567,13 +9452,7 @@ namespace HYFONTCODEC
 			}
 
 			tbEntry.length = ftell(m_pFontFile) - tbEntry.offset;
-			int iTail = 4-tbEntry.length%4;
-			if (tbEntry.length%4>0){
-				char c = 0;
-				for (int i=0; i<iTail; i++){
-					fwrite(&c,1,1,m_pFontFile);
-				}				
-			}	
+			fourbytesAlign(tbEntry.length);
 		}
 
 		return HY_NOERROR;
@@ -9778,15 +9657,7 @@ namespace HYFONTCODEC
 				delete[] pString;		
 
 			tbEntry.length = ftell(m_pFontFile) - tbEntry.offset;
-			int iTail = 4-tbEntry.length%4;
-			if (tbEntry.length%4>0)
-			{
-				char c = 0;
-				for (int i=0; i<iTail; i++)
-				{
-					fwrite(&c,1,1,m_pFontFile);
-				}				
-			}
+			fourbytesAlign(tbEntry.length);
 		}
 
 		return HY_NOERROR;
@@ -10078,13 +9949,7 @@ namespace HYFONTCODEC
 			fwrite(&usTmp,2,1,m_pFontFile);
 
 			tbEntry.length = ftell(m_pFontFile) - tbEntry.offset;
-			int iTail = 4-tbEntry.length%4;
-			if (tbEntry.length%4>0)	{
-				char c = 0;
-				for (int i=0; i<iTail; i++)	{
-					fwrite(&c,1,1,m_pFontFile);
-				}				
-			}
+			fourbytesAlign(tbEntry.length);			
 		}
 
 		return HY_NOERROR;
@@ -10236,13 +10101,7 @@ namespace HYFONTCODEC
 			}
 
 			tbEntry.length = ftell(m_pFontFile) - tbEntry.offset;
-			int iTail = 4-tbEntry.length%4;
-			if (tbEntry.length%4>0)	{
-				char c = 0;
-				for (int i=0; i<iTail; i++)	{
-					fwrite(&c,1,1,m_pFontFile);
-				}				
-			}
+			fourbytesAlign(tbEntry.length);
 		}
 
 		return HY_NOERROR;
@@ -10302,15 +10161,7 @@ namespace HYFONTCODEC
 			fwrite(&c,1,1,m_pFontFile);
 
 			tbEntry.length = ftell(m_pFontFile) - tbEntry.offset;
-			int iTail = 4-tbEntry.length%4;
-			if (tbEntry.length%4>0)
-			{
-				char c = 0;
-				for (int i=0; i<iTail; i++)
-				{
-					fwrite(&c,1,1,m_pFontFile);
-				}				
-			}
+			fourbytesAlign(tbEntry.length);
 		}
 
 		return HY_NOERROR;
@@ -10372,8 +10223,7 @@ namespace HYFONTCODEC
 		if (m_HYloca.vtLoca.size()==0)
 			return FONT_ERR_GLYF_DECODE;
 
-		unsigned long ulGlyphOffset = 0;
-		short sContourNums=0;		
+		unsigned long ulGlyphOffset = 0;		
 		for (unsigned short i=0; i <m_HYMaxp.numGlyphs; i++){			
 			CHYGlyph& glyph = m_vtHYGlyphs[i];
 			glyph.fontFlag = FONTTYPE_TTF;
@@ -10399,8 +10249,8 @@ namespace HYFONTCODEC
 			fseek(m_pFontFile,iTableStartPoint+m_HYloca.vtLoca[i],SEEK_SET);
 
 			// contour numbers
-			fread(&sContourNums,2,1,m_pFontFile);
-			sContourNums = hy_cdr_int16_to(sContourNums);
+			fread(&glyph.sContourNums,2,1,m_pFontFile);
+			glyph.sContourNums = hy_cdr_int16_to(glyph.sContourNums);
 			//Minimum x for coordinate data 
 			fread(&glyph.minX,2,1,m_pFontFile);
 			glyph.minX = hy_cdr_int16_to(glyph.minX);
@@ -10414,8 +10264,8 @@ namespace HYFONTCODEC
 			fread(&glyph.maxY,2,1,m_pFontFile);
 			glyph.maxY = hy_cdr_int16_to(glyph.maxY);
 			//simple glyph
-			if (sContourNums>-1){			
-				DecodeGLYF_SIMPLE(glyph, sContourNums);
+			if (glyph.sContourNums>-1){
+				DecodeGLYF_SIMPLE(glyph, glyph.sContourNums);
 			}
 			else {					
 				DecodeGLYF_COMPOS(glyph);
@@ -10429,9 +10279,7 @@ namespace HYFONTCODEC
 	}	// end of int	CHYFontCodec::Decodeglyf()
 
 	void CHYFontCodec::DecodeGLYF_SIMPLE(CHYGlyph& Glyph, unsigned short usContours)
-	{	
-		Glyph.glyfType = GLYF_TYPE_SIMPLE;
-
+	{
 		unsigned short 	i = 0, nIns = 0, nPts = 0, nTmp=0;
 		short			nCnts = usContours;
 		std::vector<unsigned short> endptsofContours;
@@ -10558,8 +10406,7 @@ namespace HYFONTCODEC
 	}	// end of void  CHYFontCodec::DecodeGLYF_SIMPLE()
 
 	void CHYFontCodec::DecodeGLYF_COMPOS(CHYGlyph& Glyph)
-	{
-		Glyph.glyfType = GLYF_TYPE_COMPOSITE;
+	{		
 		USHORT	nIns=0,	flags=0;
 
 		int		iCompIndex  =0;
@@ -10655,21 +10502,13 @@ namespace HYFONTCODEC
 			tbEntry.offset = ftell(m_pFontFile);
 
 			m_HYloca.vtLoca.clear();
-			for (size_t i=0; i<m_vtHYGlyphs.size(); i++)
-			{
+			for (size_t i=0; i<m_vtHYGlyphs.size(); i++){
 				m_HYloca.vtLoca.push_back(ulGlyphOffset);
 
 				CHYGlyph& glyph = m_vtHYGlyphs[i];			
-				if (glyph.vtComponents.size()==0 &&glyph.vtContour.size()==0)
-				{
-					continue;
-				}
-
-				size_t szCnturSize = glyph.vtContour.size();
-				if (glyph.vtContour.size()>0)	// 轮廓字形
-				{
+				if (glyph.sContourNums>0){// 轮廓字形
 					//numberOfContours
-					usTmp = szCnturSize;
+					usTmp = glyph.sContourNums;
 					usTmp =hy_cdr_int16_to(usTmp);
 					fwrite(&usTmp,2,1,m_pFontFile);					
 					//xMin
@@ -10694,32 +10533,26 @@ namespace HYFONTCODEC
 					short	XOffset=0, YOffset=0;
 
 					size_t  TatlPntNum = 0;
-					for (size_t j=0; j<glyph.vtContour.size(); j++)
-					{						
+					for (size_t j=0; j<glyph.vtContour.size(); j++){						
 						const CHYContour& cntur = glyph.vtContour[j];
 						size_t stCutPntnum = cntur.vtHYPoints.size();
-						for (size_t x=0; x<stCutPntnum; x++)
-						{
+						for (size_t x=0; x<stCutPntnum; x++){
 							const CHYPoint& pt = cntur.vtHYPoints[x];
 							unsigned char	flage = 0;
 
-							if (pt.flag==POINT_FLG_ANCHOR)
-							{
+							if (pt.flag==POINT_FLG_ANCHOR){
 								flage |= GLYF_SMPL_ONCURVE;
 							}
 
 							// 计算X轴坐标点偏移量
 							XOffset = pt.x - prePoint.x;
-							if ( XOffset == 0 )
-							{
+							if ( XOffset == 0 ){
 								// 当前点与上一点x位置相同
 								flage |= GLYF_SMPL_X_SAME_FLG;
 							}
-							else 
-							{
+							else {
 								// 如果偏移量的绝对值小于255，按单字节保存
-								if (abs(XOffset)<=255)
-								{
+								if (abs(XOffset)<=255){
 									// x-Short Vector位设置为1
 									flage |= GLYF_SMPL_X_VECTOR;
 									// 如果offset为正,This x is same表示偏移方向 1为正， 0为负
@@ -10727,32 +10560,27 @@ namespace HYFONTCODEC
 
 									vtXCoordinat.push_back((short)abs(XOffset));									
 								}
-								else	// 按双字节保存
-								{									
+								else {	// 按双字节保存
 									vtXCoordinat.push_back(XOffset);
 								}
 							}
 
 							// 计算Y轴坐标点偏移量				
 							YOffset = pt.y - prePoint.y;
-							if (YOffset==0)
-							{
+							if (YOffset==0)	{
 								// 当前点与上一点偏移量相同
 								flage |= GLYF_SMPL_Y_SAME_FLG;
 							}
-							else 
-							{
+							else {
 								// 如果偏移量的绝对值小于255，按单字节保存
-								if (abs(YOffset) <= 255)
-								{
+								if (abs(YOffset) <= 255){
 									flage |= GLYF_SMPL_Y_VECTOR;
 
 									// 如果offset为正,This x is same表示偏移方向 1为正， 0为负
 									if (YOffset>0) flage |= GLYF_SMPL_Y_SAME_FLG;
 									vtYCoordinat.push_back((short)abs(YOffset));
 								}
-								else	// 按双字节保存
-								{
+								else{// 按双字节保存
 									vtYCoordinat.push_back(YOffset);
 								}
 							}
@@ -10766,8 +10594,7 @@ namespace HYFONTCODEC
 
 					//endPtsOfContours
 					size_t stEndPtsCnturNum = vtendPtsOfContour.size();
-					for (size_t y =0; y<stEndPtsCnturNum; y++)
-					{
+					for (size_t y =0; y<stEndPtsCnturNum; y++){
 						usTmp = hy_cdr_int16_to(vtendPtsOfContour[y]);
 						fwrite(&usTmp,2,1,m_pFontFile);
 					}
@@ -10790,12 +10617,10 @@ namespace HYFONTCODEC
 					size_t	stflagsize = vtflage.size();					
 
 					size_t y=0,z=0;
-					for (y=0; y<stflagsize; y++)
-					{
+					for (y=0; y<stflagsize; y++){
 						btFlag	= vtflage[y];
 						iRepeat = 0;
-						for ( z=y+1; z<stflagsize; z++)
-						{
+						for ( z=y+1; z<stflagsize; z++)	{
 							if (iRepeat>255) break;
 							btNextFlag = vtflage[z];
 
@@ -10803,23 +10628,20 @@ namespace HYFONTCODEC
 							iRepeat++;
 						}
 
-						if (iRepeat>0)
-						{
+						if (iRepeat>0){
 							y = z-1;
 							btFlag|=GLYF_SMPL_REPEAT;
 							vtRle.push_back(btFlag);
 							vtRle.push_back((unsigned char)iRepeat);						
 						}
-						else 
-						{
+						else {
 							vtRle.push_back(btFlag);
 						}
 					}
 
 					//flags
 					size_t stRlesz = vtRle.size();
-					for (size_t y=0; y<stRlesz; y++)
-					{
+					for (size_t y=0; y<stRlesz; y++){
 						fwrite(&vtRle[y],1,1,m_pFontFile);
 					}
 
@@ -10827,15 +10649,12 @@ namespace HYFONTCODEC
 					//xCoordinates
 					size_t stcrdts = vtflage.size();					
 					size_t stAryIndex = 0;
-					for (size_t y=0; y<stcrdts; y++)
-					{
-						if (vtflage[y]&GLYF_SMPL_X_VECTOR)
-						{
+					for (size_t y=0; y<stcrdts; y++){
+						if (vtflage[y]&GLYF_SMPL_X_VECTOR){
 							ucTmp = (unsigned char)vtXCoordinat[stAryIndex];
 							fwrite(&ucTmp,1,1,m_pFontFile);
 						}
-						else 
-						{
+						else {
 							if (vtflage[y]&GLYF_SMPL_X_SAME_FLG)
 								continue;
 							usTmp = hy_cdr_int16_to(vtXCoordinat[stAryIndex]);
@@ -10847,15 +10666,12 @@ namespace HYFONTCODEC
 					stAryIndex = 0;
 					//yCoordinates
 					stcrdts = vtflage.size();					
-					for (size_t y=0; y<stcrdts; y++)
-					{
-						if (vtflage[y]&GLYF_SMPL_Y_VECTOR)
-						{
+					for (size_t y=0; y<stcrdts; y++){
+						if (vtflage[y]&GLYF_SMPL_Y_VECTOR){
 							ucTmp = (unsigned char)vtYCoordinat[stAryIndex];
 							fwrite(&ucTmp,1,1,m_pFontFile);
 						}
-						else 
-						{
+						else {
 
 							if (vtflage[y]&GLYF_SMPL_Y_SAME_FLG)
 								continue;
@@ -10866,8 +10682,7 @@ namespace HYFONTCODEC
 						stAryIndex++;
 					}
 				}
-				else // 组件字形
-				{
+				else if (glyph.sContourNums < 0){// 组件字形
 					//numberOfContours					
 					usTmp =0xffff;
 					fwrite(&usTmp,2,1,m_pFontFile);					
@@ -10885,8 +10700,7 @@ namespace HYFONTCODEC
 					fwrite(&usTmp,2,1,m_pFontFile);
 
 					size_t stCmpsz = glyph.vtComponents.size();
-					for (size_t x=0; x<stCmpsz; x++)
-					{
+					for (size_t x=0; x<stCmpsz; x++){
 						//flags
 						const CHYCmpst&  Cmps = glyph.vtComponents[x];
 						usTmp = hy_cdr_int16_to(Cmps.flags);
@@ -10897,55 +10711,44 @@ namespace HYFONTCODEC
 						fwrite(&usTmp,2,1,m_pFontFile);
 
 						//
-						if (Cmps.flags&GLYF_CMPST_ARG_1_AND_2_ARE_WORDS)
-						{
+						if (Cmps.flags&GLYF_CMPST_ARG_1_AND_2_ARE_WORDS){
 							usTmp = hy_cdr_int16_to(Cmps.args[0]);
 							fwrite(&usTmp,2,1,m_pFontFile);							
 
 							usTmp = hy_cdr_int16_to(Cmps.args[1]);
 							fwrite(&usTmp,2,1,m_pFontFile);						
 						}
-						else 
-						{ 
+						else { 
 							usTmp = Cmps.args[0]<<8 | (Cmps.args[1]&0xFF);
 							usTmp = hy_cdr_int16_to(usTmp);
 							fwrite(&usTmp,2,1,m_pFontFile);							
 						}
 
-						if (Cmps.flags&GLYF_CMPST_WE_HAVE_A_SCALE)
-						{
+						if (Cmps.flags&GLYF_CMPST_WE_HAVE_A_SCALE){
 							usTmp = hy_cdr_int16_to(Cmps.scale);
 							fwrite(&usTmp,2,1,m_pFontFile);
 						}
-						else if (Cmps.flags & GLYF_CMPST_WE_HAVE_AN_X_AND_Y_SCALE)
-						{
+						else if (Cmps.flags & GLYF_CMPST_WE_HAVE_AN_X_AND_Y_SCALE){
 							usTmp = hy_cdr_int16_to(Cmps.vctr.xscale);
 							fwrite(&usTmp,2,1,m_pFontFile);
-
 							usTmp = hy_cdr_int16_to(Cmps.vctr.yscale);
 							fwrite(&usTmp,2,1,m_pFontFile);
 						}
-						else if (Cmps.flags & GLYF_CMPST_WE_HAVE_A_TWO_BY_TWO)
-						{
+						else if (Cmps.flags & GLYF_CMPST_WE_HAVE_A_TWO_BY_TWO){
 							usTmp = hy_cdr_int16_to(Cmps.tensor.xscale);
 							fwrite(&usTmp,2,1,m_pFontFile);
-
 							usTmp = hy_cdr_int16_to(Cmps.tensor.scale01);
 							fwrite(&usTmp,2,1,m_pFontFile);
-
 							usTmp = hy_cdr_int16_to(Cmps.tensor.scale10);
 							fwrite(&usTmp,2,1,m_pFontFile);
-
 							usTmp = hy_cdr_int16_to(Cmps.tensor.yscale);
 							fwrite(&usTmp,2,1,m_pFontFile);
 						}
 					}					
 
-					if (glyph.vtInstruntions.size() > 0)
-					{
+					if (glyph.vtInstruntions.size() > 0){
 						size_t stInstSize = glyph.vtInstruntions.size();
-						for (size_t x = 0;x<stInstSize;x++)
-						{
+						for (size_t x = 0;x<stInstSize;x++)	{
 							fwrite(&glyph.vtInstruntions[x],1,1,m_pFontFile);
 						}						
 					}
@@ -10953,11 +10756,9 @@ namespace HYFONTCODEC
 				ulGlyphOffset = ftell(m_pFontFile) - ulTableBegin;
 
 				int iTail = 4-ulGlyphOffset%4;
-				if (ulGlyphOffset%4>0)
-				{
+				if (ulGlyphOffset%4>0){
 					char c = 0;
-					for (int i=0; i<iTail; i++)
-					{
+					for (int i=0; i<iTail; i++){
 						fwrite(&c,1,1,m_pFontFile);
 					}			
 					ulGlyphOffset += iTail;
@@ -10969,16 +10770,7 @@ namespace HYFONTCODEC
 			m_HYloca.vtLoca.push_back(ulGlyphOffset);
 
 			tbEntry.length = ftell(m_pFontFile) - tbEntry.offset;
-			int iTail = 4-tbEntry.length%4;
-			if (tbEntry.length%4>0)
-			{
-				char c = 0;
-				for (int i=0; i<iTail; i++)
-				{
-					fwrite(&c,1,1,m_pFontFile);
-				}				
-			}
-
+			fourbytesAlign(tbEntry.length);
 		}
 		return 0;
 
@@ -11051,16 +10843,7 @@ namespace HYFONTCODEC
 			}	
 
 			tbEntry.length = ftell(m_pFontFile) - tbEntry.offset;
-			if(tbEntry.length%4!=0)
-			{
-				int iTail = 4-tbEntry.length%4;
-				char c = 0;
-				for (int i=0; i<iTail; i++)
-				{
-					fwrite(&c,1,1,m_pFontFile);
-				}				
-			}
-			
+			fourbytesAlign(tbEntry.length);
 		}
 
 		return HY_NOERROR;
@@ -11641,7 +11424,7 @@ namespace HYFONTCODEC
 			DecodeCFFIndex(CharStringIndx);
 
 			int iStringlen = 0;	
-			for (int i=0; i<CharStringIndx.Count; i++){				
+			for (int i=0; i<CharStringIndx.Count; i++){			
 				CHYGlyph&	HYGryph = m_vtHYGlyphs[i];
 				double		AdbWidht = -32768.0;
 				int			iDept = 0;				
@@ -11656,6 +11439,7 @@ namespace HYFONTCODEC
 					DecodeCharData(charData,ulCharDataSize, HYGryph,i,AdbWidht,(void*)&CharParam, iDept,HYContour);				
 
 					HYGryph.fontFlag=FONTTYPE_OTF;
+					HYGryph.sContourNums = (short)HYGryph.vtContour.size();
 					if (HYGryph.GetTotalPointsNumber() > 0){
 						HYGryph.CountBoundBox();
 					}
@@ -15063,7 +14847,7 @@ namespace HYFONTCODEC
 		}
 		
 
-#if 0	//暂时不财通subrs的组件服用方式
+#if 0	//暂时不开通subrs的组件服用方式
 		// subrs()
 		lSubrPostion = 0;
 		EncodeDICTInteger(PrivtDict.lSubrsOffset, vtData);
@@ -15791,7 +15575,7 @@ namespace HYFONTCODEC
 		EncodeLookupList();
 
 		tbEntry.length = ftell(m_pFontFile) - tbEntry.offset;
-		::HY_4ByteAlign(m_pFontFile, tbEntry.length);
+		fourbytesAlign(tbEntry.length);
 
 		return HY_NOERROR;
 
@@ -16186,8 +15970,10 @@ namespace HYFONTCODEC
 			}
 
 			tbEntry.length = ftell(m_pFontFile) - tbEntry.offset;
-			::HY_4ByteAlign(m_pFontFile,tbEntry.length);
+			fourbytesAlign(tbEntry.length);
 		}
+
+		return HY_NOERROR;
 
 	}	// end of int CHYFontCodec::EncodeGPOS() 
 
@@ -16289,15 +16075,7 @@ namespace HYFONTCODEC
 			}
 
 			tbEntry.length = ftell(m_pFontFile) - tbEntry.offset;
-			int iTail = 4-tbEntry.length%4;
-			if (tbEntry.length%4>0)
-			{
-				char c = 0;
-				for (int i=0; i<iTail; i++)
-				{
-					fwrite(&c,1,1,m_pFontFile);
-				}				
-			}
+			fourbytesAlign(tbEntry.length);
 		}
 
 		return  HY_NOERROR;
@@ -16463,15 +16241,7 @@ namespace HYFONTCODEC
 			fwrite(&usTmp,2,1,m_pFontFile);
 
 			tbEntry.length = ftell(m_pFontFile) - tbEntry.offset;
-			int iTail = 4-tbEntry.length%4;
-			if (tbEntry.length%4>0)
-			{
-				char c = 0;
-				for (int i=0; i<iTail; i++)
-				{
-					fwrite(&c,1,1,m_pFontFile);
-				}				
-			}
+			fourbytesAlign(tbEntry.length);			
 		}
 
 		return HY_NOERROR;
@@ -16542,13 +16312,7 @@ namespace HYFONTCODEC
 				fwrite(&usTmp,2,1,m_pFontFile);
 			}
 			tbEntry.length = ftell(m_pFontFile) - tbEntry.offset;
-			int iTail = 4-tbEntry.length%4;
-			if (tbEntry.length%4>0)	{
-				char c = 0;
-				for (int i=0; i<iTail; i++)	{
-					fwrite(&c,1,1,m_pFontFile);
-				}				
-			}
+			fourbytesAlign(tbEntry.length);			
 		}
 
 		return HY_NOERROR;
@@ -16808,15 +16572,7 @@ namespace HYFONTCODEC
 
 
 			tbEntry.length = ftell(m_pFontFile) - tbEntry.offset;
-			int iTail = 4-tbEntry.length%4;
-			if (tbEntry.length%4>0)
-			{
-				char c = 0;
-				for (int i=0; i<iTail; i++)
-				{
-					fwrite(&c,1,1,m_pFontFile);
-				}				
-			}
+			fourbytesAlign(tbEntry.length);			
 		}
 
 		return HY_NOERROR;
@@ -16870,15 +16626,7 @@ namespace HYFONTCODEC
 			}
 
 			tbEntry.length = ftell(m_pFontFile) - tbEntry.offset;
-			int iTail = 4-tbEntry.length%4;
-			if (tbEntry.length%4>0)
-			{
-				char c = 0;
-				for (int i=0; i<iTail; i++)
-				{
-					fwrite(&c,1,1,m_pFontFile);
-				}				
-			}
+			fourbytesAlign(tbEntry.length);			
 		}
 
 		return HY_NOERROR;
@@ -16951,15 +16699,7 @@ namespace HYFONTCODEC
 		}
 
 		tbEntry.length = ftell(m_pFontFile) - tbEntry.offset;
-		int iTail = 4-tbEntry.length%4;
-		if (tbEntry.length%4>0)
-		{
-			char c = 0;
-			for (int i=0; i<iTail; i++)
-			{
-				fwrite(&c,1,1,m_pFontFile);
-			}				
-		}
+		fourbytesAlign(tbEntry.length);
 
 		return HY_NOERROR;
 
@@ -17046,13 +16786,7 @@ namespace HYFONTCODEC
 			fwrite(&usTmp,2,1,m_pFontFile);
 
 			tbEntry.length = ftell(m_pFontFile) - tbEntry.offset;
-			int iTail = 4-tbEntry.length%4;
-			if (tbEntry.length%4>0)	{
-				char c = 0;
-				for (int i=0; i<iTail; i++)	{
-					fwrite(&c,1,1,m_pFontFile);
-				}				
-			}
+			fourbytesAlign(tbEntry.length);
 		}
 
 		return HY_NOERROR;
@@ -17176,13 +16910,7 @@ namespace HYFONTCODEC
 			fseek(m_pFontFile, iTMP,SEEK_SET);
 
 			tbEntry.length = ftell(m_pFontFile) - tbEntry.offset;
-			int iTail = 4-tbEntry.length%4;
-			if (tbEntry.length%4>0)	{
-				char c = 0;
-				for (int i=0; i<iTail; i++)	{
-					fwrite(&c,1,1,m_pFontFile);
-				}				
-			}
+			fourbytesAlign(tbEntry.length);
 		}
 
 		return HY_NOERROR;
@@ -17296,7 +17024,7 @@ namespace HYFONTCODEC
 		}
 
 		tbEntry.length = ftell(m_pFontFile) - tbEntry.offset;
-		::HY_4ByteAlign(m_pFontFile, tbEntry.length);
+		fourbytesAlign(tbEntry.length);
 
 		return HY_NOERROR;
 
@@ -17399,7 +17127,7 @@ namespace HYFONTCODEC
 		}
 
 		tbEntry.length = ftell(m_pFontFile) - tbEntry.offset;
-		::HY_4ByteAlign(m_pFontFile, tbEntry.length);
+		fourbytesAlign(tbEntry.length);
 
 		return HY_NOERROR;
 
@@ -17665,7 +17393,7 @@ namespace HYFONTCODEC
 		}
 
 		tbEntry.length = ftell(m_pFontFile) - tbEntry.offset;
-		::HY_4ByteAlign(m_pFontFile, tbEntry.length);
+		fourbytesAlign(tbEntry.length);
 
 		return HY_NOERROR;
 
@@ -18174,7 +17902,7 @@ namespace HYFONTCODEC
 		}
 
 		tbEntry.length = ftell(m_pFontFile) - tbEntry.offset;
-		::HY_4ByteAlign(m_pFontFile, tbEntry.length);
+		fourbytesAlign(tbEntry.length);
 
 		return HY_NOERROR;
 
@@ -19076,7 +18804,7 @@ namespace HYFONTCODEC
 		fseek(m_pFontFile, ulEndPos, SEEK_SET);
 
 		tbEntry.length = ftell(m_pFontFile) - tbEntry.offset;
-		::HY_4ByteAlign(m_pFontFile, tbEntry.length);
+		fourbytesAlign(tbEntry.length);
 
 		return HY_NOERROR;
 
@@ -20497,16 +20225,14 @@ namespace HYFONTCODEC
 	
 	void CHYFontCodec::CountFontBound()
 	{
-		if (m_vtHYGlyphs.size() > 0)
-		{
+		if (m_vtHYGlyphs.size() > 0){
 			m_HYhead.xMin = m_vtHYGlyphs[0].minX != 0 ? m_vtHYGlyphs[0].minX:32767;
 			m_HYhead.yMin = m_vtHYGlyphs[0].minY != 0 ? m_vtHYGlyphs[0].minY:32767;
 			m_HYhead.xMax = m_vtHYGlyphs[0].maxX != 0 ? m_vtHYGlyphs[0].maxX:-32768;
 			m_HYhead.yMax = m_vtHYGlyphs[0].maxY != 0 ? m_vtHYGlyphs[0].maxY:-32768;
 
-			for(size_t i=1; i<m_vtHYGlyphs.size(); i++)
-			{
-				if (m_vtHYGlyphs[i].vtContour.size()==0)
+			for(size_t i=1; i<m_vtHYGlyphs.size(); i++)	{
+				if (m_vtHYGlyphs[i].sContourNums ==0)
 					continue;
 
 				if (m_vtHYGlyphs[i].minX<m_HYhead.xMin)
@@ -20522,8 +20248,7 @@ namespace HYFONTCODEC
 					m_HYhead.yMax = m_vtHYGlyphs[i].maxY;
 			}
 		}
-
-	}	// end of int CHYFontCodec::CountFontBound()	
+	}	// end of int CHYFontCodec::CountFontBound()
 
 	bool CHYFontCodec::MulToWCharBL(char* pDest, int& iDestlen,const char* pSrc, int iSrclen)
 	{

@@ -14,19 +14,18 @@
     <ProjectGuid>{0A1651B4-EF3A-4153-9BDD-490174038E09}</ProjectGuid>
     <RootNamespace>HYFontSmartShaper</RootNamespace>
     <Keyword>MFCProj</Keyword>
-    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <UseOfMfc>Dynamic</UseOfMfc>
     <CharacterSet>MultiByte</CharacterSet>
     <WholeProgramOptimization>false</WholeProgramOptimization>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <UseOfMfc>Dynamic</UseOfMfc>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
@@ -62,7 +61,7 @@
     </Midl>
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..\include\HYFontCodec;..\include;..\include\HYFontSmartCore;..\include\HYIKFontCodec;..\boost_1_59_0;..\include\HYImageConvertFont;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\include\HYFontCodec;..\include;..\include\HYFontSmartCore;..\include\HYIKFontCodec;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -78,7 +77,7 @@
       <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>HYBaseFunctionD.lib;HYFontCodecD.lib;HYIkCodecD.lib;HYImageConvertFontD.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>HYBaseFunctionD.lib;HYFontCodecD.lib;HYIkCodecD.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(ProjectName)D.exe</OutputFile>
       <AdditionalLibraryDirectories>..\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -98,7 +97,7 @@
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>..\include\HYFontCodec;..\include\;..\include\HYFontSmartCore;..\include\HYIKFontCodec;..\boost_1_59_0;..\include\HYImageConvertFont;..\CXImage\Include\CxImage;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(VC_IncludePath);..\include\HYFontCodec;..\include\;..\include\HYFontSmartCore;..\include\HYIKFontCodec;..\include\HYImageConvertFont;..\CXImage\Include\CxImage;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>false</MinimalRebuild>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
@@ -115,8 +114,8 @@
       <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>HYBaseFunction.lib;HYFontCodec.lib;HYIkCodec.lib;png.lib;jpeg.lib;zlib.lib;tiff.lib;jbig.lib;jasper.lib;mng.lib;libdcr.lib;libpsd.lib;cximage.lib;HYImageConvertFont.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\lib;..\CXImage\lib\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>HYBaseFunction.lib;HYFontCodec.lib;HYIkCodec.lib;HYImageConvertFont.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
@@ -128,6 +127,7 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CCharsetCheckDlg.cpp" />
     <ClCompile Include="CExchgCodeDlg.cpp" />
     <ClCompile Include="CharsCompareDlg.cpp" />
     <ClCompile Include="CHYEmjioDlg.cpp" />
@@ -180,6 +180,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\HYFontSmartCore\HY_Global.h" />
+    <ClInclude Include="CCharsetCheckDlg.h" />
     <ClInclude Include="CExchgCodeDlg.h" />
     <ClInclude Include="CharsCompareDlg.h" />
     <ClInclude Include="CHYEmjioDlg.h" />

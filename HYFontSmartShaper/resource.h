@@ -38,6 +38,7 @@
 #define IDD_TXTCMP_DLG                  377
 #define IDD_EMJ_DLG                     379
 #define IDD_EXCHGCDE_DLG                381
+#define IDD_CHKCHARSET_DLG              385
 #define IDC_MN_CNVTR_STC                1001
 #define IDC_MN_CNTRL_STC                1002
 #define IDC_MN_CVTS_BTN                 1003
@@ -60,17 +61,11 @@
 #define IDD_IK_MRG_IKF_BTN              1020
 #define IDC_MN_VMTYP_STC                1020
 #define IDC_MN_CUTM_BTN                 1021
-#define IDC_MN_ADW_STC                  1022
 #define IDD_IK_MRG_DEL_BTN              1023
-#define IDC_MN_ADW_EDT                  1023
 #define IDD_IK_MRG_UP_BTN               1024
-#define IDC_MN_ADWNOTES_STC             1024
 #define IDD_IK_MRG_DOWN_BTN             1025
-#define IDC_MN_ADH_STC                  1025
 #define IDD_IK_MRG_LST                  1026
-#define IDC_MN_ADHNOTES_STC             1026
 #define IDD_IK_MRG_BTN                  1027
-#define IDC_MN_ADH_EDT                  1027
 #define IDD_IK_MRG_CLEAR_BTN            1028
 #define IDD_IK_MRG_INF_LST              1029
 #define IDD_IK_SPLT_BTN                 1037
@@ -259,6 +254,12 @@
 #define IDC_EMJ_MK_BTN                  1212
 #define IDC_EMJ_HMFILE_EDIT             1213
 #define IDC_EMJ_HMEFILE_BTN             1214
+#define IDC_CCST_CMB_LST01              1220
+#define IDC_CCST_CMB_LST02              1221
+#define IDC_CCST_CHK_BTN                1223
+#define IDC_CCST_EXPT_BTN               1224
+#define IDC_CCST_LST_CHKVEW             1229
+#define IDC_PTN_SETADW_EDT              1230
 #define IDC_TSC_ISCIDY_RAD              1235
 #define IDC_TSC_ISCIDN_RAD              1236
 #define IDC_TSC_RGST_EDIT               1237
@@ -295,11 +296,9 @@
 #define IDC_PTN_CORRECT_CHK             2605
 #define IDC_PTN_CMP_CHK                 2607
 #define IDC_PTN_SETADW_CHK              2608
-#define IDC_PTN_SETADH_CHK              2609
 #define IDC_PTN_LYT_CHK                 2610
 #define IDC_PTN_HYSND_CHK               2611
 #define IDC_PTN_KANGXI_CHK              2612
-#define IDC_PTN_ADH_EDT                 2613
 #define IDC_PTN_RENAME_CHK              2614
 #define IDC_PTN_CHS_EDT                 2615
 #define IDC_PTN_ENG_EDT                 2616
@@ -339,6 +338,27 @@
 #define IDS_NAME_ID_14                  10007
 #define IDS_NAME_ID_7_EN                10008
 #define IDS_NAME_ID_7_CHS               10009
+#define IDS_CHARSET_GBL1                10010
+#define IDS_CHARSET_GBL2                10011
+#define IDS_CHARSET_GBL3                10012
+#define IDS_CHARSET_GBSYMB              10013
+#define IDS_CHARSET_UniCJK              10014
+#define IDS_CHARSET_UniCJKA             10015
+#define IDS_CHARSET_UniCJKB             10016
+#define IDS_CHARSET_UniCJKC             10017
+#define IDS_CHARSET_UniCJKD             10018
+#define IDS_CHARSET_UniCJKE             10019
+#define IDS_CHARSET_UniCJKF             10020
+#define IDS_CHARSET_UniCJKG             10021
+#define IDS_CHARSET_UniCJKH             10022
+#define IDS_CHARSET_UniCJKI             10023
+#define IDS_CHARSET_UniKangXiRdl        10024
+#define IDS_CHARSET_UniStroke           10025
+#define IDS_CHARSET_UniRdlSupp          10026
+#define IDS_CHARSET_UniCJKCMPT          10027
+#define IDS_CHARSET_UniCJKCMPTSUPP      10028
+#define IDS_CHARSET_GB                  10029
+#define IDS_CHARSET_UNI                 10030
 #define ID_FNT_ENCODE_PARAM             32772
 #define ID_IK_MERGE                     32779
 #define ID_IK_SPLIT                     32780
@@ -371,8 +391,6 @@
 #define ID_FNT_EXTRCD                   32880
 #define ID_FNT_EXTRCHR                  32881
 #define ID_FNT_EXTRNAME                 32883
-#define ID_FNT_RP_NODEF                 32887
-#define ID_FNT_RP_TWFNT                 32888
 #define ID_NOBOX_MNU                    32890
 #define ID_FNT_RSETNAME                 32895
 #define ID_MN_EXPTNAME                  32897
@@ -384,21 +402,19 @@
 #define ID_EMOJI_MK                     32910
 #define ID_MN_CODEMAP                   32912
 #define ID_FNT_CLEARCODE                32915
-#define ID_32916                        32916
 #define ID_FNT_BUDCIDOTF                32917
-#define ID_32918                        32918
-#define ID_MN_CHANGECODE                32919
-#define ID_MN_EXCNGCODE                 32920
-#define ID_32921                        32921
 #define ID_G3FX_MN                      32922
+#define ID_MN_CHKCHARSET                32924
+#define ID_Menu                         32925
+#define ID_MN_EXPNAME                   32926
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        385
-#define _APS_NEXT_COMMAND_VALUE         32923
-#define _APS_NEXT_CONTROL_VALUE         1220
+#define _APS_NEXT_RESOURCE_VALUE        391
+#define _APS_NEXT_COMMAND_VALUE         32927
+#define _APS_NEXT_CONTROL_VALUE         1231
 #define _APS_NEXT_SYMED_VALUE           310
 #endif
 #endif

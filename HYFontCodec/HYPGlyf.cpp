@@ -210,12 +210,12 @@ namespace HYFONTCODEC
 		minY			= 0;
 		maxX			= 0;
 		maxY			= 0;
-		fontFlag		= FONTTYPE_UNKNOWN;
-		glyfType		= GLYF_TYPE_UNKNOW;
+		fontFlag		= FONTTYPE_UNKNOWN;		
 		advanceWidth	= 0;
 		advanceHeight	= 0;
 		topSB			= 0;	
 		strPostName     = "";
+		sContourNums	= 0;
 
 	}	// end of CHYGlyph::~CHYGlyph()
 
@@ -233,20 +233,18 @@ namespace HYFONTCODEC
 		minX			= 0;
 		minY			= 0;
 		maxX			= 0;
-		maxY			= 0;
-		fontFlag		= FONTTYPE_UNKNOWN;
-		glyfType		= GLYF_TYPE_UNKNOW;
+		maxY			= 0;		
 		advanceWidth	= 0;
 		advanceHeight	= 0;
 		topSB			= 0;
-		strPostName		= "";	
-
+		strPostName		= "";		
 		vtUnicode.clear();
 		vtContour.clear();
 		vtInstruntions.clear();
 		vtComponents.clear();
 		vtPts.clear();
 		vtendPtsofContours.clear();
+		sContourNums = 0;
 
 	}	// end of void CHYGlyph::SetDefault()
 
@@ -259,8 +257,7 @@ namespace HYFONTCODEC
 			minY			= other.minY;
 			maxX			= other.maxX;
 			maxY			= other.maxY;
-			fontFlag		= other.fontFlag;
-			glyfType		= other.glyfType;
+			fontFlag		= other.fontFlag;			
 			advanceWidth	= other.advanceWidth;
 			advanceHeight	= other.advanceHeight;
 			topSB			= other.topSB;
@@ -271,6 +268,7 @@ namespace HYFONTCODEC
 			vtComponents	= other.vtComponents;	
 			vtPts			= other.vtPts;
 			vtendPtsofContours = other.vtendPtsofContours;
+			sContourNums = other.sContourNums;
 		}
 
 		return *this;
@@ -354,9 +352,8 @@ namespace HYFONTCODEC
 		}	
 
 		if (fontFlag == FONTTYPE_TTF){
-			if (glyfType == GLYF_TYPE_SIMPLE){
-				size_t CntuNums = vtContour.size();
-				for (size_t i=0; i<CntuNums; i++){
+			if (sContourNums >-1){				
+				for (size_t i=0; i< sContourNums; i++){
 					CHYContour& cntur = vtContour[i];
 					std::vector<CHYPoint>& vtPoints = cntur.vtHYPoints;
 					size_t pointNums = vtPoints.size();
@@ -384,8 +381,8 @@ namespace HYFONTCODEC
 
 	bool CHYGlyph::GetCountourBox(size_t iConturIndex, int& minX, int& minY, int & maxX, int& maxY)
 	{			
-		if (this->glyfType == GLYF_TYPE_SIMPLE){
-			if (iConturIndex>=vtContour.size()) return false;
+		if (sContourNums > 0){
+			if (iConturIndex>= sContourNums) return false;
 
 			CHYContour& cntur = vtContour[iConturIndex];
 			std::vector<CHYPoint>& vtPoints = cntur.vtHYPoints;

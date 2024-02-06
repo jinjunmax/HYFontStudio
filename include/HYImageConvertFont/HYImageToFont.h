@@ -1,6 +1,6 @@
 #include "HYFontCodecHead.h"
 #include "HYFontCodec.h"
-#include "ximage.h"
+//#include "ximage.h"
 
 using namespace  HYFONTCODEC;
 namespace HYIMGTOFONT
@@ -40,8 +40,8 @@ namespace HYIMGTOFONT
 			double		dispointtoline(CHYPoint& startpoint,CHYPoint& endpoint,CHYPoint& tagpoint);
 			void		GetContour(char*	pMtrxData, int iWidth, int iHeight, std::vector<CHYContour>& ContourItemLst, std::vector<CHYContour>& ImageCutContourItemLst,int m_BezierN);
 			void		FindImgFile(char* strFoldername,char* extName,std::vector<CString>& vtFiles);
-			char*		GetImageMtrxData(CxImage* pImg);
-			CxImage*	SquareImage(const char* ImgFile);			
+			//char*		GetImageMtrxData(CxImage* pImg);
+			//CxImage*	SquareImage(const char* ImgFile);			
 
 			void		AdjustMetrics(int BsLine, float fEMScale, HYFONTCODEC::CHYGlyph & Glyph);
 			void		AdjustMetrics(int BsLine, float fEMScale, HYFONTCODEC::CHYFontCodec& FntEncode);

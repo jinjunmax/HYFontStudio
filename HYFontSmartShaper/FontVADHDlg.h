@@ -27,6 +27,10 @@ public:
 	afx_msg void OnBnClickedVadhPsnmBtn();
 public:
 	virtual BOOL OnInitDialog();
+	void	SetVertHeight(HYFONTCODEC::CHYFontCodec& HYFontCode);
+	void	ChangeVertHeight(HYFONTCODEC::CHYFontCodec& HYFontCode,short Tsb);
+	void	ChangeVertHeight(HYFONTCODEC::CHYFontCodec& HYFontCode,std::vector<std::string> vtPsName, short Tsb);
+
 protected:
 	UINT		m_uiTsb;
 	CString		m_strSrcFntFile;

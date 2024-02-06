@@ -45,7 +45,7 @@ protected:
 	// 打开字库
 	afx_msg void		OnFileOpen();
 	// 生成字库
-	afx_msg void		OnFileSave();	
+	afx_msg void		OnFileSave();
 	// 生成设置
 	afx_msg void		OnFntEncodeParam();
 	afx_msg void		OnBnClickedMnFntstBtn();
@@ -79,6 +79,7 @@ protected:
 	afx_msg void		OnMnCodedot();
 	// 生成简繁字库
 	afx_msg void		OnMnMkjf();
+	// 生产变高字库
 	afx_msg void		OnFntVadh();
 	afx_msg void		OnMnAduni();
 	afx_msg void		OnMkvntMn();	
@@ -92,7 +93,8 @@ protected:
 	// 根据字表提取subsetfont
 	afx_msg void		OnFntExtrchr();
 	// 根据码表提取subsetfont
-	afx_msg void		OnFntExtrcd();	
+	afx_msg void		OnFntExtrcd();
+	// 根据字形名称提取subsetfont
 	afx_msg void		OnFntExtrname();
 	afx_msg void		OnFntRpNodef();
 	afx_msg void		OnFntRpTwfnt();
@@ -103,8 +105,8 @@ protected:
 	afx_msg void		OnMnExptname();
 	// 用于调整中文字符的AdvanceWidth	
 	afx_msg void		OnFlnm2numnm();
-	afx_msg void		OnEnChangeMnAdwEdt();
-	afx_msg void		OnEnChangeMnAdhEdt();
+	
+	
 	afx_msg void		OnMnCmptxt();
 	afx_msg void		OnMnChkerttf();
 	afx_msg void		OnMnChkerotf();
@@ -119,6 +121,11 @@ protected:
 	virtual BOOL		PreTranslateMessage(MSG* pMsg);
 	// 批处理otf -> CIDOTF
 	afx_msg void		OnFntBudcidotf();
+	// 修复Glyphs3版本可变字库轮廓点会增加OVERLAP_SIMPLE标志
+	afx_msg void		OnG3fxMn();
+	// 对字库的字符集进行检查，主要是检查
+	afx_msg void		OnMnChkcharset();
+
 	// 实现
 public:
 #ifdef _DEBUG
@@ -158,8 +165,6 @@ public:
 	void				MakeFontSaveInfo();
 	void				ScaleGlyph(CHYGlyph& Gryph, float fScale);
 	void				SetAdWidth(UINT adw, CHYGlyph& Glyphs);
-	void				SetAdHeight(UINT adh, CHYGlyph& Glyphs);
-
 	// 提取子集操作
 	void				GetFntSubset(char* strSrcFnt, std::vector<unsigned long> vtUni, const char* strDstFnt);
 	void				GetOTFSawtooth(std::vector<CHYPoint>& vtInPnts, std::vector<CHYPoint>& vtOutPnts);
@@ -187,9 +192,7 @@ public:
 	int								m_iSelectGID;
 	CString							m_strFontFileName;
 	HANDLE							m_hdLoadFontThread;
-	HANDLE							m_hdLoadFontStepThread;
-	UINT							m_adsAdw;	// 用于指定字形宽度
-	UINT							m_adsAdh;	// 用于指定字形高度
+	HANDLE							m_hdLoadFontStepThread;	
 	HYFONTCODEC::CHYFontCodec		m_FontDeCodec;
 	HYFONTCODEC::CHYFontCodec		m_FontEnCodec;
 	HANDLE							m_hLoadFontEvent;
@@ -204,5 +207,5 @@ public:
 	}
 #endif	
 	
-	afx_msg void OnG3fxMn();
+	afx_msg void OnMnExpname();
 };

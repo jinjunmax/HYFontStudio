@@ -221,12 +221,9 @@ namespace HYFONTCODEC
 
 		void	SetCmapEntry(std::vector<CMAP_TABLE_ENTRY>&	vtEntry);
 		void	MakeCmap();		
-		int		MakeBitmapGlyphs(char* pProfile);
-		//void	MakeVheaVmtx();
+		int		MakeBitmapGlyphs(char* pProfile);		
 		void	MakeVerticalMetrics();
-		void	CountVerticalMetrics();
-
-		void	SetAdHeight(UINT adh, CHYGlyph& Glyphs);
+		void	CountVerticalMetrics();		
 		int	    SetCheckSumAdjustment(const char* pFontFile);
 
 	public:

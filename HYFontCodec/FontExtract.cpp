@@ -1815,13 +1815,15 @@ namespace HYFONTCODEC
 		if (iFilestat == -3)  
 			return HY_ERR_FILE_OTHER;
 
-		HYFONTCODEC::CHYFontCodec		HYFontCode;				
-			
+		HYFONTCODEC::CHYFontCodec		HYFontCode;
 		if (HYFontCode.OpenFile(pFont) == HY_NOERROR)		
 		{		
 			HYFontCode.DecodeTableDirectory();			
 			if (HYFontCode.m_HYTbDirectory.FindTableEntry(MAXP_TAG) == -1) return FONT_ERR_VMTX_DECODE;
 			HYFontCode.Decodemaxp();
+
+			if (HYFontCode.m_HYTbDirectory.FindTableEntry(OS2_TAG) == -1) return FONT_ERR_OS2_DECODE;
+			HYFontCode.DecodeOS2();
 
 			if (HYFontCode.m_HYTbDirectory.FindTableEntry(HEAD_TAG) == -1) return FONT_ERR_HEAD_DECODE;
 			HYFontCode.Decodehead();
@@ -1844,6 +1846,77 @@ namespace HYFONTCODEC
 				HYFontCode.Decodeglyf();
 			}
 
+			iEntryIndex = HYFontCode.m_HYTbDirectory.FindTableEntry(CMAP_TAG);
+			if (iEntryIndex != -1)
+			{
+				CHYTableEntry& tbEntry = HYFontCode.m_HYTbDirectory.vtTableEntry[iEntryIndex];
+				fseek(HYFontCode.m_pFontFile, tbEntry.offset, SEEK_SET);
+				HYFontCode.Decodecmap();
+			}
+
+			CHYCmap& HYCmap = HYFontCode.m_HYCmap;
+
+			iEntryIndex = HYCmap.FindSpecificEntryIndex(CMAP_ENCODE_FT_12);
+			if (iEntryIndex != -1)
+			{
+				CMAP_TABLE_ENTRY& TbEntry = HYCmap.vtCamp_tb_entry[iEntryIndex];
+				CMAP_ENCODE_FORMAT_12& Format12 = TbEntry.Format12;
+				unsigned long ulloop = Format12.nGroups;
+				for (unsigned long i = 0; i < ulloop; i++)
+				{
+					CMAP_ENCODE_FORMAT_12_GROUP& tagF12Group = Format12.vtGroup[i];
+					unsigned long GID = tagF12Group.startGlyphID;
+					for (unsigned long l = tagF12Group.startCharCode; l <= tagF12Group.endCharCode; l++)
+					{
+						if (GID < (unsigned long)HYFontCode.m_vtHYGlyphs.size())
+						{
+							CHYGlyph& glyph = HYFontCode.m_vtHYGlyphs[GID++];
+							glyph.vtUnicode.push_back(l);
+						}
+					}
+				}
+			}
+			else
+			{
+				iEntryIndex = HYCmap.FindSpecificEntryIndex(3, 1, CMAP_ENCODE_FT_4);
+				if (iEntryIndex == -1)
+				{
+					iEntryIndex = HYCmap.FindSpecificEntryIndex(0, 3, CMAP_ENCODE_FT_4);
+				}
+				if (iEntryIndex != -1)
+				{
+					CMAP_TABLE_ENTRY& TbEntry = HYCmap.vtCamp_tb_entry[iEntryIndex];
+					CMAP_ENCODE_FORMAT_4& Format4 = TbEntry.Format4;
+					unsigned long ulloop = Format4.segCountX2 >> 1;
+
+					for (unsigned short i = 0; i < ulloop; i++)
+					{
+						int iRang = Format4.vtEndCount[i] - Format4.vtstartCount[i];
+						if (Format4.vtidRangeOffset[i] != 0)
+						{
+							for (int x = 0; x <= iRang; x++)
+							{
+								int iID = (Format4.vtidRangeOffset[i] - Format4.segCountX2) / 2 + i + x;
+								iID = Format4.vtglyphIdArray[iID];
+								CHYGlyph& glyph = HYFontCode.m_vtHYGlyphs[iID];
+								glyph.vtUnicode.push_back(Format4.vtstartCount[i] + x);
+							}
+						}
+						else
+						{
+							for (int x = 0; x <= iRang; x++)
+							{
+								int GID = (Format4.vtstartCount[i] + x + (Format4.vtidDelta[i])) % 65536;
+								if (GID != 65535)
+								{
+									CHYGlyph& glyph = HYFontCode.m_vtHYGlyphs[GID];
+									glyph.vtUnicode.push_back(Format4.vtstartCount[i] + x);
+								}
+							}
+						}
+					}
+				}
+			}
 		}
 
  		std::vector<VMTX_LONGVRTMETRIC> vtVMTX;		
@@ -1872,10 +1945,13 @@ namespace HYFONTCODEC
 
 				if (glyh.vtContour.size()==0&&glyh.vtComponents.size()==0)
 					continue;			
-
-				VMTX_LONGVRTMETRIC&  vmtxLongMetric = vtVMTX[i];
-				vmtxLongMetric.tsb = space;
-				vmtxLongMetric.advanceHeight = (glyh.maxY-glyh.minY)+(space<<1);
+				if (glyh.vtUnicode.size() > 0) {
+					if (::HY_Iszh(glyh.vtUnicode[0])) {
+						VMTX_LONGVRTMETRIC& vmtxLongMetric = vtVMTX[i];
+						vmtxLongMetric.tsb = space;
+						vmtxLongMetric.advanceHeight = (glyh.maxY - glyh.minY) + (space << 1);
+					}
+				}
 			}
 		}
 		else 
@@ -1917,17 +1993,19 @@ namespace HYFONTCODEC
 
 			for (int i=0; i<HYFontCode.m_HYMaxp.numGlyphs;i++)
 			{				
-				CHYGlyph& glyh =  HYFontCode.m_vtHYGlyphs[i];
+				CHYGlyph& glyh =  HYFontCode.m_vtHYGlyphs[i];			
+
 				VMTX_LONGVRTMETRIC  vmtxLongMetric;
-				if (glyh.vtContour.size()==0&&glyh.vtComponents.size()==0)
-				{
-					vmtxLongMetric.advanceHeight = HYFontCode.m_HYhead.unitsPerEm;
-					vmtxLongMetric.tsb = 0;
-				}
-				else 
-				{
-					vmtxLongMetric.tsb = space;
-					vmtxLongMetric.advanceHeight = (glyh.maxY-glyh.minY)+(space<<1);
+				vmtxLongMetric.advanceHeight = HYFontCode.m_HYOS2.sTypoAscender - HYFontCode.m_HYOS2.sTypoDescender;
+				vmtxLongMetric.tsb = HYFontCode.m_HYOS2.sTypoAscender - glyh.maxY;
+
+				if (glyh.vtUnicode.size() > 0) {
+				
+					if (::HY_Iszh(glyh.vtUnicode[0]))
+					{
+						vmtxLongMetric.tsb = space;
+						vmtxLongMetric.advanceHeight = (glyh.maxY - glyh.minY) + (space << 1);
+					}
 				}
 
 				vtVMTX.push_back(vmtxLongMetric);				

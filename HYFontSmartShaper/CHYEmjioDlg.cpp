@@ -534,8 +534,7 @@ void CHYEmjioDlg::SetTables(CHYFontCodec& FntEncode)
 	FntEncode.m_tagOption.bOldStandard = FALSE;
 	FntEncode.m_tagOption.bRePsName = FALSE;
 	FntEncode.m_tagOption.bReSortUni = FALSE;
-	FntEncode.m_tagOption.bsetADW = FALSE;
-	FntEncode.m_tagOption.bsetADH = FALSE;
+	FntEncode.m_tagOption.bsetADW = FALSE;	
 	FntEncode.m_tagOption.bYitizi = FALSE;
 
 	for (size_t i = 0; i < FntEncode.m_HYMaxp.numGlyphs; i++) {

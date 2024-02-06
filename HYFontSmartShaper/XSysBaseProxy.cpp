@@ -140,11 +140,8 @@ void CXSysBaseProxy::LoadLocalProfile()
 	GetPrivateProfileString("Option", "SETADW", _T("0"), szInfo, MAX_PATH, strProfileName);
 	m_tagOpeionPrm.bsetADW = atoi(szInfo) == 0 ? FALSE : TRUE;
 	ZeroMemory(szInfo, MAX_PATH);
-	GetPrivateProfileString("Option", "SETADH", _T("0"), szInfo, MAX_PATH, strProfileName);
-	m_tagOpeionPrm.bsetADH = atoi(szInfo) == 0 ? FALSE : TRUE;
-	ZeroMemory(szInfo, MAX_PATH);
-	GetPrivateProfileString("Option", "ADH", _T("0"), szInfo, MAX_PATH, strProfileName);
-	m_tagOpeionPrm.usSetADH = atoi(szInfo);
+	GetPrivateProfileString("Option", "ADW", _T("1000"), szInfo, MAX_PATH, strProfileName);
+	m_tagOpeionPrm.usSetADW = atoi(szInfo);	
 	ZeroMemory(szInfo, MAX_PATH);
 	GetPrivateProfileString("Option", "LAYOUT", _T("0"), szInfo, MAX_PATH, strProfileName);
 	m_tagOpeionPrm.bCmplLayout = atoi(szInfo) == 0 ? FALSE : TRUE;
@@ -240,11 +237,9 @@ void CXSysBaseProxy::StoreLocalProfile()
 	strTmp.Format(_T("%d"), m_tagOpeionPrm.bCmplCMAP);
 	WritePrivateProfileString("Option", "CMAP", strTmp, strProfileName);
 	strTmp.Format(_T("%d"), m_tagOpeionPrm.bsetADW);
-	WritePrivateProfileString("Option", "SETADW", strTmp, strProfileName);	
-	strTmp.Format(_T("%d"), m_tagOpeionPrm.bsetADH);
-	WritePrivateProfileString("Option", "SETADH", strTmp, strProfileName);
-	strTmp.Format(_T("%d"), m_tagOpeionPrm.usSetADH);
-	WritePrivateProfileString("Option", "ADH", strTmp, strProfileName);		
+	WritePrivateProfileString("Option", "SETADW", strTmp, strProfileName);
+	strTmp.Format(_T("%d"), m_tagOpeionPrm.usSetADW);
+	WritePrivateProfileString("Option", "ADW", strTmp, strProfileName);		
 	strTmp.Format(_T("%d"), m_tagOpeionPrm.bCmplLayout);
 	WritePrivateProfileString("Option", "LAYOUT", strTmp, strProfileName);
 	strTmp.Format(_T("%d"), m_tagOpeionPrm.bHanyi);

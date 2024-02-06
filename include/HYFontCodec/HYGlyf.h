@@ -104,8 +104,8 @@ namespace HYFONTCODEC
 		short							minY;
 		short							maxX;
 		short							maxY;
-		// 是否是组件字形
-		int								glyfType;
+		short							sContourNums;
+
 		int								fontFlag;
 		std::string						strPostName;
 		int								advanceWidth;

@@ -31,7 +31,7 @@ protected:
 	BOOL		m_bRename;
 	BOOL		m_bCustomCmap;
 	BOOL		m_bSetAdw;
-	BOOL		m_bSetAdh;
+	int			m_iSetAdw;	
 	BOOL		m_bLayout;
 	BOOL		m_bCorrect;
 	BOOL		m_bHanyi;
@@ -43,7 +43,7 @@ protected:
 	CString		m_strENGFamilyName;
 	CString		m_strENGSubName;
 	CString		m_strVersion;
-	int			m_iSetAdh;
+	
 	
 public:
 	BOOL			Save();
@@ -51,9 +51,9 @@ public:
 public:
 	virtual BOOL OnInitDialog();
 	afx_msg void OnDestroy();	
-	afx_msg void OnBnClickedPtnRenameChk();	
-	afx_msg void OnBnClickedPtnSetadhChk();
+	afx_msg void OnBnClickedPtnRenameChk();		
 	afx_msg void OnBnClickedPtnOldstndChk();	
 	
 
+	afx_msg void OnBnClickedPtnSetadwChk();
 };

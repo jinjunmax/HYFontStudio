@@ -82,34 +82,124 @@ void CFontVADHDlg::OnBnClickedVadhBudlBtn()
 	}
 
 	UpdateData();
-
 	CWaitCursor	wc;
-	HYFONTCODEC::CFontExtract	FontExtract;
-	int iRt;
-	if (IsDlgButtonChecked(IDC_VADH_PSNM_CHK)){ 
+	HYFONTCODEC::CHYFontCodec		HYFontCode;
+	if (HYFontCode.Decode((LPSTR)(LPCSTR)m_strSrcFntFile) != HY_NOERROR)
+	{
+		AfxMessageBox("字库解析失败！");
+		return;
+	}
+	SetVertHeight(HYFontCode);
+
+	if (IsDlgButtonChecked(IDC_VADH_PSNM_CHK)) {
 		if (m_strPSNameFile == "") {
-			AfxMessageBox("源字库为空");
+			AfxMessageBox("psname文件名不能为空");
 			return;
 		}
-		iRt = FontExtract.ModifyVMTX3((LPSTR)(LPCSTR)m_strSrcFntFile, (LPSTR)(LPCSTR)m_strPSNameFile,(LPSTR)(LPCSTR)strDstFileName, m_uiTsb);
+		std::vector<std::string> vtPsName;
+		int Result = ::HY_LoadPsNameFile((LPSTR)(LPCSTR)m_strPSNameFile, vtPsName);
+		if (Result != HY_NOERROR) {
+			AfxMessageBox("psname文件读取错误");
+			return;
+		}		
+		ChangeVertHeight(HYFontCode, vtPsName,m_uiTsb);
 	}
 	else {
-		iRt = FontExtract.ModifyVMTX2((LPSTR)(LPCSTR)m_strSrcFntFile, (LPSTR)(LPCSTR)strDstFileName, m_uiTsb);
-	}
+		ChangeVertHeight(HYFontCode,m_uiTsb);
+	}	
 
-	if (iRt == HY_NOERROR){
-		AfxMessageBox("字库处理成功！");
-	} 
-	else{
-		AfxMessageBox("字库处理失败！");
-	}
+	std::vector<unsigned long> vtFlag;
+	HYFontCode.m_HYTbDirectory.GetTableFlags(vtFlag);
 
+	::XSysproxy().InitHmtxTb(HYFontCode);
+	HYFontCode.MakeHYCodeMap();
+	HYFontCode.MakeVerticalMetrics();
+	if (HYFontCode.Encode((LPSTR)(LPCSTR)strDstFileName, vtFlag) == HY_NOERROR) {
+		AfxMessageBox("处理完成");	
+	}
+	else {
+		AfxMessageBox("处理失败");
+	}
 }	// end of void CFontVADHDlg::OnBnClickedVadhBudlBtn()
+
+void CFontVADHDlg::SetVertHeight(HYFONTCODEC::CHYFontCodec& HYFontCode)
+{		
+	if (!HYFontCode.FindFlag(VHEA_TAG) || !HYFontCode.FindFlag(VMTX_TAG)) {
+		for (int i = 0; i < HYFontCode.m_HYMaxp.numGlyphs; i++)
+		{
+			CHYGlyph& glyh = HYFontCode.m_vtHYGlyphs[i];			
+			glyh.advanceHeight = HYFontCode.m_HYOS2.sTypoAscender - HYFontCode.m_HYOS2.sTypoDescender;
+			glyh.topSB = HYFontCode.m_HYOS2.sTypoAscender - glyh.maxY;
+		}
+	}
+
+	bool bIsInsertLast = TRUE;
+	CHYTableEntry VHEAEntry;
+	VHEAEntry.tag = VHEA_TAG;	
+	int EntryNum = (int)HYFontCode.m_HYTbDirectory.vtTableEntry.size();
+	for (int x = 0; x < EntryNum; x++){
+		if (HYFontCode.m_HYTbDirectory.vtTableEntry[x].tag > VHEA_TAG){
+			HYFontCode.m_HYTbDirectory.vtTableEntry.insert(HYFontCode.m_HYTbDirectory.vtTableEntry.begin() + x, VHEAEntry);
+			bIsInsertLast = FALSE;
+		}
+	}
+	if (bIsInsertLast){
+		HYFontCode.m_HYTbDirectory.vtTableEntry.push_back(VHEAEntry);
+	}
+	bIsInsertLast = TRUE;
+	VHEAEntry.tag = VMTX_TAG;
+	for (int x = 0; x < EntryNum; x++){
+		if (HYFontCode.m_HYTbDirectory.vtTableEntry[x].tag > VMTX_TAG)	{
+			HYFontCode.m_HYTbDirectory.vtTableEntry.insert(HYFontCode.m_HYTbDirectory.vtTableEntry.begin() + x, VHEAEntry);
+		}
+	}
+	if (bIsInsertLast){
+		HYFontCode.m_HYTbDirectory.vtTableEntry.push_back(VHEAEntry);
+	}
+
+	HYFontCode.m_HYTbDirectory.numTables = HYFontCode.m_HYTbDirectory.vtTableEntry.size();
+
+}	// end of void CFontVADHDlg::SetVertHeight()
+
+void CFontVADHDlg::ChangeVertHeight(HYFONTCODEC::CHYFontCodec& HYFontCode,short Tsb)
+{
+	for (int i = 0; i < HYFontCode.m_HYMaxp.numGlyphs; i++)
+	{
+		CHYGlyph& glyh = HYFontCode.m_vtHYGlyphs[i];
+		if (glyh.vtContour.size() == 0 && glyh.vtComponents.size() == 0) continue;
+
+		if (glyh.vtUnicode.size() > 0) {
+			if (::HY_Iszh(glyh.vtUnicode[0])) {				
+				glyh.topSB = Tsb;
+				glyh.advanceHeight = (glyh.maxY - glyh.minY) + (Tsb << 1);
+			}
+		}
+	}
+
+}	// end of void CFontVADHDlg::ChangeVertHeight()
+
+void CFontVADHDlg::ChangeVertHeight(HYFONTCODEC::CHYFontCodec& HYFontCode, std::vector<std::string> vtPsName, short Tsb)
+{
+	for (int i = 0; i < vtPsName.size(); i++)
+	{
+		int index = HYFontCode.FindGryphIndexByGlyName(vtPsName[i]);
+		if (index != -1) {
+			CHYGlyph& glyh = HYFontCode.m_vtHYGlyphs[index];
+			if (glyh.vtContour.size() == 0 && glyh.vtComponents.size() == 0) continue;
+			glyh.topSB = Tsb;
+			glyh.advanceHeight = (glyh.maxY - glyh.minY) + (Tsb << 1);
+		}
+	}
+
+}	// end of void CFontVADHDlg::ChangeVertHeight()
 
 BOOL CFontVADHDlg::OnInitDialog()
 {
 	CDialog::OnInitDialog();
-	CheckDlgButton(IDC_VADH_PSNM_CHK, BST_CHECKED);
+	//CheckDlgButton(IDC_VADH_PSNM_CHK, BST_CHECKED);
+	GetDlgItem(IDC_VADH_PSNM_EDT)->EnableWindow(FALSE);
+	GetDlgItem(IDC_VADH_PSNM_BTN)->EnableWindow(FALSE);
+	GetDlgItem(IDC_VADH_PSNM_STC)->EnableWindow(FALSE);
 
 	return TRUE;  
 				  
@@ -120,12 +210,12 @@ void CFontVADHDlg::OnBnClickedVadhPsnmChk()
 	UINT isCheck = IsDlgButtonChecked(IDC_VADH_PSNM_CHK);
 	if(isCheck>0){
 		GetDlgItem(IDC_VADH_PSNM_EDT)->EnableWindow();
-		GetDlgItem(IDC_VADH_PSNM_EDT)->EnableWindow();
+		GetDlgItem(IDC_VADH_PSNM_BTN)->EnableWindow();
 		GetDlgItem(IDC_VADH_PSNM_STC)->EnableWindow();		
 	}
 	else {
 		GetDlgItem(IDC_VADH_PSNM_EDT)->EnableWindow(FALSE);
-		GetDlgItem(IDC_VADH_PSNM_EDT)->EnableWindow(FALSE);
+		GetDlgItem(IDC_VADH_PSNM_BTN)->EnableWindow(FALSE);
 		GetDlgItem(IDC_VADH_PSNM_STC)->EnableWindow(FALSE);
 	}
 

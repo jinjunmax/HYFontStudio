@@ -29,6 +29,7 @@
 #include "CExchgCodeDlg.h"
 #include <atltime.h>
 #include "HYFontUpdate.h"
+#include"CCharsetCheckDlg.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -94,9 +95,7 @@ BEGIN_MESSAGE_MAP(CHYFontSmartShaperView, CFormView)
 	ON_COMMAND(ID_NOBOX_MNU, &CHYFontSmartShaperView::OnNoboxMnu)	
 	ON_COMMAND(ID_FNT_RSETNAME, &CHYFontSmartShaperView::OnFntRsetname)
 	ON_COMMAND(ID_MN_EXPTNAME, &CHYFontSmartShaperView::OnMnExptname)
-	ON_COMMAND(ID_FLNM2NUMNM, &CHYFontSmartShaperView::OnFlnm2numnm)	
-	ON_EN_CHANGE(IDC_MN_ADW_EDT, &CHYFontSmartShaperView::OnEnChangeMnAdwEdt)
-	ON_EN_CHANGE(IDC_MN_ADH_EDT, &CHYFontSmartShaperView::OnEnChangeMnAdhEdt)
+	ON_COMMAND(ID_FLNM2NUMNM, &CHYFontSmartShaperView::OnFlnm2numnm)
 	ON_COMMAND(ID_MN_CMPTXT, &CHYFontSmartShaperView::OnMnCmptxt)
 	ON_COMMAND(ID_MN_CHKERTTF, &CHYFontSmartShaperView::OnMnChkerttf)
 	ON_COMMAND(ID_MN_CHKEROTF, &CHYFontSmartShaperView::OnMnChkerotf)
@@ -105,15 +104,15 @@ BEGIN_MESSAGE_MAP(CHYFontSmartShaperView, CFormView)
 	ON_COMMAND(ID_FNT_CLEARCODE, &CHYFontSmartShaperView::OnFntResetcode)
 	ON_COMMAND(ID_FNT_BUDCIDOTF, &CHYFontSmartShaperView::OnFntBudcidotf)	
 	ON_COMMAND(ID_G3FX_MN, &CHYFontSmartShaperView::OnG3fxMn)
+	ON_COMMAND(ID_MN_CHKCHARSET, &CHYFontSmartShaperView::OnMnChkcharset)
+	ON_COMMAND(ID_MN_EXPNAME, &CHYFontSmartShaperView::OnMnExpname)
 END_MESSAGE_MAP()
 
 // CHYFontSmartShaperView 构造/析构
 
 CHYFontSmartShaperView::CHYFontSmartShaperView()
 	: CFormView(CHYFontSmartShaperView::IDD)
-	, m_strSeek(_T(""))	
-	, m_adsAdw(0)
-	, m_adsAdh(0)
+	, m_strSeek(_T(""))
 {
 	// TODO: 在此处添加构造代码
 	m_iThumClumnNums			= 0;
@@ -149,10 +148,6 @@ void CHYFontSmartShaperView::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_MN_CNVTR_PRSS, m_prssProgress);
 	DDX_Control(pDX, IDC_MN_SEEK_CMB, m_cmbSeek);
 	DDX_Text(pDX, IDC_MN_SEEK_EDT, m_strSeek);
-	DDX_Text(pDX, IDC_MN_ADW_EDT, m_adsAdw);
-	DDV_MinMaxUInt(pDX, m_adsAdw, 0, 65535);
-	DDX_Text(pDX, IDC_MN_ADH_EDT, m_adsAdh);
-	DDV_MinMaxUInt(pDX, m_adsAdh, 0, 65535);
 
 }	// end of void CHYFontSmartShaperView::DoDataExchange()
 
@@ -273,19 +268,15 @@ void CHYFontSmartShaperView::OnFileSave()
 		ulTableFlag.push_back(VHEA_TAG);
 		ulTableFlag.push_back(VMTX_TAG);
 	}
-	if (m_FontDeCodec.FindFlag(GPOS_TAG))
-	{
+	if (m_FontDeCodec.FindFlag(GPOS_TAG)){
 		ulTableFlag.push_back(GPOS_TAG);
 	}
 
-	if (::XSysproxy().m_tagOpeionPrm.bCmplLayout)
-	{
+	if (::XSysproxy().m_tagOpeionPrm.bCmplLayout){
 		ulTableFlag.push_back(GSUB_TAG);
 	}
-	else 
-	{
-		if (m_FontDeCodec.FindFlag(GSUB_TAG))
-		{
+	else {
+		if (m_FontDeCodec.FindFlag(GSUB_TAG)){
 			ulTableFlag.push_back(GSUB_TAG);
 		}
 	}
@@ -592,15 +583,11 @@ void CHYFontSmartShaperView::OnBnClickedMnCvtmBtn()
 		CHYGlyph		SrcGryph	= m_FontDeCodec.m_vtHYGlyphs[i];
 		CHYGlyph&		DstGryph	= m_FontEnCodec.m_vtHYGlyphs[i];
 		DstGryph = SrcGryph;
-		if (::XSysproxy().m_tagOpeionPrm.bsetADW) {
-			if (m_adsAdw != 0) SetAdWidth(m_adsAdw, DstGryph);
-		}
-/*
-		if (::XSysproxy().m_tagOpeionPrm.bsetADH) {
-			if (m_adsAdh != 0) SetAdHeight(m_adsAdh, DstGryph);
-		}
-*/
 
+		if (::XSysproxy().m_tagOpeionPrm.bsetADW) {
+			SetAdWidth(::XSysproxy().m_tagOpeionPrm.usSetADW, DstGryph);
+		}
+		
 		m_prssProgress.SetPos(((i+1)*100)/stGlyhNum);
 	}
 
@@ -617,58 +604,23 @@ void CHYFontSmartShaperView::OnBnClickedMnCvtmBtn()
 
 void CHYFontSmartShaperView::SetAdWidth(UINT adw, CHYGlyph& Glyphs)
 {
-	char  buffer[200] = { 0 };
-	BOOL B = FALSE;
+	char  buffer[200] = { 0 };	
 	if (Glyphs.vtUnicode.size() > 0) {
 		unsigned long  unicode = Glyphs.vtUnicode[0];
-		if (unicode >= 0x2E80 && unicode <= 0x2EFF) B = TRUE;
-		if (unicode >= 0x2F00 && unicode <= 0x2FDF) B = TRUE;
-		if (unicode >= 0x3000 && unicode <= 0x303F) B = TRUE;
-		if (unicode >= 0x31C0 && unicode <= 0x31EF) B = TRUE;
-		if (unicode >= 0x3300 && unicode <= 0x33FF) B = TRUE;
-		if (unicode >= 0x3400 && unicode <= 0x4DBF) B = TRUE;
-		if (unicode >= 0x4E00 && unicode <= 0x9FFF) B = TRUE;
-		if (unicode >= 0xF900 && unicode <= 0xFAFF) B = TRUE;
-		if (unicode >= 0x20000 && unicode <= 0x2FA1F) B = TRUE;
-	}
-
-	if (B) {		
-		int xoffset = ::HY_RealRount((Glyphs.advanceWidth - (int)adw) / 2.0);
-		for (int i = 0; i < Glyphs.vtContour.size(); i++) {
-			CHYContour& cnt = Glyphs.vtContour[i];
-			size_t stloop = cnt.vtHYPoints.size();
-			for (size_t j = 0; j < stloop; j++) {
-				cnt.vtHYPoints[j].x -= xoffset;
+		if (::HY_Iszh(unicode)) {
+			int xoffset = ::HY_RealRount((Glyphs.advanceWidth - (int)adw) / 2.0);
+			for (int i = 0; i < Glyphs.vtContour.size(); i++) {
+				CHYContour& cnt = Glyphs.vtContour[i];
+				size_t stloop = cnt.vtHYPoints.size();
+				for (size_t j = 0; j < stloop; j++) {
+					cnt.vtHYPoints[j].x -= xoffset;
+				}
 			}
-		}
-		Glyphs.advanceWidth = adw;
+			Glyphs.advanceWidth = adw;		
+		}		
 	}
 
-}	// end of void CHYFontSmartShaperView::SetAdWidth()
-
-void CHYFontSmartShaperView::SetAdHeight(UINT adh, CHYGlyph& Glyphs)
-{
-	// 增大或缩小中文竖排字间距
-	char  buffer[200] = { 0 };
-	BOOL B = FALSE;
-	if (Glyphs.vtUnicode.size() > 0) {
-		unsigned long  unicode = Glyphs.vtUnicode[0];
-		if (unicode >= 0x2E80 && unicode <= 0x2EFF) B = TRUE;
-		if (unicode >= 0x2F00 && unicode <= 0x2FDF) B = TRUE;
-		if (unicode >= 0x3000 && unicode <= 0x303F) B = TRUE;
-		if (unicode >= 0x31C0 && unicode <= 0x31EF) B = TRUE;
-		if (unicode >= 0x3300 && unicode <= 0x33FF) B = TRUE;
-		if (unicode >= 0x3400 && unicode <= 0x4DBF) B = TRUE;
-		if (unicode >= 0x4E00 && unicode <= 0x9FFF) B = TRUE;
-		if (unicode >= 0xF900 && unicode <= 0xFAFF) B = TRUE;
-		if (unicode >= 0x20000 && unicode <= 0x2FA1F) B = TRUE;
-	}
-	if (B) {
-		Glyphs.topSB = Glyphs.topSB - (Glyphs.advanceHeight-adh)/2.0 + 0.5;
-		Glyphs.advanceHeight = adh; 		
-	}
-
-}	// end of void CHYFontSmartShaperView::SetAdHeight()              
+}	// end of void CHYFontSmartShaperView::SetAdWidth()            
 
 void CHYFontSmartShaperView::OnBnClickedMnCutmBtn()
 {
@@ -1281,101 +1233,13 @@ void CHYFontSmartShaperView::SetLayout()
 		if (pWnd->m_hWnd){
 			pWnd->MoveWindow(rcSeekBTN);		
 		}
-	}	
-
-	// 设置宽度
-	CRect rcADWStc;
-	rcADWStc.top = rcSeekStc.bottom;
-	rcADWStc.left = rcSeekStc.left;
-	rcADWStc.right = rcSeekStc.right;
-	rcADWStc.bottom = rcADWStc.top + 25;
-	pWnd = GetDlgItem(IDC_MN_ADW_STC);
-	if (pWnd) {
-		if (pWnd->m_hWnd) {
-			pWnd->MoveWindow(rcADWStc);
-		}
-		//pWnd->ShowWindow(SW_HIDE);
 	}
-
-	CRect rcADWEdt;
-	rcADWEdt.top = rcADWStc.top;
-	rcADWEdt.left = rcADWStc.right;
-	rcADWEdt.right = rcADWEdt.left + 50;
-	rcADWEdt.bottom = rcADWStc.top + 20;
-	CRichEditCtrl* AdwEdtCtrl = (CRichEditCtrl*)GetDlgItem(IDC_MN_ADW_EDT);
-	if (AdwEdtCtrl) {
-		if (AdwEdtCtrl->m_hWnd) {
-			AdwEdtCtrl->MoveWindow(rcADWEdt);
-			AdwEdtCtrl->SetEventMask(AdwEdtCtrl->GetEventMask() |
-				ENM_CHANGE);
-		}
-
-		//AdwEdtCtrl->ShowWindow(SW_HIDE);
-	}
-
-	CRect rcADWNTSEdt;
-	rcADWNTSEdt.top = rcADWEdt.top;
-	rcADWNTSEdt.left = rcADWEdt.right;
-	rcADWNTSEdt.right = rcADWNTSEdt.left + 100;
-	rcADWNTSEdt.bottom = rcADWNTSEdt.top + 40;
-	pWnd = GetDlgItem(IDC_MN_ADWNOTES_STC);
-	if (pWnd) {
-		if (pWnd->m_hWnd) {
-			pWnd->MoveWindow(rcADWNTSEdt);
-		}
-
-		//pWnd->ShowWindow(SW_HIDE);
-	}	
-
-	// 设置高度
-	CRect rcADHStc;
-	rcADHStc.top = rcADWStc.bottom+15;
-	rcADHStc.left = rcADWStc.left;
-	rcADHStc.right = rcADWStc.right;
-	rcADHStc.bottom = rcADHStc.top+25;
-	pWnd = GetDlgItem(IDC_MN_ADH_STC);
-	if (pWnd) {
-		if (pWnd->m_hWnd) {
-			pWnd->MoveWindow(rcADHStc);
-		}
-
-		//pWnd->ShowWindow(SW_HIDE);
-	}
-
-	CRect rcADHEdt;
-	rcADHEdt.top = rcADHStc.top;
-	rcADHEdt.left = rcADHStc.right;
-	rcADHEdt.right = rcADHEdt.left + 50;
-	rcADHEdt.bottom = rcADHStc.bottom;
-	pWnd = GetDlgItem(IDC_MN_ADH_EDT);
-	if (pWnd) {
-		if (pWnd->m_hWnd) {
-			pWnd->MoveWindow(rcADHEdt);
-		}
-
-		//pWnd->ShowWindow(SW_HIDE);
-	}
-
-	CRect rcADHNTSEdt;
-	rcADHNTSEdt.top = rcADHStc.top;
-	rcADHNTSEdt.left = rcADHEdt.right;
-	rcADHNTSEdt.right = rcADHNTSEdt.left + 100;
-	rcADHNTSEdt.bottom = rcADHStc.top+40;
-	pWnd = GetDlgItem(IDC_MN_ADHNOTES_STC);
-	if (pWnd) {
-		if (pWnd->m_hWnd) {
-			pWnd->MoveWindow(rcADHNTSEdt);
-		}
-
-		//pWnd->ShowWindow(SW_HIDE);
-	}
-
 
 	//窗口显示模式 
 	CRect rcVMTSTC;
-	rcVMTSTC.top	= rcADHStc.bottom+25;
-	rcVMTSTC.left	= rcADHStc.left;
-	rcVMTSTC.right	= rcADHStc.right;
+	rcVMTSTC.top	= rcSeekBTN.bottom+10;
+	rcVMTSTC.left	= rcSeekStc.left;
+	rcVMTSTC.right	= rcSeekStc.right;
 	rcVMTSTC.bottom	= rcVMTSTC.top+25;
 	pWnd = GetDlgItem(IDC_MN_VMTYP_STC);
 	if (pWnd){
@@ -1396,8 +1260,6 @@ void CHYFontSmartShaperView::SetLayout()
 		if (pWnd->m_hWnd){
 			pWnd->MoveWindow(rcVMTCMB);		
 		}
-
-		//pWnd->ShowWindow(SW_HIDE);
 	}
 
 	CRect rcCVTSBtn;
@@ -1742,7 +1604,7 @@ void  CHYFontSmartShaperView::Smooth(CHYGlyph& inglyph, CHYGlyph& Outglyph)
 	Outglyph.CountBoundBox();
 	Outglyph.advanceHeight = inglyph.advanceHeight;
 	Outglyph.advanceWidth = inglyph.advanceWidth;
-	Outglyph.glyfType = inglyph.glyfType;
+	Outglyph.sContourNums = inglyph.sContourNums;
 
 	int iTmp = 0;
 
@@ -1939,7 +1801,7 @@ void CHYFontSmartShaperView::OTF2TTF(CHYGlyph& otfGryph,CHYGlyph& ttfGryph)
 		
 	}
 
-	ttfGryph.glyfType = GLYF_TYPE_SIMPLE;
+	ttfGryph.sContourNums = (short)ttfGryph.vtContour.size();
 	ttfGryph.fontFlag = FONTTYPE_TTF;
 
 }	// end of BOOL CHYFontSmartShaperView::OTF2TTF()
@@ -2678,22 +2540,6 @@ stdFile.Close();
 
 }	// end of void CHYFontSmartShaperView::OnMnExptname()
 
-void CHYFontSmartShaperView::OnEnChangeMnAdwEdt()
-{
-	if (!::XSysproxy().m_tagOpeionPrm.bsetADW) {
-		AfxMessageBox("如果要调整中文字宽，需要在设置中勾选自定义宽度");
-	}
-
-}	// end of void CHYFontSmartShaperView::OnEnChangeMnAdwEdt()
-
-void CHYFontSmartShaperView::OnEnChangeMnAdhEdt()
-{
-	if (!::XSysproxy().m_tagOpeionPrm.bsetADH) {
-		AfxMessageBox("如果要调整中文字高，需要在设置中勾选自定义高度");
-	}
-
-}	// end of void CHYFontSmartShaperView::OnEnChangeMnAdhEdt()
-
 void CHYFontSmartShaperView::OnMnCmptxt()
 {
 	CTXTCmpDlg dlg;
@@ -2930,6 +2776,7 @@ void CHYFontSmartShaperView::OnG3fxMn()
 	// 解析MAXP表
 	if (fntCodec.Decodemaxp() != HY_NOERROR){
 		AfxMessageBox("原始文件maxp解析失败!");
+
 		return;
 	}
 	// 解析local表
@@ -2968,3 +2815,42 @@ void CHYFontSmartShaperView::OnG3fxMn()
 		AfxMessageBox("处理失败");
 
 }	// end of void CHYFontSmartShaperView::OnG3fxMn()
+
+void CHYFontSmartShaperView::OnMnChkcharset()
+{
+	CCharsetCheckDlg dlg;
+	dlg.DoModal();
+
+}	// end of void CHYFontSmartShaperView::OnMnChkcharset()
+
+// 导出psname文件
+void CHYFontSmartShaperView::OnMnExpname()
+{	
+	if (m_FontDeCodec.m_HYPost.Format.value == 3) {
+		AfxMessageBox("字库不支持提取psname文件 POST Table version == 3");
+		return;	
+	}
+
+	TCHAR szFilters[] = _T("psname文件(*.txt)|*.txt||");
+	CFileDialog  saveFileDlg(FALSE, _T(""), _T(""), OFN_LONGNAMES, szFilters);
+	if (saveFileDlg.DoModal() != IDOK) return;
+
+	CString strName = saveFileDlg.GetPathName();
+	FILE*  fwt = fopen(string(strName).c_str(),"w+t");
+	if (fwt == NULL) {
+		AfxMessageBox("psname文件写入错误", MB_OK|MB_ICONSTOP);
+		return;
+	}
+
+	string strline;
+	for (int i = 0; i < m_FontDeCodec.m_HYMaxp.numGlyphs; i++){
+		strline = m_FontDeCodec.m_vtHYGlyphs[i].strPostName + "\n";
+		fwrite(strline.c_str(), 1, strline.length(), fwt);
+	}
+	
+	fflush(fwt);
+	fclose(fwt);
+
+	AfxMessageBox("psname文件写入完成");
+
+}	// end of void CHYFontSmartShaperView::OnMnExpname()

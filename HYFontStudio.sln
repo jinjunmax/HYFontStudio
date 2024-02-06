@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27130.2024
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.34024.191
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HYFontSmartShaper", "HYFontSmartShaper\HYFontSmartShaper.vcxproj", "{0A1651B4-EF3A-4153-9BDD-490174038E09}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -30,8 +30,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HYImageFontBuilder", "HYIma
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HYFontVerify", "HYFontVerify\HYFontVerify.vcxproj", "{E7F3830E-43AB-4788-9AE0-C7F70A8A1E8C}"
-EndProject
-Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "HYSetup", "HYSetup\HYSetup.vdproj", "{CD43E2E1-A229-481A-B7AD-686EE15B5B47}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -99,16 +97,12 @@ Global
 		{E7F3830E-43AB-4788-9AE0-C7F70A8A1E8C}.Release|Win32.Build.0 = Release|Win32
 		{E7F3830E-43AB-4788-9AE0-C7F70A8A1E8C}.Release|x64.ActiveCfg = Release|x64
 		{E7F3830E-43AB-4788-9AE0-C7F70A8A1E8C}.Release|x64.Build.0 = Release|x64
-		{CD43E2E1-A229-481A-B7AD-686EE15B5B47}.Debug|Win32.ActiveCfg = Debug
-		{CD43E2E1-A229-481A-B7AD-686EE15B5B47}.Debug|x64.ActiveCfg = Debug
-		{CD43E2E1-A229-481A-B7AD-686EE15B5B47}.Release|Win32.ActiveCfg = Release
-		{CD43E2E1-A229-481A-B7AD-686EE15B5B47}.Release|x64.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {86702A17-EC30-4C7D-A02B-56E151E8CE51}
 		VisualSVNWorkingCopyRoot = .
+		SolutionGuid = {86702A17-EC30-4C7D-A02B-56E151E8CE51}
 	EndGlobalSection
 EndGlobal

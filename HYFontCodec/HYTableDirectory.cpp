@@ -57,5 +57,15 @@ namespace HYFONTCODEC
 		return -1;
 
 	}	// end of CHYTableEntry& CHYTableDirectory::FindTableEntry()
+
+	void CHYTableDirectory::GetTableFlags(std::vector<unsigned long>& vtFlag)
+	{
+		vtFlag.clear();
+		for (int i = 0; i < vtTableEntry.size(); i++)
+		{
+			vtFlag.push_back(vtTableEntry[i].tag);
+		}
+
+	}	// end of int CHYTableDirectory::GetTableFlags()
 }
 

@@ -17,7 +17,7 @@ namespace HYFONTCODEC
 	int CHYFontUpdate::Update_glyf(char* pFontFile, std::vector<unsigned long> vtFlag)
 	{		
 		int iRtn = CreateFile(pFontFile);
-		if (iRtn != HY_NOERROR)  return false;
+		if (iRtn != HY_NOERROR)  return iRtn;
 		m_iFontType = FONTTYPE_TTF;
 
 		MakeTableDirectory(vtFlag);
@@ -67,9 +67,8 @@ namespace HYFONTCODEC
 		EncodeTableDirectory();
 		CloseFile();
 
-		return true;
+		return HY_NOERROR;
 
 	}	// end of Update_glyf()
-
 
 }

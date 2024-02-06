@@ -808,3 +808,42 @@ void  HY_BrodMessage(UINT Msg, WPARAM wParam,LPARAM lParam)
 	PostMessage(HWND_BROADCAST, Msg, wParam, lParam);
 
 }	// end of void  HY_BrodMessage()
+
+bool HY_Iszh(unsigned long uni)
+{
+	//  中日韩汉字部首补充
+	if (uni >= 0x2E80 && uni <= 0x2EFF) return true;
+	//	康熙部首
+	if (uni >= 0x2F00 && uni <= 0x2FDF) return true;
+	//	中日韩笔画
+	if (uni >= 0x31C0 && uni <= 0x31EF) return true;
+	// 中日韩统一表意文字扩展区A
+	if (uni >= 0x3400 && uni <= 0x4DBF) return true;
+	//	中日韩统一表意文字
+	if (uni >= 0x4E00 && uni <= 0x9FFF) return true;
+	//	中日韩兼容表意文字
+	if (uni >= 0xF900 && uni <= 0xFAFF) return true;
+	// 中日韩统一表意文字扩展B区
+	if (uni >= 0x20000 && uni <= 0x2A6DF) return true;
+	// 中日韩统一表意文字扩展C区
+	if (uni >= 0x2A700 && uni <= 0x2B73F) return true;
+	// 中日韩统一表意文字扩展D区
+	if (uni >= 0x2B740 && uni <= 0x2B81F) return true;
+	// 中日韩统一表意文字扩展E区
+	if (uni >= 0x2B820 && uni <= 0x2CEAF) return true;
+	// 中日韩统一表意文字扩展F区
+	if (uni >= 0x2CEB0 && uni <= 0x2EBEF) return true;
+	//中日韩统一表意文字扩展I区
+	if (uni >= 0x2EBF0 && uni <= 0x2EE5D) return true;
+	// 中日韩兼容表意文字增补
+	if (uni >= 0x2F800 && uni <= 0x2FA1F) return true;
+	// 中日韩统一表意文字扩展G区
+	if (uni >= 0x30000 && uni <= 0x3134F) return true;
+	// 中日韩统一表意文字扩展H区
+	if (uni >= 0x31350 && uni <= 0x323AF) return true;
+	// 篆书（unicode15 提案已提交未发布）
+	if (uni >= 0x38000 && uni <= 0x3AB9F) return true;
+
+	return false;
+
+}	// end of static void Iszh()

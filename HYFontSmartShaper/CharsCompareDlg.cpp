@@ -15,19 +15,19 @@ CCharsCompareDlg::CCharsCompareDlg(CWnd* pParent /*=NULL*/)
 	: CDialog(ID_CHARS_COMPARE_DLG, pParent)
 {
 
-}
+}	// end of CCharsCompareDlg::CCharsCompareDlg()
 
 CCharsCompareDlg::~CCharsCompareDlg()
 {
 
-}
+}	// end of CCharsCompareDlg::~CCharsCompareDlg()
 
 void CCharsCompareDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
 	DDX_Control(pDX, IDC_CHARS_COMPARE_LST, m_lstFnts);
-}	// end of 
 
+}	// end of void CCharsCompareDlg::DoDataExchange()
 
 BEGIN_MESSAGE_MAP(CCharsCompareDlg, CDialog)
 	ON_BN_CLICKED(IDC_CHARS_COMPARE_ADD_LST, &CCharsCompareDlg::OnBnClickedCharsCompareAddLst)

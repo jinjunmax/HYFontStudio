@@ -27,6 +27,7 @@ void CFongSVGDlg::DoDataExchange(CDataExchange* pDX)
 
 	DDX_Text(pDX, IDC_SVG_OPENFNT_EDT2, m_strFontFile);
 	DDX_Text(pDX, IDC_SVG_SAVESVG_EDT, m_strSVGFile);
+
 }	// end of void CFongSVGDlg::DoDataExchange()
 
 BEGIN_MESSAGE_MAP(CFongSVGDlg, CDialog)

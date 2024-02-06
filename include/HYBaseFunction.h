@@ -106,7 +106,8 @@ void				HY_DLL_API  HY_WriteLog(std::string SavePath, std::string& Text, bool bN
 void				HY_DLL_API	HY_4ByteAlign(FILE* pF, unsigned long length);
 void				HY_DLL_API  HY_BrodMessage(UINT Msg, WPARAM wParam, LPARAM lParam);
 
-
+// 确定这个编码是否是中文
+bool				HY_DLL_API	HY_Iszh(unsigned long uni);
 
 
 #endif 

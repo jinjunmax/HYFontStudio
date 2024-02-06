@@ -55,14 +55,15 @@ namespace HYIMGTOFONT
 
 	BOOL CHYImageToFont::ImageToGlyph(string strImage, HYFONTCODEC::CHYFontCodec& FntEncode)
 	{		
-		CxImage* pImage = SquareImage(strImage.data());
-		if (pImage)
+		IplImage* clrImage = cvLoadImage(strImage.c_str(), CV_LOAD_IMAGE_GRAYSCALE);
+		if (NULL == clrImage)	FALSE;		
+		if (clrImage)
 		{
 			CHYGlyph		glyph;
-			int iImgWD = pImage->GetWidth();
-			int iImgHT = pImage->GetHeight();
+			int iImgWD = clrImage->widthStep;
+			int iImgHT = clrImage->height;
 
-			char* pMtrxData = GetImageMtrxData(pImage);
+			char* pMtrxData = clrImage->imageData;
 			int iMonoImgDataLen = iImgWD*iImgHT;
 			char* pMonoImgData = new char[iMonoImgDataLen];
 			ZeroMemory(pMonoImgData,iMonoImgDataLen);
@@ -2547,7 +2548,7 @@ namespace HYIMGTOFONT
 
 	}  // end of void CHYImageToFont::FindBmpFile()
 
-
+	/*
 	char* CHYImageToFont::GetImageMtrxData(CxImage* pImg)
 	{
 		if (pImg==NULL) return NULL;
@@ -2577,7 +2578,8 @@ namespace HYIMGTOFONT
 		return pMtrxData;
 
 	}	// end of void	CHYImageToFont::GetImageMtrxData()
-
+	*/
+	/*
 	CxImage*	CHYImageToFont::SquareImage(const char* ImgFile)
 	{		
 		CxImage Img;
@@ -2618,6 +2620,7 @@ namespace HYIMGTOFONT
 		return Square;
 
 	}	// end of CxImage*	CHYImageToFont::SquareImage()
+	*/
 
 	void CHYImageToFont::AdjustMetrics(int BsLine, float fEMScale, HYFONTCODEC::CHYGlyph & Glyph)
 	{

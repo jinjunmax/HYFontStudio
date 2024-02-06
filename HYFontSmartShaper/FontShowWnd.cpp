@@ -531,17 +531,14 @@ void CFontShowWnd::CountTTFInfo(CHYGlyph*								pGlyph,
 	float		fIndent=(m_rcBgRect.Width-pGlyph->advanceWidth*m_fEMScale)/2.0f;
 
 	// 点
-	if (pGlyph->glyfType == GLYF_TYPE_SIMPLE)
-	{
+	if (pGlyph->sContourNums >0){
 		PointF		pfAdapter;
 		size_t		szCntunNum = pGlyph->vtContour.size();		
-		for (size_t i=0; i<szCntunNum; i++)
-		{
+		for (size_t i=0; i<szCntunNum; i++)	{
 			CHYContour&				hyCntur = pGlyph->vtContour[i];
 			size_t					szPtNum = hyCntur.vtHYPoints.size();
 
-			for(size_t j=0; j<szPtNum; j++)
-			{
+			for(size_t j=0; j<szPtNum; j++)	{
 				// 转换到windows坐标系左上角
 				CHYPoint& htPt = hyCntur.vtHYPoints[j];
 
@@ -562,16 +559,14 @@ void CFontShowWnd::CountTTFInfo(CHYGlyph*								pGlyph,
 			std::vector<PointF>		vtTmpPT;
 			std::vector<int>		vtTmpFlag;
 
-			for(size_t j=0; j<szPtNum; j++)
-			{	
+			for(size_t j=0; j<szPtNum; j++)	{	
 				vtTmpPT.push_back(vtDrawPts[iPtIndex]);
 				vtTmpFlag.push_back(vtDrawPtFlag[iPtIndex]);
 
 				iPtIndex++;
 			}
 
-			if (vtTmpFlag.size()>0)
-			{
+			if (vtTmpFlag.size()>0)	{
 				if (vtTmpFlag[0] == POINT_FLG_CONTROL)
 					TrimPointlist(vtTmpPT, vtTmpFlag);
 			}
@@ -581,8 +576,7 @@ void CFontShowWnd::CountTTFInfo(CHYGlyph*								pGlyph,
 		}
 	}
 
-	if (pGlyph->glyfType == GLYF_TYPE_COMPOSITE)
-	{
+	if (pGlyph->sContourNums < 0){
 		// 针对组合轮廓转换
 		SHORT sValue = 0;
 		float fXScale = 1.0f, fYScale = 1.0f, fValue = 0.0f, fFraction = 0.0f;			
@@ -598,13 +592,11 @@ void CFontShowWnd::CountTTFInfo(CHYGlyph*								pGlyph,
 			USHORT sGlyphIndex  = hyCmpst.glyphIndex;
 			if (hyCmpst.flags&GLYF_CMPST_ARGS_ARE_XY_VALUES)
 			{
-				if (hyCmpst.flags&GLYF_CMPST_WE_HAVE_A_SCALE)
-				{
+				if (hyCmpst.flags&GLYF_CMPST_WE_HAVE_A_SCALE){
 					fYScale = fXScale = HY_F2DOT14_to_float(hyCmpst.scale);
 				}
 
-				if (hyCmpst.flags&GLYF_CMPST_WE_HAVE_AN_X_AND_Y_SCALE)
-				{					
+				if (hyCmpst.flags&GLYF_CMPST_WE_HAVE_AN_X_AND_Y_SCALE){					
 					fXScale = HY_F2DOT14_to_float(hyCmpst.vctr.xscale);
 					fYScale = HY_F2DOT14_to_float(hyCmpst.vctr.yscale);
 				}
@@ -617,20 +609,17 @@ void CFontShowWnd::CountTTFInfo(CHYGlyph*								pGlyph,
 				CHYGlyph&	cmpGlyph = vtGryph[sGlyphIndex];					
 
 				size_t		szCntunNum = cmpGlyph.vtContour.size();						
-				for (size_t i=0; i<szCntunNum; i++)
-				{
+				for (size_t i=0; i<szCntunNum; i++)	{
 					CHYContour&				hyCntur = cmpGlyph.vtContour[i];
 					size_t					szPtNum = hyCntur.vtHYPoints.size();
 					std::vector<PointF>		vtTmpPT;
 					std::vector<int>		vtTmpFlag;
 
 					Gdiplus::GraphicsPath	cnturPath;
-					for(size_t x=0; x<szPtNum; x++)
-					{							
+					for(size_t x=0; x<szPtNum; x++)	{							
 						CHYPoint& htPt = hyCntur.vtHYPoints[x];
 
-						if (hyCmpst.flags&GLYF_CMPST_ARGS_ARE_XY_VALUES)
-						{							
+						if (hyCmpst.flags&GLYF_CMPST_ARGS_ARE_XY_VALUES){							
 							pfAdapter.X = htPt.x*fXScale;
 							pfAdapter.Y = htPt.y*fYScale;
 							
@@ -638,8 +627,7 @@ void CFontShowWnd::CountTTFInfo(CHYGlyph*								pGlyph,
 							pfAdapter.X = (float)pfAdapter.X+hyCmpst.args[0];
 							pfAdapter.Y = (float)pfAdapter.Y+hyCmpst.args[1];														
 						}
-						else 
-						{
+						else {
 							// 先缩放
 							pfAdapter.X = htPt.x*fXScale;
 							pfAdapter.Y = htPt.y*fYScale;
@@ -658,8 +646,7 @@ void CFontShowWnd::CountTTFInfo(CHYGlyph*								pGlyph,
 						vtTmpFlag.push_back(htPt.flag);
 					}
 
-					if (vtTmpFlag.size()>0)
-					{
+					if (vtTmpFlag.size()>0){
 						if (vtTmpFlag[0] == POINT_FLG_CONTROL)
 							TrimPointlist(vtTmpPT, vtTmpFlag);
 
@@ -996,35 +983,29 @@ BOOL CFontShowWnd::DrawTTFPoint(Graphics*				pbmpGraphics,
 
 		RectF		rcPt;
 
-		if (pGlyph->glyfType == GLYF_TYPE_SIMPLE)
-		{
+		if (pGlyph->sContourNums >0){
 			size_t ptNums = vtDrawPts.size();
-			for (size_t i=0; i<ptNums; i++)
-			{
+			for (size_t i=0; i<ptNums; i++)	{
 				rcPt.X = vtDrawPts[i].X-2.0f>0 ? vtDrawPts[i].X-2.0f:0;
 				rcPt.Y = vtDrawPts[i].Y-2.0f>0 ? vtDrawPts[i].Y-2.0f:0;
 				rcPt.Width = 4.0f;
 				rcPt.Height =4.0f;
 
-				if (vtDrawPtFlag[i]==POINT_FLG_ANCHOR)
-				{					
+				if (vtDrawPtFlag[i]==POINT_FLG_ANCHOR){					
 					pbmpGraphics->DrawRectangle(&penOnLinePt, rcPt);
 				}
 
-				if (vtDrawPtFlag[i]==POINT_FLG_CONTROL)
-				{
+				if (vtDrawPtFlag[i]==POINT_FLG_CONTROL){
 					pbmpGraphics->DrawLine(&penOffLinePt,rcPt.X,rcPt.Y,rcPt.X+rcPt.Width,rcPt.Y+rcPt.Height);
 					pbmpGraphics->DrawLine(&penOffLinePt,rcPt.X,rcPt.Y+rcPt.Height,rcPt.X+rcPt.Width,rcPt.Y);
 				}	
 			}
 		}
 
-		if (pGlyph->glyfType == GLYF_TYPE_COMPOSITE)
-		{
+		if (pGlyph->sContourNums < 0){
 			Pen			penBound(Color(100,125,125,125),1.0f);
 
-			for (size_t i=0; i<m_vtCmpsPath.size();i++)
-			{
+			for (size_t i=0; i<m_vtCmpsPath.size();i++)	{
 				RectF rcBountd;
 				m_vtCmpsPath[i]->GetBounds(&rcBountd);
 				pbmpGraphics->DrawRectangle(&penBound,rcBountd);
@@ -1123,12 +1104,10 @@ BOOL CFontShowWnd::DrawTTFPointNo(Graphics*								pbmpGraphics,
 		{
 			float			fIndent=(m_rcBgRect.Width-pGlyph->advanceWidth*m_fEMScale)/2.0f;
 			PointF			pfAdapter;
-			if (pGlyph->glyfType == GLYF_TYPE_SIMPLE)
-			{			
+			if (pGlyph->sContourNums > 0){			
 				size_t		ptNums = vtDrawPts.size();
 				int			iPtIndex = 0;
-				for (size_t i=0; i<ptNums; i++)
-				{						
+				for (size_t i=0; i<ptNums; i++){						
 					pfAdapter = vtDrawPts[i];
 					pfAdapter.X += 5;
 					pfAdapter.Y -= 5;
@@ -1139,10 +1118,9 @@ BOOL CFontShowWnd::DrawTTFPointNo(Graphics*								pbmpGraphics,
 				}
 			}
 
-			if (pGlyph->glyfType == GLYF_TYPE_COMPOSITE)
+			if (pGlyph->sContourNums<0)
 			{
-				for (size_t i=0; i<vtCmpsPath.size();i++)
-				{
+				for (size_t i=0; i<vtCmpsPath.size();i++){
 					RectF rcBountd;
 					vtCmpsPath[i]->GetBounds(&rcBountd);
 					pfAdapter.X = rcBountd.X+20;
@@ -1304,15 +1282,12 @@ BOOL CFontShowWnd::DrawPath(Graphics* pbmpGraphics,Color& clrPth, CHYGlyph*	pGly
 BOOL CFontShowWnd::DrawTTFPath(Graphics* pbmpGraphics,Color& clrPth, CHYGlyph*	pGlyph,Gdiplus::GraphicsPath& GlyphPath,std::vector<Gdiplus::GraphicsPath*>&  vtCmpsPath)
 {
 	Pen		pnBk(clrPth,1);
-	if (pGlyph->glyfType == GLYF_TYPE_SIMPLE)
-	{
+	if (pGlyph->sContourNums > 0){
 		pbmpGraphics->DrawPath(&pnBk,&GlyphPath);
 	}
 
-	if (pGlyph->glyfType == GLYF_TYPE_COMPOSITE)
-	{
-		for (size_t i=0; i<vtCmpsPath.size();i++)
-		{
+	if (pGlyph->sContourNums < 0){
+		for (size_t i=0; i<vtCmpsPath.size();i++){
 			pbmpGraphics->DrawPath(&pnBk,vtCmpsPath[i]);
 		}
 	}
@@ -1378,15 +1353,12 @@ BOOL CFontShowWnd::FillPath(Graphics* pbmpGraphics,Color& clrFll, CHYGlyph*	pGly
 BOOL CFontShowWnd::FillTTFPath(Graphics* pbmpGraphics,Color& clrFll, CHYGlyph*	pGlyph,Gdiplus::GraphicsPath& GlyphPath,std::vector<Gdiplus::GraphicsPath*>&  vtCmpsPath)
 {
 	SolidBrush			SBrsh(clrFll);
-	if (pGlyph->glyfType == GLYF_TYPE_SIMPLE)
-	{			
+	if (pGlyph->sContourNums > 0){			
 		pbmpGraphics->FillPath(&SBrsh,&GlyphPath);
 	}
 
-	if (pGlyph->glyfType == GLYF_TYPE_COMPOSITE)
-	{
-		for (size_t i=0; i<vtCmpsPath.size();i++)
-		{
+	if (pGlyph->sContourNums <0){
+		for (size_t i=0; i<vtCmpsPath.size();i++){
 			pbmpGraphics->FillPath(&SBrsh,vtCmpsPath[i]);
 		}
 	}

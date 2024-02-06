@@ -20,14 +20,13 @@ CFontSetupOptionPage::CFontSetupOptionPage()
 	, m_strVersion(_T(""))
 	, m_bRename(FALSE)	
 	, m_bCustomCmap(TRUE)
-	, m_bSetAdw(FALSE)
-	, m_bSetAdh(FALSE)
+	, m_bSetAdw(FALSE)	
 	, m_bLayout(FALSE)
 	, m_bCorrect(FALSE)
 	, m_bHanyi(TRUE)	
 	, m_bOldStandard(FALSE)
 	, m_bDelOldStnd(FALSE)
-	, m_iSetAdh(0)
+	, m_iSetAdw(1000)
 {
 	m_bReVert = TRUE;
 	m_bRePsName = FALSE;
@@ -54,27 +53,27 @@ void CFontSetupOptionPage::DoDataExchange(CDataExchange* pDX)
 	DDX_Check(pDX, IDC_PTN_RMRPPNT_CHK, m_brmPoint);
 	DDX_Check(pDX, IDC_PTN_RENAME_CHK, m_bRename);
 	DDX_Check(pDX, IDC_PTN_CMP_CHK, m_bCustomCmap);
-	DDX_Check(pDX, IDC_PTN_SETADW_CHK, m_bSetAdw);
-	DDX_Check(pDX, IDC_PTN_SETADH_CHK, m_bSetAdh);
+	DDX_Check(pDX, IDC_PTN_SETADW_CHK, m_bSetAdw);	
 	DDX_Text(pDX, IDC_PTN_CHS_EDT, m_strCHSFaimlyName);
 	DDX_Text(pDX, IDC_PTN_CHSSUB_EDT, m_strCHSSubName);
 	DDX_Text(pDX, IDC_PTN_ENG_EDT, m_strENGFamilyName);
 	DDX_Text(pDX, IDC_PTN_ENGSUB_EDT, m_strENGSubName);
 	DDX_Text(pDX, IDC_PTN_VER_EDT, m_strVersion);
+	DDX_Text(pDX, IDC_PTN_SETADW_EDT, m_iSetAdw);
 	DDX_Check(pDX, IDC_PTN_LYT_CHK, m_bLayout);
 	DDX_Check(pDX, IDC_PTN_CORRECT_CHK, m_bCorrect);
 	DDX_Check(pDX, IDC_PTN_HYSND_CHK, m_bHanyi);
 	DDX_Check(pDX, IDC_PTN_KANGXI_CHK, m_bKangxi);
 	DDX_Check(pDX, IDC_PTN_OLDSTND_CHK, m_bOldStandard);
 	DDX_Check(pDX, IDC_PTN_DELOLD_CHK, m_bDelOldStnd);
-	DDX_Text(pDX, IDC_PTN_ADH_EDT, m_iSetAdh);
+
 }	// end of void CFontSetupOptionPage::DoDataExchange()
 
 BEGIN_MESSAGE_MAP(CFontSetupOptionPage, CPropertyPage)
 	ON_WM_DESTROY()	
-	ON_BN_CLICKED(IDC_PTN_RENAME_CHK, &CFontSetupOptionPage::OnBnClickedPtnRenameChk)	
-	ON_BN_CLICKED(IDC_PTN_SETADH_CHK, &CFontSetupOptionPage::OnBnClickedPtnSetadhChk)
+	ON_BN_CLICKED(IDC_PTN_RENAME_CHK, &CFontSetupOptionPage::OnBnClickedPtnRenameChk)		
 	ON_BN_CLICKED(IDC_PTN_OLDSTND_CHK, &CFontSetupOptionPage::OnBnClickedPtnOldstndChk)
+	ON_BN_CLICKED(IDC_PTN_SETADW_CHK, &CFontSetupOptionPage::OnBnClickedPtnSetadwChk)
 END_MESSAGE_MAP()
 
 void	CFontSetupOptionPage::Init()
@@ -85,20 +84,17 @@ void	CFontSetupOptionPage::Init()
 	m_bYiTiZi	=	::XSysproxy().m_tagOpeionPrm.bYitizi;	
 	m_bRename	=	::XSysproxy().m_tagOpeionPrm.bFontname;	
 	m_bCustomCmap = ::XSysproxy().m_tagOpeionPrm.bCmplCMAP;
-	m_bSetAdw	= ::XSysproxy().m_tagOpeionPrm.bsetADW;
-	m_bSetAdh	= ::XSysproxy().m_tagOpeionPrm.bsetADH;
-	m_bOldStandard = ::XSysproxy().m_tagOpeionPrm.bOldStandard;
-	m_bDelOldStnd = ::XSysproxy().m_tagOpeionPrm.bDelOld;
-
-	
-	if (m_bSetAdh){
-		((CEdit*)GetDlgItem(IDC_PTN_ADH_EDT))->SetReadOnly(FALSE);
+	m_bSetAdw	= ::XSysproxy().m_tagOpeionPrm.bsetADW;	
+	if (m_bSetAdw) {
+		GetDlgItem(IDC_PTN_SETADW_EDT)->EnableWindow();	
 	}
-	else{
-		((CEdit*)GetDlgItem(IDC_PTN_ADH_EDT))->SetReadOnly(TRUE);
-	}	
+	else {
+		GetDlgItem(IDC_PTN_SETADW_EDT)->EnableWindow(FALSE);
+	}
 
-	m_iSetAdh = ::XSysproxy().m_tagOpeionPrm.usSetADH;	
+	m_iSetAdw = ::XSysproxy().m_tagOpeionPrm.usSetADW;
+	m_bOldStandard = ::XSysproxy().m_tagOpeionPrm.bOldStandard;
+	m_bDelOldStnd = ::XSysproxy().m_tagOpeionPrm.bDelOld;	
 	m_bLayout = ::XSysproxy().m_tagOpeionPrm.bCmplLayout;
 	m_bCorrect = ::XSysproxy().m_tagOpeionPrm.bCnturCorrect;
 	m_bHanyi = ::XSysproxy().m_tagOpeionPrm.bHanyi;
@@ -150,12 +146,11 @@ BOOL	CFontSetupOptionPage::Save()
 		::XSysproxy().m_tagOpeionPrm.bFontname = m_bRename;		
 		::XSysproxy().m_tagOpeionPrm.bCmplCMAP = m_bCustomCmap;
 		::XSysproxy().m_tagOpeionPrm.bsetADW = m_bSetAdw;
-		::XSysproxy().m_tagOpeionPrm.bsetADH = m_bSetAdh;
+		::XSysproxy().m_tagOpeionPrm.usSetADW = m_iSetAdw;
 		::XSysproxy().m_tagOpeionPrm.bCmplLayout = m_bLayout;
 		::XSysproxy().m_tagOpeionPrm.bCnturCorrect = m_bCorrect;	
 		::XSysproxy().m_tagOpeionPrm.bHanyi = m_bHanyi;
-		::XSysproxy().m_tagOpeionPrm.bKangXi = m_bKangxi;
-		::XSysproxy().m_tagOpeionPrm.usSetADH = m_iSetAdh;
+		::XSysproxy().m_tagOpeionPrm.bKangXi = m_bKangxi;		
 		::XSysproxy().m_tagOpeionPrm.bOldStandard = m_bOldStandard;
 		::XSysproxy().m_tagOpeionPrm.bDelOld = m_bDelOldStnd;
 
@@ -220,18 +215,16 @@ void CFontSetupOptionPage::OnBnClickedPtnRenameChk()
 
 } // end of void CFontSetupOptionPage::OnBnClickedPtnRenameChk()
 
-void CFontSetupOptionPage::OnBnClickedPtnSetadhChk()
+void CFontSetupOptionPage::OnBnClickedPtnSetadwChk()
 {
 	UpdateData(TRUE);
-
-	if (m_bSetAdh) {
-		((CEdit*)GetDlgItem(IDC_PTN_ADH_EDT))->SetReadOnly(FALSE);
+	if (m_bSetAdw) {
+		GetDlgItem(IDC_PTN_SETADW_EDT)->EnableWindow();
 	}
 	else {
-		((CEdit*)GetDlgItem(IDC_PTN_ADH_EDT))->SetReadOnly(TRUE);
+		GetDlgItem(IDC_PTN_SETADW_EDT)->EnableWindow(FALSE);
 	}
-	
-}	// end of void CFontSetupOptionPage::OnBnClickedPtnSetadhChk()
+}	// end of void CFontSetupOptionPage::OnBnClickedPtnSetadwChk()
 
 void CFontSetupOptionPage::OnBnClickedPtnOldstndChk()
 {

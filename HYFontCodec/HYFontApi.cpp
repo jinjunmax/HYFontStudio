@@ -5,10 +5,8 @@
 #include "HYBaseFunction.h"
 #include "WoffCodec.h"
 #include "HYFontApiPrivate.h"
-#include "boost/algorithm/string.hpp"
 #include "HYZIPCodec.h"
 
-using namespace  boost::algorithm;
 using namespace HYFONTCODEC;
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 

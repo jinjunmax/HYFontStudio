@@ -43,7 +43,12 @@ using namespace Gdiplus;
 #include <vector>
 using namespace std;
 
-#include "ximage.h"
+#include "opencv2/core/core.hpp"  
+#include "opencv2/core.hpp"  
+#include "opencv2/highgui/highgui.hpp"  
+#include "opencv2/opencv.hpp"
+#include "opencv2/imgproc/imgproc.hpp"
+using namespace cv;
 
 #include "HY_Global.h"
 #include "HYBaseFunction.h"
@@ -51,3 +56,5 @@ using namespace std;
 #include "HYFontCodecHead.h"
 
 using namespace HYFONTCODEC;
+
+

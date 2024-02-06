@@ -56,10 +56,9 @@ typedef int BOOL;
 #define HY_OPTION_STRUCT
 typedef struct _HY_OPTION_PRM
 {
-	BOOL 			bCmplVert;		// 是否重新编译竖排表
-	BOOL			bsetADH;		// 调整中文竖排高度
-	unsigned short	usSetADH;		// 高度值	
-	BOOL			bsetADW;		// 调整中文竖排宽度
+	BOOL 			bCmplVert;		// 是否重新编译竖排表	
+	BOOL			bsetADW;		// 调整中文横排宽度
+	unsigned short	usSetADW;		// 宽度值	
 	BOOL			bRePsName;		// 重新命名中文字形的name
 	BOOL			bReSortUni;		// 字库按unicode升序排序
 	BOOL			bCmplCMAP;		// 是否重新编译CMAP
@@ -295,12 +294,6 @@ typedef struct _HY_IMG_OPTIM
 #define CMAP_ENCODE_FT_12							12
 #define CMAP_ENCODE_FT_13							13
 #define CMAP_ENCODE_FT_14							14
-
-//////////////////////////////////////////////////
-//GLYF TABLE FLAG
-#define	GLYF_TYPE_UNKNOW							0
-#define	GLYF_TYPE_SIMPLE							1
-#define	GLYF_TYPE_COMPOSITE							2
 
 //////////////////////////////////////////////////
 //GLYF TABLE FLAG

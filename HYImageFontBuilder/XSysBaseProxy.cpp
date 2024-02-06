@@ -1,8 +1,8 @@
 #include "StdAfx.h"
 #include "XSysBaseProxy.h"
 #include "HYGsub.h"
-#include "boost/algorithm/string.hpp"
-using namespace  boost::algorithm;
+//#include "boost/algorithm/string.hpp"
+//using namespace  boost::algorithm;
 
 CXSysBaseProxy::CXSysBaseProxy(void)
 {

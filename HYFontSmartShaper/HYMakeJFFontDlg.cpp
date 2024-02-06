@@ -210,13 +210,16 @@ bool CHYMakeJFFontDlg::DecodeW(CString strWFontFile, CHYFontCodec& FontWDecode)
 	if (FontWDecode.m_HYTbDirectory.FindTableEntry(HMTX_TAG) == -1)		return false;
 	FontWDecode.Decodehmtx();
 	if (FontWDecode.m_HYTbDirectory.FindTableEntry(POST_TAG) == -1)		return false;
-	FontWDecode.Decodepost();
-	if (FontWDecode.m_HYTbDirectory.FindTableEntry(VHEA_TAG) == -1)		return false;
-	FontWDecode.Decodevhea();
-	if (FontWDecode.m_HYTbDirectory.FindTableEntry(VMTX_TAG) == -1)		return false;
-	FontWDecode.Decodevmtx();
+	FontWDecode.Decodepost();	
 	if (FontWDecode.m_HYTbDirectory.FindTableEntry(NAME_TAG) == -1)		return false;
 	FontWDecode.Decodename();
+
+	if (FontWDecode.m_HYTbDirectory.FindTableEntry(VHEA_TAG) != -1) {
+		FontWDecode.Decodevhea();
+	}	
+	if (FontWDecode.m_HYTbDirectory.FindTableEntry(VMTX_TAG) != -1) {
+		FontWDecode.Decodevmtx();
+	}
 
 	// 当前字库不包括VDMX
 	if (FontWDecode.m_HYTbDirectory.FindTableEntry(VDMX_TAG) != -1) {
@@ -243,6 +246,7 @@ bool CHYMakeJFFontDlg::DecodeW(CString strWFontFile, CHYFontCodec& FontWDecode)
 
 void CHYMakeJFFontDlg::RemoveHan(CHYFontCodec& FontWDecode, std::vector<GlyfData>& vtXiWen)
 {
+#if 0
 	vtXiWen.clear();
 
 	int iTableEntryIndx = FontWDecode.m_HYTbDirectory.FindTableEntry(GLYF_TAG);
@@ -258,11 +262,16 @@ void CHYMakeJFFontDlg::RemoveHan(CHYFontCodec& FontWDecode, std::vector<GlyfData
 		bool b = false;
 		if (vtUnicode.size() == 0) b = true;
 		else {
-			if (::CheckUniRepeat(vtUnicode[0], m_vtWUni) == 0)
-				b = true;
+			for each (unsigned long ul in vtUnicode)
+			{
+				if (::CheckUniRepeat(ul, m_vtWUni) == 0) {
+					b = true;
+					break;
+				}	
+			}
 		}
 
-		// 如果glyph中的unicode编码，不在uni字表数组里就保留下来。
+		// 如果glyph中的unicode编码，不在uni数组里就保留下来并且需要过滤中文部分。
 		if (b) {
 			GlyfData glyfData;
 			if (i == 0)
@@ -320,6 +329,90 @@ void CHYMakeJFFontDlg::RemoveHan(CHYFontCodec& FontWDecode, std::vector<GlyfData
 			vtXiWen.push_back(glyfData);
 		}
 	}
+#else 
+	vtXiWen.clear();
+
+	int iTableEntryIndx = FontWDecode.m_HYTbDirectory.FindTableEntry(GLYF_TAG);
+	if (iTableEntryIndx == -1)		return;
+
+	CHYTableEntry& entry = FontWDecode.m_HYTbDirectory.vtTableEntry[iTableEntryIndx];
+	fseek(FontWDecode.m_pFontFile, entry.offset, SEEK_SET);
+
+	for (size_t i = 0; i < FontWDecode.m_HYMaxp.numGlyphs; i++) {
+		std::vector<unsigned long> vtUnicode;
+		FontWDecode.FindGryphUncidoByIndex(i, vtUnicode);
+
+		bool b = false;
+		if (vtUnicode.size() == 0) b = true;
+		else {
+			for each (unsigned long ul in vtUnicode)
+			{
+				if (!::HY_Iszh(ul)) {
+					b = true;
+				}
+			}
+		}
+		
+		if (b) {
+			GlyfData glyfData;
+			if (i == 0)
+				glyfData.vtUnicode.push_back(0xffff);
+			else
+				glyfData.vtUnicode = vtUnicode;
+
+			glyfData.pDataLen = FontWDecode.m_HYloca.vtLoca[i + 1] - FontWDecode.m_HYloca.vtLoca[i];
+			if (glyfData.pDataLen > 0) {
+				fseek(FontWDecode.m_pFontFile, entry.offset + FontWDecode.m_HYloca.vtLoca[i], SEEK_SET);
+				for (int j = 0; j < glyfData.pDataLen; j++) {
+					byte bData = 0;
+					fread(&bData, 1, 1, FontWDecode.m_pFontFile);
+					glyfData.vtData.push_back(bData);
+				}
+
+				fseek(FontWDecode.m_pFontFile, entry.offset + FontWDecode.m_HYloca.vtLoca[i], SEEK_SET);
+				// contour numbers			
+				fread(&glyfData.CnturNum, 2, 1, FontWDecode.m_pFontFile);
+				glyfData.CnturNum = hy_cdr_int16_to(glyfData.CnturNum);
+				//Minimum x for coordinate data 
+				fread(&glyfData.xMin, 2, 1, FontWDecode.m_pFontFile);
+				glyfData.xMin = hy_cdr_int16_to(glyfData.xMin);
+				//Minimum y for coordinate data 
+				fread(&glyfData.yMin, 2, 1, FontWDecode.m_pFontFile);
+				glyfData.yMin = hy_cdr_int16_to(glyfData.yMin);
+				//Maximum x for coordinate data 
+				fread(&glyfData.xMax, 2, 1, FontWDecode.m_pFontFile);
+				glyfData.xMax = hy_cdr_int16_to(glyfData.xMax);
+				//Maximum y for coordinate data 
+				fread(&glyfData.yMax, 2, 1, FontWDecode.m_pFontFile);
+				glyfData.yMax = hy_cdr_int16_to(glyfData.yMax);
+			}
+
+			glyfData.strName = FontWDecode.m_HYPost.FindNameByGID(i);
+			if (i < FontWDecode.m_HYHhea.numberOfHMetrics) {
+				glyfData.usAdvWidth = FontWDecode.m_HYHmtx.vtLonghormetric[i].advanceWidth;
+				glyfData.sLsb = FontWDecode.m_HYHmtx.vtLonghormetric[i].lsb;
+			}
+			else {
+				glyfData.usAdvWidth = FontWDecode.m_HYHmtx.vtLonghormetric[FontWDecode.m_HYHhea.numberOfHMetrics - 1].advanceWidth;
+				glyfData.sLsb = FontWDecode.m_HYHmtx.vtLeftsidebearing[i - FontWDecode.m_HYHhea.numberOfHMetrics];
+			}
+
+			if (FontWDecode.m_HYVhea.numOfLongVerMetrics > 0) {
+				if (i < FontWDecode.m_HYVhea.numOfLongVerMetrics) {
+					glyfData.usAdvHeight = FontWDecode.m_HYVmtx.vtLongVrtmetric[i].advanceHeight;
+					glyfData.sTsb = FontWDecode.m_HYVmtx.vtLongVrtmetric[i].tsb;
+				}
+				else {
+					glyfData.usAdvHeight = FontWDecode.m_HYVmtx.vtLongVrtmetric[FontWDecode.m_HYVhea.numOfLongVerMetrics - 1].advanceHeight;
+					glyfData.sTsb = FontWDecode.m_HYVmtx.vtTopsidebearing[i - FontWDecode.m_HYVhea.numOfLongVerMetrics];
+				}
+			}
+			vtXiWen.push_back(glyfData);
+		}
+	}
+
+
+#endif 
 
 }	// bool CHYMakeJFFontDlg::RemoveHan()
 
@@ -345,7 +438,7 @@ void CHYMakeJFFontDlg::MakeName(CHYName& inName, CHYName& outName, int iJFFlag)
 	std::string strJFCN = "";
 	if (iJFFlag == MAKE_J)
 	{
-		if (strSubFamileEN.back() == 'W')
+		if (strSubFamileEN.back() == 'W'|| strSubFamileEN.back() == 'U')
 		{
 			strJFEN = strSubFamileEN.substr(0, strSubFamileEN.length()-1)+_T("J");
 			strJFCN = strSubFamileEN.substr(0, strSubFamileEN.length() - 1) + _T("简");
@@ -359,7 +452,7 @@ void CHYMakeJFFontDlg::MakeName(CHYName& inName, CHYName& outName, int iJFFlag)
 	}
 	if (iJFFlag == MAKE_F)
 	{
-		if (strSubFamileEN.back() == 'W')
+		if (strSubFamileEN.back() == 'W' || strSubFamileEN.back() == 'U')
 		{
 			strJFEN = strSubFamileEN.substr(0, strSubFamileEN.length() - 1) + _T("F");
 			strJFCN = strSubFamileEN.substr(0, strSubFamileEN.length() - 1) + _T("繁");

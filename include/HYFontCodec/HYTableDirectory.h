@@ -27,7 +27,7 @@ namespace HYFONTCODEC
 
 		void		SetDefault();
 		int 		FindTableEntry(unsigned long  tag);
-
+		void  		GetTableFlags(std::vector<unsigned long>& vtFlag);
 	public:
 		HYFIXED							version;
 		unsigned short					numTables;

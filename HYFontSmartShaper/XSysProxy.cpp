@@ -630,7 +630,7 @@ void CXSysProxy::InitHeadTb(CHYFontCodec& Encode)
 void CXSysProxy::InitMaxpTb(CHYFontCodec& Encode)
 {
 	//Maxp
-	Encode.m_HYMaxp.numGlyphs = Encode.m_vtHYGlyphs.size();
+	Encode.m_HYMaxp.numGlyphs = (unsigned short)Encode.m_vtHYGlyphs.size();
 	if (Encode.m_iFontType == FONTTYPE_OTF) {
 		Encode.m_HYMaxp.version.value = 0;
 		Encode.m_HYMaxp.version.fract = 0x5000;
@@ -640,29 +640,29 @@ void CXSysProxy::InitMaxpTb(CHYFontCodec& Encode)
 		Encode.m_HYMaxp.version.fract = 0;
 	}
 	for (unsigned short i = 0; i < Encode.m_HYMaxp.numGlyphs; i++) {
-		size_t szTmpPoint = 0;
+		unsigned short szTmpPoint = 0;
 		CHYGlyph& glyph = Encode.m_vtHYGlyphs[i];
-		size_t szCntursNum = glyph.vtContour.size();
+		unsigned short szCntursNum = (unsigned short)glyph.vtContour.size();
 		if (szCntursNum == 0 && glyph.vtComponents.size() == 0) continue;
 		if (szCntursNum > 0) {
 			if (Encode.m_HYMaxp.maxContours < szCntursNum)
 				Encode.m_HYMaxp.maxContours = szCntursNum;
 
 			for (unsigned short j = 0; j < szCntursNum; j++) {
-				szTmpPoint += glyph.vtContour[j].vtHYPoints.size();
+				szTmpPoint += (unsigned short)glyph.vtContour[j].vtHYPoints.size();
 			}
 			if (Encode.m_HYMaxp.maxPoints < szTmpPoint)
 				Encode.m_HYMaxp.maxPoints = szTmpPoint;
 		}
 		else {
-			size_t  maxCmpnntElmTmp = glyph.vtComponents.size();
-			size_t  maxCompositePointTmp = 0, maxCompositeContourTmp = 0;
+			unsigned short maxCmpnntElmTmp = (unsigned short)glyph.vtComponents.size();
+			unsigned short maxCompositePointTmp = 0, maxCompositeContourTmp = 0;
 
 			for (unsigned int j = 0; j < maxCmpnntElmTmp; j++) {
 				CHYCmpst& cmpst = glyph.vtComponents[j];
 				CHYGlyph& cmpGlyph = Encode.m_vtHYGlyphs[cmpst.glyphIndex];
 				maxCompositePointTmp += cmpGlyph.GetTotalPointsNumber();
-				maxCompositeContourTmp += cmpGlyph.vtContour.size();
+				maxCompositeContourTmp += (unsigned short)cmpGlyph.vtContour.size();
 			}
 			if (maxCmpnntElmTmp > Encode.m_HYMaxp.maxComponentElements)
 				Encode.m_HYMaxp.maxComponentElements = maxCmpnntElmTmp;
@@ -701,12 +701,10 @@ void CXSysProxy::InitOS2Tb(CHYFontCodec& Encode)
 	Encode.m_HYOS2.vtachVendID.push_back('Y');
 	Encode.m_HYOS2.vtachVendID.push_back('I');
 
-	if (Encode.m_HYOS2.usWeightClass == 400)
-	{
+	if (Encode.m_HYOS2.usWeightClass == 400){
 		Encode.m_HYOS2.fsSelection = 0x140;
 	}
-	else if (Encode.m_HYOS2.usWeightClass >= 700)
-	{
+	else if (Encode.m_HYOS2.usWeightClass >= 700){
 		Encode.m_HYOS2.fsSelection = 0x120;		
 	}
 	else {
@@ -763,6 +761,7 @@ void CXSysProxy::InitOS2Tb(CHYFontCodec& Encode)
 	Encode.m_HYOS2.panose.Letterform = 0;
 	Encode.m_HYOS2.panose.Midline = 0;
 	Encode.m_HYOS2.panose.XHeight = 0;
+
 	Encode.CountUnicodeRange(Encode.m_HYOS2.ulUnicodeRange1, Encode.m_HYOS2.ulUnicodeRange2, Encode.m_HYOS2.ulUnicodeRange3, Encode.m_HYOS2.ulUnicodeRange4);
 	Encode.m_HYOS2.usFirstCharIndex = 0x0020;
 	Encode.m_HYOS2.usLastCharIndex = Encode.FindLastCharIndex(Encode.m_vtHYGlyphs);
@@ -821,7 +820,6 @@ void CXSysProxy::InitCFFTb(CHYFontCodec& Encode)
 void CXSysProxy::InitEncodeOption(CHYFontCodec& Encode)
 {
 	Encode.m_tagOption = ::XSysproxy().m_tagOpeionPrm;
-
 	Encode.CountFontBound();	
 	MakeFontName(Encode);
 	
@@ -852,13 +850,11 @@ void CXSysProxy::InitEncodeOption(CHYFontCodec& Encode)
 	Encode.MakeCmap();
 	Encode.MakeHYCodeMap();
 
-	if (::XSysproxy().m_tagOpeionPrm.bDelOld)
-	{
+	if (::XSysproxy().m_tagOpeionPrm.bDelOld){
 		::XSysproxy().DelCode(Encode, ::XSysproxy().m_vtOvrrdUni);
 	}
 
-	if (::XSysproxy().m_tagOpeionPrm.bCmplLayout)
-	{
+	if (::XSysproxy().m_tagOpeionPrm.bCmplLayout){
 		::XSysproxy().LoadAdvancedTypographicTables(&Encode);
 	}
 
@@ -885,18 +881,21 @@ void CXSysProxy::SetEncodeOption(CHYFontCodec& Encode, CHYFontCodec& Original)
 	Encode.m_HYOS2.usWeightClass = Original.m_HYOS2.usWeightClass;
 	Encode.m_HYOS2.usWidthClass = Original.m_HYOS2.usWidthClass;
 	if (m_tagOpeionPrm.bHanyi) {
-		if (Encode.m_HYOS2.usWeightClass == 400)
-		{
+		if (Encode.m_HYOS2.usWeightClass == 400){
 			Encode.m_HYOS2.fsSelection = 0x140;
 		}
-		else if (Encode.m_HYOS2.usWeightClass >=700)
-		{
+		else if (Encode.m_HYOS2.usWeightClass >=700){
 			Encode.m_HYOS2.fsSelection = 0x120;
 			Encode.m_HYhead.macStyle = 0x1;
 		}
 		else {
 			Encode.m_HYOS2.fsSelection = 0x100;
 		}
+
+		Encode.m_HYOS2.ulUnicodeRange1 = 0xa00002bf;
+		Encode.m_HYOS2.ulUnicodeRange2 = 0x18ef7cfa;
+		Encode.m_HYOS2.ulUnicodeRange3 = 0x00000016;
+		Encode.m_HYOS2.ulUnicodeRange4 = 0x00000000;		
 	}
 	else
 	{
@@ -910,6 +909,11 @@ void CXSysProxy::SetEncodeOption(CHYFontCodec& Encode, CHYFontCodec& Original)
 		for each (char var in Original.m_HYOS2.vtachVendID) {
 			Encode.m_HYOS2.vtachVendID.push_back(var);
 		}
+
+		Encode.m_HYOS2.ulUnicodeRange1 = Original.m_HYOS2.ulUnicodeRange1;
+		Encode.m_HYOS2.ulUnicodeRange2 = Original.m_HYOS2.ulUnicodeRange2;
+		Encode.m_HYOS2.ulUnicodeRange3 = Original.m_HYOS2.ulUnicodeRange3;
+		Encode.m_HYOS2.ulUnicodeRange4 = Original.m_HYOS2.ulUnicodeRange4;
 		Encode.m_HYOS2.ulCodePageRange1 = Original.m_HYOS2.ulCodePageRange1;
 		Encode.m_HYOS2.ulCodePageRange2 = Original.m_HYOS2.ulCodePageRange2;
 		Encode.m_HYOS2.fsSelection = Original.m_HYOS2.fsSelection;
@@ -935,8 +939,7 @@ void CXSysProxy::SetEncodeOption(CHYFontCodec& Encode, CHYFontCodec& Original)
 	Encode.m_HYOS2.panose.XHeight = Original.m_HYOS2.panose.XHeight;
 	Encode.m_HYOS2.usDefaultChar = Original.m_HYOS2.usDefaultChar;
 	Encode.m_HYOS2.usBreakChar = Original.m_HYOS2.usBreakChar;
-	Encode.m_HYOS2.usMaxContext = Original.m_HYOS2.usMaxContext;
-
+	Encode.m_HYOS2.usMaxContext = Original.m_HYOS2.usMaxContext;	
 	Encode.m_HYPost.italicAngle.value = Original.m_HYPost.italicAngle.value;
 	Encode.m_HYPost.italicAngle.fract = Original.m_HYPost.italicAngle.fract;
 	Encode.m_HYPost.underlineThickness = Original.m_HYPost.underlineThickness;

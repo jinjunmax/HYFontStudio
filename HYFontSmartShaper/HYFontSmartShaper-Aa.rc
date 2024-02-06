@@ -111,8 +111,6 @@ BEGIN
     BEGIN
         MENUITEM "打开(&O)...\tCtrl+O",           ID_FILE_OPEN
         MENUITEM "保存(&S)\tCtrl+S",              ID_FILE_SAVE
-        MENUITEM SEPARATOR
-        MENUITEM "导出name文件",                    ID_MN_EXPNAME
         MENUITEM "导入码表",                        ID_MN_CODEMAP
         MENUITEM SEPARATOR
         MENUITEM "最近的文件",                       ID_FILE_MRU_FILE1, GRAYED
@@ -554,7 +552,6 @@ BEGIN
     CONTROL         " 兼容康熙部首",IDC_PTN_KANGXI_CHK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,130,47,66,10
     CONTROL         " 兼容旧标准",IDC_PTN_OLDSTND_CHK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,130,65,58,10
     CONTROL         " 删除旧标准",IDC_PTN_DELOLD_CHK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,130,84,58,10
-    EDITTEXT        IDC_PTN_SETADW_EDT,91,122,91,14,ES_AUTOHSCROLL
 END
 
 IDD_FNT_INF_DLG DIALOGEX 0, 0, 367, 290
@@ -665,9 +662,8 @@ BEGIN
     EDITTEXT        IDC_VADH_PSNM_EDT,56,57,150,14,ES_AUTOHSCROLL | ES_READONLY
     PUSHBUTTON      "打开",IDC_VADH_SFNT_BTN,219,37,50,14
     LTEXT           "TSB设定",IDC_STATIC,15,11,29,8
-    CONTROL         "PSName文件",IDC_VADH_PSNM_CHK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,89,10,58,10
+    CONTROL         "需要PSName文件",IDC_VADH_PSNM_CHK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,89,10,74,10
     PUSHBUTTON      "生成",IDC_VADH_BUDL_BTN,219,82,50,14
-    LTEXT           "! 当无需导入PSName时，变高操作只对中文字符有效",IDC_STATIC,11,86,196,8
 END
 
 IDD_FNT_MKVNT_DLG DIALOGEX 0, 0, 575, 436
@@ -879,6 +875,15 @@ BEGIN
     PUSHBUTTON      "检测",IDC_CCST_CHK_BTN,279,10,50,14
     LISTBOX         IDC_CCST_LST_CHKVEW,11,31,378,207,LBS_SORT | LBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_TABSTOP
     PUSHBUTTON      "导出",IDC_CCST_EXPT_BTN,336,10,50,14
+END
+
+IDD_DIALOG1 DIALOGEX 0, 0, 455, 264
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Dialog"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "确定",IDOK,342,243,50,14
+    PUSHBUTTON      "取消",IDCANCEL,398,243,50,14
 END
 
 
@@ -1175,6 +1180,14 @@ BEGIN
         TOPMARGIN, 7
         BOTTOMMARGIN, 238
     END
+
+    IDD_DIALOG1, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 448
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 257
+    END
 END
 #endif    // APSTUDIO_INVOKED
 
@@ -1345,6 +1358,11 @@ BEGIN
     0
 END
 
+IDD_DIALOG1 AFX_DIALOG_LAYOUT
+BEGIN
+    0
+END
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -1463,16 +1481,16 @@ END
 
 STRINGTABLE
 BEGIN
-    IDS_NAME_ID_0_EN        "Copyright ? 2024 Beijing Hanyi Innovation Technology Co.,Ltd"
-    IDS_NAME_ID_0_CHS       "? 2024 北京汉仪创新科技股份有限公司 版权所有"
-    IDS_NAME_ID_8_EN        "Hanyi Fonts"
-    IDS_NAME_ID_8_CHS       "汉仪字库"
-    IDS_NAME_ID_11          "http://www.hanyi.com.cn/"
-    IDS_NAME_ID_13_CHS      "请访问 http://hanyi.com.cn/law.php 了解授权协议。"
-    IDS_NAME_ID_13_EN       "Please visit http://hanyi.com.cn/law.php for license information."
-    IDS_NAME_ID_14          "http://hanyi.com.cn/law.php"
-    IDS_NAME_ID_7_EN        "is a trademark of Beijing Hanyi Innovation Technology Co.,Ltd."
-    IDS_NAME_ID_7_CHS       "是北京汉仪创新科技股份有限公司的商标。"
+    IDS_NAME_ID_0_EN        "Copyright(c) 2023 HanMeiHutong (XiaMen) Technology Co.Ltd. ,All rights reserved."
+    IDS_NAME_ID_0_CHS       "(c) 2023 翰美互通（厦门）科技有限公司 版权所有"
+    IDS_NAME_ID_8_EN        "HanMeiHutong"
+    IDS_NAME_ID_8_CHS       "翰美互通"
+    IDS_NAME_ID_11          "www.aafont.com.cn"
+    IDS_NAME_ID_13_CHS      "请访问 http://www.aafont.com.cn/partner.html 了解授权协议。"
+    IDS_NAME_ID_13_EN       "Please visit http://www.aafont.com.cn/partner.html for license information."
+    IDS_NAME_ID_14          "http://www.aafont.com.cn/partner.html"
+    IDS_NAME_ID_7_EN        "is a trademark of HanMeiHutong (XiaMen) Technology Co.Ltd."
+    IDS_NAME_ID_7_CHS       "是翰美互通（厦门）科技有限公司的商标。"
     IDS_CHARSET_GBL1        "级别一"
     IDS_CHARSET_GBL2        "级别二"
     IDS_CHARSET_GBL3        "级别三"
